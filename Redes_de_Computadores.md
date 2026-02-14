@@ -3,7 +3,7 @@ title: Redes de Computadores
 author: Christian Velasco Pérez
 ---
 # Redes de Computadores
-*Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" style="width:15%; float:right; margin-left:4%;margin-bottom:2%">
+*Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" align="right" style="width:15%; margin-left:4%;margin-bottom:2%">
 \
 El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento orientado al curso de *Redes de computadores* del Grado en Ingeniería Informática de la Universidad de La Rioja. Por consiguiente, se considera completa responsabilidad del lector lo que haga con la información de este documento.
 \
@@ -234,7 +234,7 @@ Esta forma de pérdida de información toma forma como **alteración no lineal**
 
 La distorsión ocurre cuando **los armónicos de una señal se desfasan** lo que provoca un cambio total en la función de onda.
 
-![Desfase de armónicos](https://www.electronics-tutorials.ws/wp-content/uploads/2018/05/amplifier-amp36.gif "Qué es la distorsión del amplificador? en FMUSER")
+![Desfase de armónicos](https://files.soniccdn.com/files/2014/07/24/dib01.png "Distorsión: el mundo real y entrenamiento auditivo, por Pablo Fernández-Cid, en Hispasonic")
 
 ### Ruido
 Es la peor de las **perturbaciones de señal**. Corresponde a **señales no deseadas** que se *"inyectan"* en la señal.

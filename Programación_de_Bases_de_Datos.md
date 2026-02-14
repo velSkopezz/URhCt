@@ -3,7 +3,7 @@ title: Programación de Bases de Datos
 author: Christian Velasco Pérez
 ---
 # Programación de Bases de Datos
-*Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" style="width:15%; float:right; margin-left:4%;margin-bottom:2%">
+*Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" align="right" style="width:15%; margin-left:4%;margin-bottom:2%">
 \
 El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento orientado al curso de *Programación de bases de datos* del Grado en Ingeniería Informática de la Universidad de La Rioja. Por consiguiente, se considera completa responsabilidad del lector lo que haga con la información de este documento.
 \
