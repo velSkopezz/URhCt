@@ -116,10 +116,12 @@ Para esto es fundamental el *algoritmo de Dijkstra*. Esto lo gestiona un **siste
 > $v \equiv$ "velocidad de viaje por el medio físico"
 
 La **velocidad de transmisión** es dependiente del tiempo necesario para **cargar** y soltar a la red los paquetes:
-$$ t_t = { L \over R } $$
+
+$$t_t = { L \over R }$$
 
 La **velocidad de propagación** es dependiente del tiempo necesario para que el paquete **transite** hasta su destino:
-$$ t_p = { D \over v } $$
+
+$$t_p = { D \over v }$$
 
 #### Puntos de intercambio de internet
 Los **IXP** e **ISP regionales** son encargados de la **interconexión de dispositivos de distintos ISPs** (proveedores de internet).
