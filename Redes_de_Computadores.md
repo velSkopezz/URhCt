@@ -107,13 +107,13 @@ Para esto es fundamental el *algoritmo de Dijkstra*. Esto lo gestiona un **siste
 > Nota: Se aborda más información sobre el sistema autónomo próximamente.
 
 #### Velocidades
-> $ L \equiv $ "cantidad de bits a transmitir"
+> $L \equiv$ "cantidad de bits a transmitir"
 > \
-> $ R \equiv $ "tiempo de carga de bits"
+> $R \equiv$ "tiempo de carga de bits"
 > \
-> $ D \equiv $ "distancia de viaje de un paquete"
+> $D \equiv$ "distancia de viaje de un paquete"
 > \
-> $ v \equiv $ "velocidad de viaje por el medio físico"
+> $v \equiv$ "velocidad de viaje por el medio físico"
 
 La **velocidad de transmisión** es dependiente del tiempo necesario para **cargar** y soltar a la red los paquetes:
 $$ t_t = { L \over R } $$
