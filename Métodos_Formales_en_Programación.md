@@ -90,3 +90,18 @@ La implementación de un TAD cuenta con:
 - **Operadores**
 
 > Eg: en orientación a objetos, por ejemplo, la representación del TAD puede corresponder a sus atributos y los operadores a sus métodos.
+
+#### Función de abstracción
+La **función de abstracción** cumple con las siguientes características.
+> Con $f:A \to B$ siendo $A$ y $B$ conjuntos de partida y llegada respectivamente
+
+- Puede ser **parcial**
+    > $\exists a \in A \ | \quad f(a) \notin B$
+- Puede ser **inyectiva**
+    > $f(x) = f(y) \implies x = y$
+- Puede ser **sobreyectiva**
+    > $\forall a \in A \quad \exists f(a) \in B$
+- Debe **conmutar los operadores**
+    > Sea un operador $T$;
+    > \
+    > $f(T(x)) = T(f(x))$

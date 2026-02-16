@@ -260,3 +260,97 @@ La solución en estos casos es que el **receptor imponga un muestreo** aunque pu
 Se trata del **medio** por el que se **transporta la señal**.
 - **guiados**: por cable, dependen del **medio**.
 - **no guiados** (inalámbrico): por aire, dependen de la **frecuencia**.
+
+Medios guiados | Medios no guiados
+:--- | :---
+par trenzado | ondas de radio
+cable coaxial | microondas
+fibra óptica | infrarrojos
+
+> Nota: Evidentemente, hay más.
+
+### Medios de transmisión guiados
+Se distinguen dos formas de disponer el cableado:
+- **directo**: para conexiones emisor/receptor
+- **cruzado**: para conexiones de doble emisor
+
+![Conexión directa y cruzada](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLqiLslUqesCM5tRuC9o6ktKnzxpGSrQ16e0XDb2yiB66YYLAhMVeQzdvQhlxfZSubJ9NbZq_u85N6WET36yN1v0FT9WJVt-ptF5_OT7l69lTNZNf4bbTD3_0lj9TJQFaMH8aNZoncfKk/s1600/straight-through-vs-crossover-cables.jpg "Cable directo y cruzado, por Jorge, en Redes de datos")
+
+#### Par trenzado
+Es el medio guiado más **económico** y consta de dos conductores aislados que se entrelazan. Alcanza una velocidad de alrededor de 100 Mbps.
+
+Se suelen utilizar en:
+- telefonía
+- redes locales
+
+Además, se distinguen **tipos de pares trenzados** según su apantallado (protección de cables) o **protección de interferencia**:
+
+Nombre | Tipo | Apantallado por par | Apantallado global
+:--- | ---: | :---: | :---:
+Unshielded Twisted Pair | UTP | ✕ : NO | ✕ : NO
+Foiled Twisted Pair | FTP | ✕ : NO |  ✓ : SÍ 
+Shielded Twisted Pair | STP | ✓ : SÍ | ✕ : NO
+Shielded Foiled Twisted Pair | SFTP | ✓ : SÍ | ✓ : SÍ 
+
+![Tipos de cables trenzados](https://cdn.shopify.com/s/files/1/0642/3091/6354/files/5_e668e12f-9590-44d3-ab93-be2eb80c68c7.jpg?v=1730016624 "La guía completa de los cables de Ethernet: lo que debe saber en Cabletime")
+
+También pueden categorizarse según sus **apliaciones** difiriendo en características como el ancho de banda.
+> Nota: El filtro de paso bajo es también **analógico**, es decir, aunque filtre según el ancho de banda, los límites son difusos y pierden amplitud de forma continua atenuándose.
+
+#### Cable coaxial
+Consiste en **dos conductores concéntricos** separados por aislante. Para obtener flexibilidad, el conductor exterior se dispone en forma de malla.
+
+Es usado en televisores y, anteriormente, en conexiones LAN entre ordenadores.
+
+![Cable coaxial](https://alfarsl.es/wp-content/uploads/2018/03/caracteristicas-cable-coaxial.jpg "Características del cable coaxial y variantes del dieléctrico en Alfa'r")
+
+#### Fibra óptica
+Transmite **señales luminosas** por lo que proporciona:
+- **inmunidad al daño radioeléctrico**
+- **mitigación de atenuación**
+
+Es pequeño, maleable y maneja enormes velocidades.
+
+![Ley de Snell y fibra óptica](https://openstax.org/apps/image-cdn/v1/f=webp/apps/archive/20260105.231123/resources/fb1e4927b295dd1f5c2bd4e56c3c0e4f2bc19b7b "Reflexión interna total: Física universitaria volumen 3 en OpenStax")
+
+### Métodos de transmisión no guiados
+Su medio es el **aire** por lo que dispondra de **menor seguridad** en **llegada de paquetes** y **privacidad de contenido**.
+
+Se distingue el tipo de onda según su **frecuencia**.
+
+![Frecuencia de ondas](https://www.adslzone.net/app/uploads-adslzone.net/2017/10/grafico-espectro-electromagnetico1.jpg "¿Cómo lo hace la fibra óptica para no perder intensidad con la distancia?, por Alberto García, en ADSLZone")
+
+En ocasiones es necesario **transformar la señal**. Para ello se utilizará **modulación** y **codificación**.
+
+> Eg: si quieres emitir una canción no puedes hacerlo por voz porque la señal no se emitirá la distancia suficiente.
+
+---
+
+### Modulación
+Es como un proceso en el que se incluye un **modulador** que actúa como **caja negra**.
+
+Para obtener la señal original en el receptor hace falta un proceso de **demodulación**.
+
+![Modulador](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4y28zRRq9RHgm3skbztFNZM504iA7wHq82g&s "TEMA 7 Modulación de amplitud en Universidad Nacional de Tucumán")
+
+![](https://onubaelectronica.es/wp-content/uploads/2020/06/am.png.webp "Transmisor de señal de banda AM, por nivel13, en OnubaElectrónica")
+
+Se distinguen tipos de modulación:
+- **AM** sobre *amplitud*
+- **FM** sobre *frecuencia*
+- **Modulación digital** sobre flancos digitales
+    - **ASK** sobre *amplitud*
+    - **FSK** sobre *frecuencia*
+    - **PSK** sobre *fase*
+    - **DPSK** sobre fase y diferencial
+
+### Modulación PSK
+Consiste en cambiar la fase según la información.
+
+Se ve de forma sencilla usando un vector fasor y un cambio de fase a un bit por 180º.
+
+![Modulación PSK a 180º en vector fasor](https://shopdelta.eu/obrazki_art/dpsk_img2_d.jpg "PSK modulation and its types en Shopdelta")
+
+Sin embargo, esto enfrenta problemas. El desfase **tiene un coste de aumento de frecuencia** pues desfasar esos 180º al instante tiene un coste de alrededor de 1GHz. Para solucionar este problema se **divide** el vector fasor en más ángulos de tal forma que se transmitan **varios bits por ángulo**.
+
+![Modulación PSK a 90º en vector fasor](https://shopdelta.eu/obrazki_art/dpsk_img3_d.jpg "PSK modulation and its types en Shopdelta")
