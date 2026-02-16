@@ -116,17 +116,9 @@ Para esto es fundamental el *algoritmo de Dijkstra*. Esto lo gestiona un **siste
 > $v \equiv$ "velocidad de viaje por el medio físico"
 
 La **velocidad de transmisión** es dependiente del tiempo necesario para **cargar** y soltar a la red los paquetes:
-<<<<<<< HEAD
-
 $$t_t = { L \over R }$$
 
 La **velocidad de propagación** es dependiente del tiempo necesario para que el paquete **transite** hasta su destino:
-
-=======
-$$t_t = { L \over R }$$
-
-La **velocidad de propagación** es dependiente del tiempo necesario para que el paquete **transite** hasta su destino:
->>>>>>> fb46c28a6bee084a3db490de25d9f7d6b18303cf
 $$t_p = { D \over v }$$
 
 #### Puntos de intercambio de internet
