@@ -100,3 +100,46 @@ Consiste en múltiples **iteraciones** de muestra *cada vez mas completa* al con
 - **iterativo e incremental**
 
 > El desarrollo *incremental* avanza por **secciones del sistema con funcionalidad completa** mientras que el desarrollo *iterativo* avanza por **sistema completo con funcionalidad incompleta**.
+
+>>>>> AQUÍ FALTAN 40 MINUTOS DE CLASE
+
+## TEMA 3: Estudio de viabilidad del sistema e ingeniería de requisitos
+
+>>>>> AQUÍ SIGUEN FALTANDO LOS MISMOS 40 MINUTOS DE CLASE
+
+### Diagrama de casos de uso
+>>>>> AQUÍ FALTA CLASE
+
+#### Relaciones
+Constituyen las conexiones de los elementos:
+- **Asociación**: Une un **actor** con un **caso de uso** de tal forma que el actor **puede participar** en el sistema.
+- **Inclusión**: Relaciona **casos de uso** y representa **obligatoriedad de participación** entre ellos.
+- **Extensión**: Une **casos de uso** representando **opcional**idad de tal forma que crea una subrama.
+- **Generalización** o herencia: Representa la herencia convencional y aplica tanto a **actores con actores** como a **casos de uso con casos de uso** aunque no se recomienda el uso de este último.
+    > Eg: es especialmente útil para crear múltiples usuarios.
+
+> Ct: La notación es imprescindible: "Tiene pocas reglas sintácticas y, por tanto, hay que seguirlas al pie de la letra".
+
+#### Actores múltiples
+Se pueden dar las siguientes situaciones:
+- **Distinto rol**: se conectan los actores de forma convencional-
+- **Mismo rol**: se crea un superactor mediante herencia y este reúne el caso de uso de ambos.
+
+#### Descripción de CdU
+Las descripciones deben ser **legibles** y deben estar indicadas:
+- **inicio y final**
+- **actores**
+- **objetos**
+- **flujos principales y excepcionales**
+
+Hay diferentes formas de **estructurar un CdU**. Se pueden usar **plantillas** entre las cuales se encuentra **Larman**.
+> Nota: Para más información revisar transparencias.
+
+> Eg: Larman es de máximos y peca de incorporar documentación excesiva llegando a indicar intereses de los actores cuando debería incorporar únicamente la del sistema.
+> \
+> Apuntes:
+> - No conviene dar pistas de implementación en la descripción de CdU. Es un estado muy temprano.
+> - Aunque contextualice, no conviene poner información en la que el sistema no esté explícitamente involucrado.
+> - Una variante del sistema Larman es separa el texto en 2 columnas: por un lado lo que hace el actor y por el otro lo que hace el sistema.
+> - Cualquier caso de uso en un diagrama CdU debe ser de uso, es decir, debe hacer algo.
+> - No se debe hacer descomposición funcional, es decir, crear múltiples unidades de CdU que solo componen un único CdU.

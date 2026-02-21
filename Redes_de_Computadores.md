@@ -354,3 +354,148 @@ Se ve de forma sencilla usando un vector fasor y un cambio de fase a un bit por 
 Sin embargo, esto enfrenta problemas. El desfase **tiene un coste de aumento de frecuencia** pues desfasar esos 180º al instante tiene un coste de alrededor de 1GHz. Para solucionar este problema se **divide** el vector fasor en más ángulos de tal forma que se transmitan **varios bits por ángulo**.
 
 ![Modulación PSK a 90º en vector fasor](https://shopdelta.eu/obrazki_art/dpsk_img3_d.jpg "PSK modulation and its types en Shopdelta")
+
+También se puede aprovechar la **modulación de la amplitud** par codificar más bits.
+
+![Modulación de amplitud PSK](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcbPSzqAKJZuyewCi3euccyZesRBgFy-9icopE2buljX6jPPVavfL5qc-Z6B_ywzcTzjxjrKpMTsKuIysXKiK6OvoF9PI-8pMFZGpR0NwlDjg6LD80SHQEh2BvuNOsll66hdo0gPfG9gMH/s1600/Captura.PNG "Teleco in a nutshell v8.7: Modulación de Amplitud en Cuadratura, por zerolynx, en Fluproject")
+
+Esto requerirá **mejores receptores** para poder captar con precisión los distintos estados.
+
+> Eg: Wi-Fi es adaptativo y, según la intensidad de la señal, puede variar entre BPSK y 1024-QAM.
+
+Es **fundamental para canalizar las señales** evitando así interferencias entre emisoras. Para ello se utilizan filtros.
+
+> Eg: si solo quisieras escuchar la música de una sola cadena de radio tendrías que modular la señal para captar la frecuencia que le corresponde. De lo contrario, estarías capturando señal de otras radios. Para ello, el modulador aporta valor 1 a las frecuencias escuchadas y 0 al resto de frecuencias creando una caída teóricamente digital aunque realmente analógica.
+
+Por todo esto, el receptor necesita, a su vez, un **demodulador** que permita recibir la señal modulada y extraer su informacón original.
+
+![Proceso de red](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPcfbvDBJeP4rTh1SVmmnpoJW5Esbd2Bo_Og&s "SISTEMAS ABIERTOS E INTERCONEXIÓN, por M.C Alejandro Gutiérrez Díaz")
+
+### Codificación
+Es la forma de tomar señales digitales y **transformarlas en analógicas**. Se distinguen múltiples formas:
+- NRZ: no retorno a cero
+- RZ: retorno a cero (vuelve a 0 a media fase reduciendo costes)
+- NRZI: no retorno a cero invertido (cambia la fase con un 1)
+- **Manchester**: se usa en Ethernet de menos de 10b. Comprueba el valor mediante el **cambio de flanco** a mitad de fase.
+- **Manchester diferencial**: en este caso la **transición se utiliza para sincronizar**. La falta de sincronización corresponde a un 1.
+
+Velocidades de transmisión y modulación:
+
+$$v_{mod} = v_{tx}/bpe$$
+
+> $v_{tx} \equiv$ "velocidad de transmisión"
+> \
+> $v_{mod} \equiv$ "velocidad de modulación"
+> \
+> $bpe \equiv$ "cantidad de bits codificados a la vez"
+>
+> Por heurística, no se suele enviar información por encima de la décima parte de la banda ancha media.
+> \
+> Con **velocidad de transmisión** se hace referencia a la cantidad de bits transmitidos en bps.
+> \
+> Con **velocidad de modulación** se hace referencia a los cambios generados por tiempo en baudios (Bd).
+
+---
+
+### Enlace y servicios
+Un **enlace** es una **trayectoria que conecta dos dispositivos**. Es el encargado de **enrutar por medio de nodods**. La capa de enlace es un intermediario entre lo físico y lo lógico, es decir, **en las próximas capas se ignorarán las trayectorias de la capa de enlace**.
+
+![Capa de enlace](https://laprovittera.com/wp-content/uploads/2022/10/image-116.png "CAPA 2 ENLACE DE DATOS (Acceso a red) Enrutamiento y creación de una LAN, por Laprovittera, en LAPROVITTERA CARLOS")
+
+> En la capa de red se ignorarán los saltos que tome la información. Se tendrá en cuenta únicamente la fuente y el destino.
+
+> Para más aclaración revisar transparencias.
+
+Los **servicios** ofrecen:
+- **Delimitación de la trama**
+- **Acceso al medio**
+- **Detección de errores**
+- **Entrega segura**
+- **Control de flujo**
+- Conmutación duplex
+
+### Datagramas en su encapsulamiento
+Cuando llega una cabecera desde el nivel de red para pasar al nivel de enlace se *encapsula* la cabecera alrededor de información de la capa de enlace.
+
+![Encapsulamiento de datos](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikKBjRvVD1gCNi9mZlTurxXbQPkH4q2JEF2CMw4YPHo-ybw4ExuqgL53ClPamBRenY3vBRpHMbm2-oNRvYuTzFIrsBNG9BhTVYbp7Y4VMam6-PSfSnBEnQ_f8c_zB4s9hMbTPs0Cmta5U/s1600/encapsulamientoEX.png "Proceso de Comunicación de los Datos: Encapsulamiento, por  Marco A. Arenas, en Telecomunicaciones USFX")
+
+#### Adaptador de red
+También conocido como **NIC** (Network Interface Card) o simplemente **tarjeta de red**, es el encargado de **encapsular** el datagrama en una trama que se transmite implementando los niveles de **enlace y físico**.
+\
+El adaptador del receptor descarta las partes de la cabecera que no le son necesarias.
+
+Es una unidad semiautónoma y **forma parte del nodo físico** compartiendo alimentación y buses del sistema.
+\
+El sistema operativo suele **delegar a la tarjeta de red** la tarea de transmisión.
+
+> Nota: Para más usos de la tarjeta de red revisar transparencias.
+
+> Nota: Comúnmente hay que habilitar la tarea de adaptación al sistema operativo para poder registrar lo que sucede, algo que se hará en grupos informáticos.
+
+### Creación de la trama
+Existe una **función de enrutamiento** que permite **delimitar** el inicio y el fin y **construir tramas**. Estas contienen:
+- **Cabecera** del protocolo.
+- **Datos**.
+- **Códigos de detección** al inicio y final de la trama.
+
+> Esta forma de construir la trama **presenta un problema**: Hay que designar **marcadores de inicio y final de trama** que pueden **presentarse entre los datos**.
+
+Se utiliza un **marcador de escape** para evitar interpretaciones incorrectas del mensaje. Se distinguirán dos formas de hacerlo:
+- **Relleno por byte**
+    > Eg: supongamos `0x7E` como valor de `FLAG`:
+    > > Nota:  `0x7E` = `0b01111110`.
+    > 
+    > Si nuestro mensaje fuera el siguiente.
+    > ```
+    > 0x7E 0x2A 0x3E 0x7E 0x0A 0x7E
+    > ```
+    > Tendríamos un problema. `0x7E` forma parte del mensaje. Para solucionarlo usaremos el escape al que llamaremos `0x7D`. De esta forma el mensaje quedaría tal que:
+    > ```
+    > 0x7E 0x2A 0x3E 0x7D 0x7E 0x0A 0x7E
+    > ```
+    > A la vista queda que lo que antes era `0x7E` a mitad de mensaje ahora es `0x7D 0x7E` donde `0x7D` es el escape y `0x7E` es la información que comparte codificación con el `FLAG`. Como queda escapado, el receptor puede comprender que no es el final del mensaje sino parte de él.
+    > > Nota: Si `0x7D` formase parte del mensaje sencillamente se escapa el escape, es decir, se cambia por `0x7D 0x7D`.
+- **Relleno por bit**
+    > Tras leer 5 unos consecutivos en `0b01111110` (igual a `0x7E`) se cambia el mensaje por `0b01111010` de tal forma que **el antepenúltimo bit no transmite mensaje**, tan solo información sobre si ha acabado el mensaje.
+    > > Eg: un byte de relleno por bit transmite una cantidad de información diferente que un byte de relleno por byte.
+    >
+    > > Nota: Es el utilizado por el protocolo **HDCL**. 
+
+> Nota: Este marcador de escape funciona exactamente igual que el `\` visto en *Regular Expressions* o *strings* en lenguajes de programación como Java.
+
+### Tramas Ethernet
+Hay muchas tramas de Ethernet. Las más relevantes son **Ethernet II**, **Ethernet 802.3raw** y **Ethernet IEEE 802.3**.
+> Nota: Las transparencias proporcionan un resumen al respecto de IONOS.
+
+- **Ethernet II**
+
+    Es el más utilizado en la actualidad.
+
+    ![Cabecera de Ethernet II](https://www.ionos.com/digitalguide/fileadmin/_processed_/5/b/csm_EN-ethernet-frame-structure_b05e04fde2.webp "Ethernet frame: definition and variants of the frame format en IONOS")
+
+    - El **preámbulo** es una secuencia ordenada de la forma `10101010`... que sirve para que el receptor detecte la conexión. Se repite durante 7 octetos.
+    - El **SFD** es el delimitador. Corresponde a la secuencia `10101011` aportando un último `1` para que el receptor delimite el *Bit Secuence*.
+    - El **type** proporciona el protocolo que se está utilizando.
+        > Nota: `0x800` corresponde a IP y `0x806` corresponde a ARP.
+        > > Ct: Típico ejercicio de clase y de examen: Si type es IP o ARP.
+    - La **data** contiene la información. Ocupa un mínimo de 46B para que el *Ethernet Frame* ocupe 64B que es el **tamaño mínimo necesario para la detección de colisiones**.
+    - El FCS verifica la integridad de los datos.
+
+- **Ethernet 802.3raw**: 
+
+    Fue creado por una empresa poniendo el nombre de Ethernet 802.3 al mismo tiempo que IEEE (*Institute of Electrical and Electronics Engineers*) estandarizaba su IEEE 802.3. Por ello, esta empresa fue obligada a añadirle la etiqueta "*raw*".
+
+    Consiste en cambiar el *type* (4B) por **length** (2B) y añadir un excedente de 2B en forma de `0xFFFF` para rellenar el espacio.
+
+    ![Ethernet 802.3raw](https://www.ionos.com/digitalguide/fileadmin/_processed_/5/7/csm_EN-ethernet-frame-structure2_d194ad28f5.webp "Ethernet frame: definition and variants of the frame format en IONOS")
+
+- **Ethernet IEEE 802.3**:
+
+    Añade **DSAP** y **SSAP** que ocupan 1B cada uno y logran sustituir los bytes de relleno en Ethernet 802.3raw.
+
+    ![Ethernet IEEE 802.3](https://www.ionos.com/digitalguide/fileadmin/_processed_/0/4/csm_EN-ethernet-frame-structure3_51c742720b.webp "Ethernet frame: definition and variants of the frame format en IONOS")
+
+> Para más ejemplos revisar transparencias.
+> > Ct: "A mí lo que me importa es la primera".
+
+> Ct: En la actualidad se usan otros. Manchester encoded es para Ethernet a menos de 10 megabits.
