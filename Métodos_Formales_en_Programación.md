@@ -120,9 +120,9 @@ Cabe destacar que, en esta ocasión, si tiene sentido crear métodos para **inse
 Como el montículo es casicompleto, es más rentable la **implementación estática** sobre la dinámica. 
 \
 De esta forma dada la implementación con un *array* $v$ de tamaño $n$, utilizando un índice $i$ se tiene que:
-- Los hijos de un nodo están en $v$[$2i \pm 1$]
-- El padre de un nodo está en $v$[$\lfloor \frac{i-1}{2} \rfloor$]
+- Los hijos de un nodo están en $v$ \[ $2i \pm 1$ \]
+- El padre de un nodo está en $v$\[ $\lfloor \frac{i-1}{2} \rfloor$ \]
 
-La complejidad de sus operaciones es fundamentalmente **logarítmica** ($O \log_{2}(n)$).
+La complejidad de sus operaciones es fundamentalmente **logarítmica** \( $O \log_{2}(n)$ \).
 \
 La implementación dinámica lo empeora por la complejidad de las operaciones para volver al padre del nodo.
