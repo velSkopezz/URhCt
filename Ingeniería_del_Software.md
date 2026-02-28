@@ -239,7 +239,7 @@ Consiste en cuatro cuestiones fundamentales:
 - **Estudio de viabilidad**
 
 Hay **numerosas alternativas** que deben ser **evaluadas desde distintos puntos de vista**.
-> CT: Importante para TFGs. Es probable que, tras *Prácticas Externas*, la propia empresa proponga un TFG. Si el tribunal pregunta para quién está orientado el producto hay que recordar defender que está orientado a una empresa. Corresponde al **estudio de viabilidad**..
+> Ct: Importante para TFGs. Es probable que, tras *Prácticas Externas*, la propia empresa proponga un TFG. Si el tribunal pregunta para quién está orientado el producto hay que recordar defender que está orientado a una empresa. Corresponde al **estudio de viabilidad**..
 
 También hay distintas **técnicas de recogida de información**.
 > Nota: Para ver un listado de estas técnicas revisar transparencias.
