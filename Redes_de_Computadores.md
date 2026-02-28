@@ -5,18 +5,18 @@ author: Christian Velasco Pérez
 # Redes de Computadores
 *Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" align="right" style="width:15%; margin-left:4%;margin-bottom:2%">
 \
-El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento orientado al curso de *Redes de computadores* del Grado en Ingeniería Informática de la Universidad de La Rioja. Por consiguiente, se considera completa responsabilidad del lector lo que haga con la información de este documento.
+El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento está orientado al curso de *Redes de computadores* del Grado en Ingeniería Informática de la Universidad de La Rioja y se considera completa responsabilidad del lector lo que haga con la información de este documento.
 \
 La distribución del documento queda reservada al permiso explícito de su autor. Si necesitase información de contacto puede [enviar un correo](mailto:velskopezz@gmail.com).
 
-## TEMA 0: Introducción
+# TEMA 0: Introducción
 La estructura de Internet está *influida por su historia*. Por ello pueden verse situaciones como el modelo de 5 capas teniendo mayor uso que el [estándar OSI](https://es.wikipedia.org/wiki/Modelo_OSI "Modelo OSI - Wikipedia, la enciclopedia libre").
 
 > Ct: Con respectoa años anteriores, el valor y la estructura del test van a aumentar (probablemente el test será $2\over6$ del examen final). El profesor valora con mayor positividad **aspectos generales sobre particularidades**.
 >
 > Nota: Este documento data del curso 2025-2026
 
-## TEMA 1: Introducción a las redes de computadores
+# TEMA 1: Introducción a las redes de computadores
 La información viaja a los **hosts** por *nodos* a la velocidad especificada por el **ancho de banda**.
 !['Nuts and bolts' view](https://sbj6364.github.io/images/post6-cn-w1/1.png "'Nuts and bolts' view, by Pearson Fastener")
 > Informalmente podemos identificar hosts como *dispositivos diana* y routers y switches (*packet switches*) como *nodos*.
@@ -29,7 +29,7 @@ Los **paquetes** es la unidad en la que se envía la información por la red. De
 
 ---
 
-### Identificación en la red
+## Identificación en la red
 Corresponde a la **dirección única**, que no por ello persistente, encargada de **identificar distintos hosts**.
 > En las *cabeceras de los protocolos* siempre **figura la dirección de salida y llegada**.
 
@@ -45,10 +45,10 @@ La dirección única más conocida es la **IPv4**, una serie de dígitos binario
 
 ---
 
-### Extremo de la red
+## Extremo de la red
 En el extremo de la red están los **hosts**, normalmente, computadores.
 
-#### Servicios orientados a conexión
+### Servicios orientados a conexión
 La conexión sucede **previa a la transferencia de datos**, es decir, primero se *acuerda la conexión* y *posteriormente* se transfieren los datos. El objetivo es garantizar:
 - Entrega **ordenada**
 - Control del **flujo** y error
@@ -58,7 +58,7 @@ La conexión sucede **previa a la transferencia de datos**, es decir, primero se
 > 
 > Anexo: Los ciberdelincuentes suelen enviarse la información por medio de TCP para garantizar la llegada de datos.
 
-#### Servicio sin conexión
+### Servicio sin conexión
 Destaca por ser **rápido y simple**. No hay intercomunicación, tan solo transferencia de datos. Su principal característica es el **nulo control de flujo de datos** .
 > Eg: UDP
 >
@@ -69,28 +69,28 @@ Destaca por ser **rápido y simple**. No hay intercomunicación, tan solo transf
 
 ---
 
-### Modelos de conexión
-#### Modelo cliente-servidor
+## Modelos de conexión
+### Modelo cliente-servidor
 Es un sistema con dos extremos basado en el intercambio de información por medio de **petición al servidor** y **respuesta**.
 
-#### Modelo peer-to-peer
+### Modelo peer-to-peer
 Comúnmente llamado P2P, es un sistema similar al cliente-servidor que destaca por su **intercambio de roles** en el que cada host puede recibir y enviar peticiones y respuestas. Está principalmente *orientado a conectar dos hosts*.
 
 
-### Identificación de procesos
+## Identificación de procesos
 Para **determinar la llegada independiente** de un paquete que llega de la red todos ellos llevan, en su cabecera, designado un **puerto** específico por el que se escucha.
 > El que envía información también los debe distinguir según sus procesos. Por ello, así como los paquetes tienen un *puerto de destino* también tiene un **puerto origen**.
 
 ---
 
-### Interior de la red
+## Interior de la red
 Hay dos formas fundamentales de transmitir información:
 - Conmutación **de circuito**: se reserva el camino
 - Conmutación **de paquetes**: se trafica el paquete por caminos abiertos
 
 > Concreción: La conmutación de circuito bloquea el uso del circuito para cualquier envío. Se menciona por su uso en otras disciplinas.
 
-### Conmutación de paquetes
+## Conmutación de paquetes
 Una de sus medidas principales es el **MTU** o tasa máxima limitada que, por defecto, suele corresponder a 1500B y es índice de si el paquete tiene permiso para viajar o debe **fragmentarse**.
 
 Los paquetes son **almacenados y retransmitidos** por el router. La **carga y descarga** toma tiempo y si sucediese un **desbordamiento de la puerta de enlace** se desecharía la información excedente y se enviaría un error para recibir nuevamente la información aumentando el tiempo.
@@ -98,15 +98,15 @@ Los paquetes son **almacenados y retransmitidos** por el router. La **carga y de
 
 ---
 
-### Network core
-#### Enrutamiento
+## Network core
+### Enrutamiento
 Cada router tiene una **tabla de redirecciones** en la que, al recibir un paquete, decide una **ruta de conmutación**.
 
 ![Tabla de redirecciones](https://i.ytimg.com/vi/gFNnab1Gf7M/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC1UUHSKbCtKFV5TlJad2NxEOFPUg "Introducción al Enrutamiento, por Hector Munguia, en YouTube")
 Para esto es fundamental el *algoritmo de Dijkstra*. Esto lo gestiona un **sistema autónomo**.
 > Nota: Se aborda más información sobre el sistema autónomo próximamente.
 
-#### Velocidades
+### Velocidades
 > $L \equiv$ "cantidad de bits a transmitir"
 > \
 > $R \equiv$ "tiempo de carga de bits"
@@ -123,14 +123,14 @@ La **velocidad de propagación** es dependiente del tiempo necesario para que el
 
 $$t_p = { D \over v }$$
 
-#### Puntos de intercambio de internet
+### Puntos de intercambio de internet
 Los **IXP** e **ISP regionales** son encargados de la **interconexión de dispositivos de distintos ISPs** (proveedores de internet).
 > También hay proveedores de internet que *"forman parte de internet"* facilitando la interconexión.
 
-#### Round Trip Time
+### Round Trip Time
 También llamado por sus siglas **RTT**, es el tiempo que pasa entre que se **envía una señal y recibe una respuesta** con respecto a un receptor.
 
-#### Comunicación entre niveles
+### Comunicación entre niveles
 Los modelos de referencia dados por distintos proveedores varios, entre ellos, RFC, que presentó problemas, o el modelo **OSI** de 7 niveles proporcionado por **ISO**. Corresponde a una divisón lógica similar a las capas. Por norma general se usa el **modelo TCP/IP** de 5 (o 4) capas.
 > Se adjunta una información lexicográfica técnica respecto al nombre del objeto de tráfico
 > 
@@ -143,9 +143,9 @@ Los modelos de referencia dados por distintos proveedores varios, entre ellos, R
 > 
 > Nota: En la capa de transporte se llama segmento si es por TCP o datagrama si es por UDP. En la capa de red se usa paquete o datagrama indistintamente. En la capa física solo hay bits.
 
-## TEMA 2: Nivel físico y de enlace
+# TEMA 2: Nivel físico y de enlace
 
-### Transmisión de datos
+## Transmisión de datos
 Se trata de solventar el problema de enviar información. Para ello se distinguen dos métodos:
 - Paralelo (síncrono): requiere reloj
 - En serie
@@ -156,19 +156,19 @@ Se trata de solventar el problema de enviar información. Para ello se distingue
 
 El envío de información en paralelo no se utiliza en Ethernet. Consiste en esperar a que la fluctuación de los datos sea la adecuada y enviarlo *"de golpe"*.
 
-### Transmisión en serie
+## Transmisión en serie
 Consiste en enviar los bits de forma secuencial. para ello es necesario conocer cuál es el último bit.
 
-#### Asíncrona
+### Asíncrona
 Utiliza **bits de inicio** y **bits de parada**.
 Se disponen los dos dispositivos a la misma velocidad. Para **mitigar la latencia**, uno de ellos lee un tiempo despues. Es **especialmente sensible a la desincronización** por lo que se utiliza cuando el envío es de pocos bits (alrededor de 8 bits).
 
-#### Síncrona
+### Síncrona
 Se incorpora un reloj. Hay varias formas de lograrlo aunque en Ethernet se utiliza un *"doble envío de datos"* en el que se conoce tanto los datos como la _**información del reloj** con la que se generaron_. Consta de múltiples implementaciones
 
 > Nota: La información sobre la Transmisión en serie síncrona de este documento es pobre. Para mayor información revisar las transparencias.
 
-### Tipos de conexión
+## Tipos de conexión
 Se distinguen tres tipos de comunicación fundamentales:
 - full duplex
 - half duplex
@@ -178,7 +178,7 @@ Se distinguen tres tipos de comunicación fundamentales:
 
 --- 
 
-### Señales
+## Señales
 Se pueden distinguir las señales de distintas formas: **continuas**, **analógicas**, **discretas**, **digitales**, **periódicas**... según distintos criterios. Dado que las señales periódicas son infinitas, para *funciones sinusoidales* se suele representar, en vez de en función del tiempo, su **dominio sobre la frecuencia**. Se da la función de una señal
 $$s(t) = Asin(2{\pi}ft + \phi) + C$$
 > $A \equiv$ "amplitud"
@@ -189,7 +189,7 @@ $$s(t) = Asin(2{\pi}ft + \phi) + C$$
 
 ![Dominio sobre la frecuencia](https://media.wiki-power.com/img/20221210154759.png "Integridad de la señal: Dominio del tiempo y Dominio de frecuencia en Power's Wiki")
 
-### Ancho de banda
+## Ancho de banda
 Es el conjunto de **frecuencias en las que se permite enviar señal**. 
 \
 Las señales digitales tienen un *ancho de banda infinito*. Las reales, por otra parte, tienen un *ancho de banda propio*. Si el dispositivo no admite la señal por la que se envía la información se limita a ignorarla dada la imposibilidad de captarla.
@@ -205,7 +205,7 @@ Para ello, conviene comprender el **desarrollo de Fourier** relativo a las ondas
 
 ---
 
-### Ancho de banda limitado
+## Ancho de banda limitado
 Los efectos del **ancho de banda limitado** se identifican en forma de **pérdida de armónicos**.
 \
 Los medios se comportan como un **filtro a paso bajo**:
@@ -218,7 +218,7 @@ Los medios se comportan como un **filtro a paso bajo**:
 
 > Nota: Para información adicional sobre filtros revisar transparencias.
 
-### Atenuación
+## Atenuación
 Es un efecto por el que **la señal pierde su amplitud** ($A$) cuya causa, y agravante por consiguiente, es la **distancia** de la trayectoria.
 > La atenuación corresponde al **cambio de escala**.
 
@@ -228,7 +228,7 @@ Se aportan dos soluciones:
 
 > Nota: Se suelen usar los repetidores porque los amplificadores aumentarán otras alteraciones de la señal como el ruido.
 
-### Distorsión
+## Distorsión
 Esta forma de pérdida de información toma forma como **alteración no lineal**, es decir, corresponde a una nueva onda $g( Asin(2{\pi}ft) )$.
 > La distorsión corresponde al **cambio de forma**.
 > \
@@ -238,7 +238,7 @@ La distorsión ocurre cuando **los armónicos de una señal se desfasan** lo que
 
 ![Desfase de armónicos](https://files.soniccdn.com/files/2014/07/24/dib01.png "Distorsión: el mundo real y entrenamiento auditivo, por Pablo Fernández-Cid, en Hispasonic")
 
-### Ruido
+## Ruido
 Es la peor de las **perturbaciones de señal**. Corresponde a **señales no deseadas** que se *"inyectan"* en la señal.
 - Ruido **térmico**: insolventable.
 
@@ -251,12 +251,12 @@ Es la peor de las **perturbaciones de señal**. Corresponde a **señales no dese
 
 > Nota: Para más información revisar transparencias.
 
-#### Muestreo
+### Muestreo
 La solución en estos casos es que el **receptor imponga un muestreo** aunque puede llevar a error si los tiempos fueran distintos o la señal estuviera gravemente alterada.
 
 ---
 
-### Medios de transmisión
+## Medios de transmisión
 Se trata del **medio** por el que se **transporta la señal**.
 - **guiados**: por cable, dependen del **medio**.
 - **no guiados** (inalámbrico): por aire, dependen de la **frecuencia**.
@@ -269,14 +269,14 @@ fibra óptica | infrarrojos
 
 > Nota: Evidentemente, hay más.
 
-### Medios de transmisión guiados
+## Medios de transmisión guiados
 Se distinguen dos formas de disponer el cableado:
 - **directo**: para conexiones emisor/receptor
 - **cruzado**: para conexiones de doble emisor
 
 ![Conexión directa y cruzada](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLqiLslUqesCM5tRuC9o6ktKnzxpGSrQ16e0XDb2yiB66YYLAhMVeQzdvQhlxfZSubJ9NbZq_u85N6WET36yN1v0FT9WJVt-ptF5_OT7l69lTNZNf4bbTD3_0lj9TJQFaMH8aNZoncfKk/s1600/straight-through-vs-crossover-cables.jpg "Cable directo y cruzado, por Jorge, en Redes de datos")
 
-#### Par trenzado
+### Par trenzado
 Es el medio guiado más **económico** y consta de dos conductores aislados que se entrelazan. Alcanza una velocidad de alrededor de 100 Mbps.
 
 Se suelen utilizar en:
@@ -297,14 +297,14 @@ Shielded Foiled Twisted Pair | SFTP | ✓ : SÍ | ✓ : SÍ
 También pueden categorizarse según sus **apliaciones** difiriendo en características como el ancho de banda.
 > Nota: El filtro de paso bajo es también **analógico**, es decir, aunque filtre según el ancho de banda, los límites son difusos y pierden amplitud de forma continua atenuándose.
 
-#### Cable coaxial
+### Cable coaxial
 Consiste en **dos conductores concéntricos** separados por aislante. Para obtener flexibilidad, el conductor exterior se dispone en forma de malla.
 
 Es usado en televisores y, anteriormente, en conexiones LAN entre ordenadores.
 
 ![Cable coaxial](https://alfarsl.es/wp-content/uploads/2018/03/caracteristicas-cable-coaxial.jpg "Características del cable coaxial y variantes del dieléctrico en Alfa'r")
 
-#### Fibra óptica
+### Fibra óptica
 Transmite **señales luminosas** por lo que proporciona:
 - **inmunidad al daño radioeléctrico**
 - **mitigación de atenuación**
@@ -313,7 +313,7 @@ Es pequeño, maleable y maneja enormes velocidades.
 
 ![Ley de Snell y fibra óptica](https://openstax.org/apps/image-cdn/v1/f=webp/apps/archive/20260105.231123/resources/fb1e4927b295dd1f5c2bd4e56c3c0e4f2bc19b7b "Reflexión interna total: Física universitaria volumen 3 en OpenStax")
 
-### Métodos de transmisión no guiados
+## Métodos de transmisión no guiados
 Su medio es el **aire** por lo que dispondra de **menor seguridad** en **llegada de paquetes** y **privacidad de contenido**.
 
 Se distingue el tipo de onda según su **frecuencia**.
@@ -326,7 +326,7 @@ En ocasiones es necesario **transformar la señal**. Para ello se utilizará **m
 
 ---
 
-### Modulación
+## Modulación
 Es como un proceso en el que se incluye un **modulador** que actúa como **caja negra**.
 
 Para obtener la señal original en el receptor hace falta un proceso de **demodulación**.
@@ -355,6 +355,8 @@ Sin embargo, esto enfrenta problemas. El desfase **tiene un coste de aumento de 
 
 ![Modulación PSK a 90º en vector fasor](https://shopdelta.eu/obrazki_art/dpsk_img3_d.jpg "PSK modulation and its types en Shopdelta")
 
+> Sobre el documento: Si no se pueden visualizar las imágenes del vector fasor, probablemente, sea culpable la página web. Tal vez se pueda visualizar usando VPNs o proxies.
+
 También se puede aprovechar la **modulación de la amplitud** par codificar más bits.
 
 ![Modulación de amplitud PSK](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcbPSzqAKJZuyewCi3euccyZesRBgFy-9icopE2buljX6jPPVavfL5qc-Z6B_ywzcTzjxjrKpMTsKuIysXKiK6OvoF9PI-8pMFZGpR0NwlDjg6LD80SHQEh2BvuNOsll66hdo0gPfG9gMH/s1600/Captura.PNG "Teleco in a nutshell v8.7: Modulación de Amplitud en Cuadratura, por zerolynx, en Fluproject")
@@ -371,7 +373,7 @@ Por todo esto, el receptor necesita, a su vez, un **demodulador** que permita re
 
 ![Proceso de red](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPcfbvDBJeP4rTh1SVmmnpoJW5Esbd2Bo_Og&s "SISTEMAS ABIERTOS E INTERCONEXIÓN, por M.C Alejandro Gutiérrez Díaz")
 
-### Codificación
+## Codificación
 Es la forma de tomar señales digitales y **transformarlas en analógicas**. Se distinguen múltiples formas:
 - NRZ: no retorno a cero
 - RZ: retorno a cero (vuelve a 0 a media fase reduciendo costes)
@@ -397,7 +399,7 @@ $$v_{mod} = v_{tx}/bpe$$
 
 ---
 
-### Enlace y servicios
+# TEMA 2: Enlace y servicios
 Un **enlace** es una **trayectoria que conecta dos dispositivos**. Es el encargado de **enrutar por medio de nodods**. La capa de enlace es un intermediario entre lo físico y lo lógico, es decir, **en las próximas capas se ignorarán las trayectorias de la capa de enlace**.
 
 ![Capa de enlace](https://laprovittera.com/wp-content/uploads/2022/10/image-116.png "CAPA 2 ENLACE DE DATOS (Acceso a red) Enrutamiento y creación de una LAN, por Laprovittera, en LAPROVITTERA CARLOS")
@@ -414,12 +416,12 @@ Los **servicios** ofrecen:
 - **Control de flujo**
 - Conmutación duplex
 
-### Datagramas en su encapsulamiento
+## Datagramas en su encapsulamiento
 Cuando llega una cabecera desde el nivel de red para pasar al nivel de enlace se *encapsula* la cabecera alrededor de información de la capa de enlace.
 
 ![Encapsulamiento de datos](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEikKBjRvVD1gCNi9mZlTurxXbQPkH4q2JEF2CMw4YPHo-ybw4ExuqgL53ClPamBRenY3vBRpHMbm2-oNRvYuTzFIrsBNG9BhTVYbp7Y4VMam6-PSfSnBEnQ_f8c_zB4s9hMbTPs0Cmta5U/s1600/encapsulamientoEX.png "Proceso de Comunicación de los Datos: Encapsulamiento, por  Marco A. Arenas, en Telecomunicaciones USFX")
 
-#### Adaptador de red
+### Adaptador de red
 También conocido como **NIC** (Network Interface Card) o simplemente **tarjeta de red**, es el encargado de **encapsular** el datagrama en una trama que se transmite implementando los niveles de **enlace y físico**.
 \
 El adaptador del receptor descarta las partes de la cabecera que no le son necesarias.
@@ -432,7 +434,7 @@ El sistema operativo suele **delegar a la tarjeta de red** la tarea de transmisi
 
 > Nota: Comúnmente hay que habilitar la tarea de adaptación al sistema operativo para poder registrar lo que sucede, algo que se hará en grupos informáticos.
 
-### Creación de la trama
+## Creación de la trama
 Existe una **función de enrutamiento** que permite **delimitar** el inicio y el fin y **construir tramas**. Estas contienen:
 - **Cabecera** del protocolo.
 - **Datos**.
@@ -463,7 +465,7 @@ Se utiliza un **marcador de escape** para evitar interpretaciones incorrectas de
 
 > Nota: Este marcador de escape funciona exactamente igual que el `\` visto en *Regular Expressions* o *strings* en lenguajes de programación como Java.
 
-### Tramas Ethernet
+## Tramas Ethernet
 Hay muchas tramas de Ethernet. Las más relevantes son **Ethernet II**, **Ethernet 802.3raw** y **Ethernet IEEE 802.3**.
 > Nota: Las transparencias proporcionan un resumen al respecto de IONOS.
 
@@ -499,3 +501,47 @@ Hay muchas tramas de Ethernet. Las más relevantes son **Ethernet II**, **Ethern
 > > Ct: "A mí lo que me importa es la primera".
 
 > Ct: En la actualidad se usan otros. Manchester encoded es para Ethernet a menos de 10 megabits.
+
+## Técnicas de detección de errores
+Es la forma de lograr **fiabilidad** entre las comunicaciones.
+
+$$ \text{"Tasa de error de bit"} \equiv BER $$
+
+> Nota: *BER* viene de *bit error rate*.
+
+> Ct: Esto aparecerá en las prácticas.
+
+El receptor debe **comprobar y detectar** los errores en la transmisión. Esta detección se realiza mediante **códigos detectores de error** que incorporan **datos adicionales** y aumenta la **complejidad**.
+\
+Estos codigos detectores de errores, normalmente, cubren **cabecera y datos** y permiten al receptor detectar **ocasionalmente** errores.
+
+### Paridad simple
+Puede ser sobre **par o impar**. Consiste en poner **un último bit de paridad**. El receptor debe calcular si la paridad del total de bits es la adecuada.
+
+Esta técnica es **poco consistente** ya que fallará siempre que fallen $2n$ bits.
+
+### CheckSum
+Proporciona un **valor como suma de información**. Si el receptor detecta distinto el valor de la suma y la suma de la información significa que se ha habido alguna alteración. Nuevamente, puede fallar.
+
+### CRC
+Se calcula electrónicamente mediante **módulos con transistores**.
+\
+Consiste en una **operación XOR consecutiva** que proporciona un **código resultante** obtenido desde el 0 que debe, en el emisor, ser transmitido y, en el receptor, ser operado hasta obtener dicho 0.
+
+Hay **estándares internacionales definidos** para llevar esto. son los $G_{\text{CRC-}n}$ con *n* bits.
+
+## Corrección de errores
+Se dan dos estrategias de las cuales la más usada es el **ARQ**:
+- **FEC** (*Foward Error Correction*) añade **información de recuperación** al mensaje.
+- **ARQ** (*Automatic Repeat Request*) pide al emisor la **información nuevamente**.
+
+> Nota: Esto aplica principalmente a la capa de transporte porque en la capa de enlace **se desecha la trama alterada**.
+
+# TEMA 3: Red de Área Local (LAN)
+Son redes de **pocos kilómetros** que transmiten información a **pocos dispositivos** a **alta velocidad**.
+
+Los **controles de acceso al medio** (MAC de *Media Acces Control*) son clasificables:
+- con **posibilidad de colisión**
+- **libres de colisión**
+
+> Eg: CSMA/CD es una red de área local en el que, en el caso de que hayan colisiones, las trata automáticamente. En cualquier caso, CSMA/CD es una red con posibilidad de colisión por mucho que solvente el problema.
