@@ -290,4 +290,4 @@ Es especialmente útil porque **almacena la ruta de la transacción** aumentando
 > ```
 > El dato se introduce directamente a la consulta evitando dicho problema.
 
-> Nota: Los problemas y las soluciones con los `null`s persisten.
+> Nota: Los problemas y las soluciones con los `null`s persisten. 

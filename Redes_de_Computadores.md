@@ -502,6 +502,8 @@ Hay muchas tramas de Ethernet. Las más relevantes son **Ethernet II**, **Ethern
 
 > Ct: En la actualidad se usan otros. Manchester encoded es para Ethernet a menos de 10 megabits.
 
+---
+
 ## Técnicas de detección de errores
 Es la forma de lograr **fiabilidad** entre las comunicaciones.
 
@@ -528,7 +530,7 @@ Se calcula electrónicamente mediante **módulos con transistores**.
 \
 Consiste en una **operación XOR consecutiva** que proporciona un **código resultante** obtenido desde el 0 que debe, en el emisor, ser transmitido y, en el receptor, ser operado hasta obtener dicho 0.
 
-Hay **estándares internacionales definidos** para llevar esto. son los $G_{\text{CRC-}n}$ con *n* bits.
+Hay **estándares internacionales definidos** para llevar esto. son los $G_{\text{CRC-}n}$ con $n$ bits.
 
 ## Corrección de errores
 Se dan dos estrategias de las cuales la más usada es el **ARQ**:
