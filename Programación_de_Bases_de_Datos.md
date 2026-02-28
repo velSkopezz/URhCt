@@ -2,14 +2,14 @@
 title: Programación de Bases de Datos
 author: Christian Velasco Pérez
 ---
-# Programación de Bases de Datos
+# **Programación de Bases de Datos**
 *Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" align="right" style="width:15%; margin-left:4%;margin-bottom:2%">
 \
-El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento orientado al curso de *Programación de bases de datos* del Grado en Ingeniería Informática de la Universidad de La Rioja. Por consiguiente, se considera completa responsabilidad del lector lo que haga con la información de este documento.
+El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento está orientado al curso de *Programación de bases de datos* del Grado en Ingeniería Informática de la Universidad de La Rioja y se considera completa responsabilidad del lector lo que haga con la información de este documento.
 \
 La distribución del documento queda reservada al permiso explícito de su autor. Si necesitase información de contacto puede [enviar un correo](mailto:velskopezz@gmail.com).
 
-## TEMA 1: Arquitectura de aplicaciones de Bases de Datos
+# TEMA 1: Arquitectura de aplicaciones de Bases de Datos
 Se habla de separación **topológica** cuando se trata de una *separación física*. La separación **lógica** se basa en capas:
 1. Capa de **presentación**
     - generación
@@ -21,10 +21,10 @@ Se habla de separación **topológica** cuando se trata de una *separación fís
 
 ---
 
-### Topología de un nivel
+## Topología de un nivel
 Consiste en **un solo servidor** con su base de datos y un **emulador de terminal** para representar la información. Es el sistema más simple.
 
-### Arquitectura cliente-servidor
+## Arquitectura cliente-servidor
 También se conoce como como *topología de dos niveles*.
 
 Se distinguen **dos roles**: uno de ellos hace *peticiones al servidor* y el otro *gestiona los recursos* para dar una respuesta. La **persistencia** puede estar dividida entre el cliente y el servidor así como estar completamente en alguna de ellas.
@@ -34,19 +34,19 @@ Se habla de ***Thin-Client*** o ***Fat-Client*** según la *cantidad de persiste
 
 ![Arquitectura cliente-servidor](https://edgarbc.wordpress.com/wp-content/uploads/2014/02/501f9-cliente-servidor.png "ARQUITECTURA CLIENTE/SERVIDOR (DOS CAPAS) en WordPress")
 
-### Topología de tres niveles
+## Topología de tres niveles
 Utiliza **múltiples roles de servidor**. Está reforzado en el mundo empresarial por J2EE. Uno de ellos sirve la **lógica de negocios**  y el otro los **datos**, aunque pueden mezclarse en diferentes casuísticas.
 
 ![Topología de tres niveles](https://bbdd.abrilcode.com/lib/exe/fetch.php?media=bloque1:3_capas.png "Fundamentos de Bases de Datos en abrilCode")
 
-#### Ventajas sobre el **cliente grueso**
+### Ventajas sobre el **cliente grueso**
 - simplificación del **tráfico de red**
 - mayor **seguridad**
 - facilidad de **mantenimiento**
 - compartición de **lógica de negocio**
 - fácilmente **escalable**
 
-### División en capas
+## División en capas
 Proporciona una solución más **flexible y dinámica** en la que cada **capa asume funciones aisladas**. Su arquitectura se forma en torno a tres capas:
 1. **Generación de presentación**
 2. **Lógica de negocio**
@@ -68,24 +68,24 @@ Proporciona una solución más **flexible y dinámica** en la que cada **capa as
 
 ---
 
-### Capa de presentación
+## Capa de presentación
 Se encarga de la **interacción** con entidades externas y pueden existir en una sola aplicación **múltiples capas de presentación** para distintas entidades. Puede tener *cualquier medio* y *no debe incluir reglas de negocio*.
 
 > Eg: en una página web al cliente le corresponde la **representación** y al servidor le corresponde la **generación**.
 > 
 > Nota: El ejemplo logra ilustrar que la capa de presentación no le corresponde exclusivamente al cliente.
 
-### Capa de lógica de negocio
+## Capa de lógica de negocio
 Es el "corazón de la aplicación". Se encarga de **efectuar las normas de negocio**. Suele trabajar con **técnicas de orientación a objetos** y dos elementos:
 - ***Domain model***: objetos de negocio
 - ***Business model***: servicios que atienden a las reglas
 
 > Eg: al *Domain model* le corresponderá el objeto `Cliente` y al *Business model* le corresponderá comprobar en `ProcesarPago()` si se puede efectuar.
 
-### Capa de persistencia
+## Capa de persistencia
 Se encarga del almacenamiento y tratamiento de **datos**. Interface las operaciones **CRUD** (create, retrieve, update, delete) y el **intercambio de colecciones de objetos** para la **comunicación con las bases de datos**.
 
-## TEMA 2: Panorámica general de la programación de bases de datos
+# TEMA 2: Panorámica general de la programación de bases de datos
 Este tema refiere a las alternativas (herramientas y metodologías) para implementar la **capa de persistencia**.
 
 Se agrupan en dos estrategias fundamentales: **CLI** y **SLI**.
@@ -116,7 +116,7 @@ Una llama a consultas y la otra incorpora *funciones que llaman a consultas* en 
 >
 > Nota: Tanto SLI como CLI se considera que tienen SQL embebido.
 
-### Statement-Level Interface (SLI)
+## Statement-Level Interface (SLI)
 Existen llamadas de **precompilado de transacciones** en las que se **insertan** de forma binaria. No basta con el compilador del lenguaje porque **no lo incorpora dentro del lenguaje**.
 
 Como SLI necesita de precompilado de transacciones no es posible utilizar **SQL dinámico**.
@@ -124,7 +124,7 @@ Como SLI necesita de precompilado de transacciones no es posible utilizar **SQL 
 > 
 > Se dice que **SQL está embebido** en el *lenguaje huésped*.
 
-### Call-Level Interface (CLI)
+## Call-Level Interface (CLI)
 El lenguaje es **intrínsecamente huésped** y las consultas son **strings**, que son editables de forma dinámica durante la ejecución. No se considera que SQL esté embebido.
 
 ### Diferencias y ventajas de las interfaces
@@ -139,13 +139,13 @@ compatibilidad con SQL dinámico | difícilmente | (+) nativa
 ---
 ---
 
-### Elementos de una API de acceso a base de datos
+## Elementos de una API de acceso a base de datos
 Las APIs proveen una **interfaz** para un sistema de bases de datos. Proporciona:
 - Conexiones
 - Instrucciones
 - Cursores
 
-#### Conexiones
+### Conexiones
 Permite obtener **información meta** y debe cerrarse tras su uso.
 
 #### Instrucciones
@@ -155,7 +155,7 @@ Se distinguen dos planes de ejecución:
 
 > Involucrará a las clases de JDBC `Statement` y `PreparedStatement` para las instrucciones *a demanda* y *preparadas* respectivamente.
 
-#### Cursores
+### Cursores
 Se utilizan fundamentalmente para **consultas**. Son zonas de memoria del servidor que sirven a modo de **almacén personal**. Hay diferentes tipos:
 - unidireccionales
 - multidireccionales
@@ -163,7 +163,7 @@ Se utilizan fundamentalmente para **consultas**. Son zonas de memoria del servid
 
 > Los actualizables referencian a la base de datos para poder alterar valores.
 
-### Microsoft ODBC
+## Microsoft ODBC
 Es un API de Microsoft orientado a múltiples aplicaciones y **marcas**. Para usar ODBC se necesita un *driver ODBC específico* para la respectiva base de datos.
 
 ODBC es un **generalizador**: abstrae conexiones, interacciones, representaciones... En definitva, permite **separar la base de datos** de las capas de persistencia y lógica de negocios.
@@ -178,7 +178,7 @@ Se distinguen dos tipos de drivers ODBC:
 >
 > Nota: La implementación del driver ODBC depende del encargado del sistema de la base de datos.
 
-### JDBC
+# TEMA 3: JDBC
 Es un API de pocas clases y fundamentalmente **interfaces**. 
 \
 Los propios encargados que conocen el sistema de bases de datos son los que deben proporcionar un **driver** (en forma de archivo jar) que incluya clases que implementen dichas interfaces.
@@ -193,7 +193,7 @@ Se distinguen hasta cuatro tipos de formas de conectarse con la base de datos ut
 
 > Nota: El método del puente está dejando de ser utilizado.
 
-#### Interfaz `Driver` y clase `DriverManager`
+## Interfaz `Driver` y clase `DriverManager`
 La interfaz `Driver` se utiliza para obtener generalización.
 \
 Es fundamentalmente necesario para la **estandarización del API**.
@@ -204,14 +204,14 @@ El **`DriverManager`** es un **gestor de drivers**. Almacena una **lista de driv
 
 > Nota: Para ver **información sobre el método `getConnection()`** revisar transparencias,
 
-#### Interfaz `Connection`
+## Interfaz **`Connection`**
 Un objeto de una clase que implementa **`Connection`** representa una **sesión abierta**. Se dispone de tres clases fundamentales de las cuales la segunda y tercera mencionadas heredan de la primera:
 
 - **`Statement`** para operaciones *a demanda*
 - **`PreparedStatement`** para operaciones *preparadas*
 - **`CallableStatement`** para **programas almacenados**
 
-#### URL de conexión
+### URL de conexión
 Se adjunta un ejemplo:
 
 ```java
@@ -226,7 +226,7 @@ A cada conexión le debería corresponder un bloque de control de errores con un
 
 > Nota: Es recomendable que una base de datos tenga un máximo de usuarios activos.
 
-#### Interfaz `Statement`
+## Interfaz **`Statement`**
 Su función fundamental es **ejecutar transacciones**:
 - `executeQuery(String): ResultSet` se utiliza para ejecutar transacciones de tipo consulta.
 - `executeUpdate(String): int` se utiliza para transacciones DDL y DML sin consultas.
@@ -235,3 +235,59 @@ Su función fundamental es **ejecutar transacciones**:
 > Nota: La función de `execute(String): boolean` es fundamentalmente tratar con transacciones cuyo contenido no conoces. Es más claro y aporta mayor control usar las funciones específicas.
 
 Tanto **`Statement`** como **`ResultSet`** tienen un método **`close()`** para cerrar la comunicación. Oracle recomienda **cerrarlo explícitamente**.
+
+## Interfaz **`ResultSet`**
+Ofrece métodos para **recorrer los resultados** de las **consutlas**:
+- `next(): boolean` devuelve `true` si hay más tuplas o `false` si no las hay.
+- `getObject(int): Object` devuelve el dato i-ésimo de la tupla como `Object`
+    > Nota: También hay `getDouble`, `getInt`, `getString` etc.
+
+### Tratamiento de `null`s
+Para los **tipos primitivos** los valores `null` son transforamdos a su equivalente más lógico.
+> Eg: `int` pasa a ser valer 0, `String` pasa a valer la cadena vacía, etc. Esto se debe a que en Java los tipos primitivos y los objetos van aparte. Los objectos a efectos prácticos son una referencia por lo que se les puede asignar `null`. Los tipos primitivos no cuentan con esta ventaja.
+
+Para controlarlo se pueden seguir dos métodos:
+1. Usar el método `wasNull(): boolean` que devuelve si es `null`.
+2. Transformarlo a un **objeto** ya que estos pueden valer `null`:
+    - `getObject(int): Object`
+    - `getObject(int, Class<T>): T`
+
+## Interfaz **`PreparedStatement`**
+Sirve para realizar **transacciones parametrizadas** utilizando un caracter `?` como almohadilla que permite introducir **parámetros** en **transacciones preparadas**.
++ `setObject(int, Object): void` donde se introduce el índice del parámetro y el dato a ingresar.
+    > Nota: Al igual que en `ResultSet`, también hay métodos para otros tipos de datos. 
+
+Es especialmente útil porque **almacena la ruta de la transacción** aumentando la eficiencia y, al mismo tiempo, es **fundamental para la seguridad** ya que impide la **inyección de código**.
+> Eg: véase por inyección de código.
+>
+> Si el código tiene la siguiente forma y, por tanto, usa `Statement`:
+> ```java
+> String query;
+> query = "SELECT * FROM users WHERE usr='" + user + "' AND pwd='" + password + "'";
+> ```
+> El usuario puede ingresar en su entrada:
+> ```
+> user?
+> > admin
+> password?
+> > any' OR '1'='1
+> ```
+> Esto inmediatamente transformaría la `String` `query` en:
+> ```sql
+> SELECT *
+> FROM users
+> WHERE usr='admin'
+>   AND pwd='any'
+>   OR '1'='1'
+> ```
+> Como se puede apreciar, la condición de dicha consulta *siempre se cumple* por lo que se puede ingresar a cualquier usuario sin tener la contraseña.
+>
+> En `PreparedStatement` el código se dispondría tal que:
+> ```java
+> PreparedStatement statement = connection.preparedStatement("SELECT * FROM user WHERE usr=? AND pwd=?");
+> statement.setString(1, user);
+> statement.setString(2, password);
+> ```
+> El dato se introduce directamente a la consulta evitando dicho problema.
+
+> Nota: Los problemas y las soluciones con los `null`s persisten.
