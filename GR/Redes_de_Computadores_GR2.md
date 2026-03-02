@@ -1,5 +1,5 @@
 ---
-title: GR 2: Redes de Computadores
+title: GR 2 Redes de Computadores
 author: Christian Velasco Pérez
 ---
 # GR 2: Redes de Computadores

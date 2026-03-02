@@ -352,7 +352,7 @@ Utiliza la notación del diagrama de secuencia para representar la **interacció
 Se muestra al actor y al objeto del sistema con sus respectivas **líneas de vida**. Se proporcionan peticiones y respuestas en forma de **flechas dirigidas** y estas, a su vez, pueden estar encajonadas representando **iteraciones**.
 
 ### Eventos
-Guardan el nombre de la pteición y la **información que se envía**. Para mensajes **condicionales** se pone la condicion encerrada en corchetes antes de la petición. En el caso contrario se hace sacando otra línea.
+Guardan el nombre de la petición y la **información que se envía**. Para mensajes **condicionales** se pone la condicion encerrada en corchetes antes de la petición. En el caso contrario se hace sacando otra línea.
 
 Los bucles son distintos según la cantidad de afectados. Si son varios se engloban en un marco y se especifica la condición tal que \*\[condición\], destacando el asterisco (*).
 

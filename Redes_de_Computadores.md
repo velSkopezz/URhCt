@@ -109,7 +109,7 @@ Para esto es fundamental el *algoritmo de Dijkstra*. Esto lo gestiona un **siste
 ### Velocidades
 > $L \equiv$ "cantidad de bits a transmitir"
 > \
-> $R \equiv$ "tiempo de carga de bits"
+> $R \equiv$ "velocidad de carga de bits"
 > \
 > $D \equiv$ "distancia de viaje de un paquete"
 > \
@@ -542,8 +542,86 @@ Se dan dos estrategias de las cuales la más usada es el **ARQ**:
 # TEMA 3: Red de Área Local (LAN)
 Son redes de **pocos kilómetros** que transmiten información a **pocos dispositivos** a **alta velocidad**.
 
+## Mecanismos de control de acceso al medio (MAC)
 Los **controles de acceso al medio** (MAC de *Media Acces Control*) son clasificables:
 - con **posibilidad de colisión**
+    > Eg: Alohanet, CSMA, CSMA/CD (Ethernet), CSMA/CA (Wi-Fi)...
 - **libres de colisión**
+    > Eg: Mecanismos de paso de testigo, de reserva, de encuesta...
 
-> Eg: CSMA/CD es una red de área local en el que, en el caso de que hayan colisiones, las trata automáticamente. En cualquier caso, CSMA/CD es una red con posibilidad de colisión por mucho que solvente el problema.
+> Nota: CSMA/CD es una red de área local en el que, en el caso de que hayan colisiones, las trata automáticamente. En cualquier caso, CSMA/CD es una red con posibilidad de colisión por mucho que solvente el problema.
+
+El problema surge cuando varios dispositivos **transmiten información simultáneamente** hacia una misma base provocando así una **colisión**. Para ello se necesita un **control de acceso al medio**.
+
+> Eg:
+> \
+> En Alohanet el dispositivo **enviaba la información inmediatamente**:
+> - Si la información llegaba correctamente se recibe un **mensaje de confirmación**.
+> - Si no llega el mensaje de confirmación se **espera un tiempo aleatorio** y se **reenvía** la información.
+> 
+> El intervalo de espera debía ser considerable puesto que reduce los rendimiento del protocolo.
+
+## Protocolo MAC
+Se distinguen en dos tipos según los **enlaces de difusión**:
+- **Acceso aleatorio**: el canal no está preasignado por lo que es susceptible a colisiones.
+- **Acceso por turnos**: el canal está coordinado para evitar colisiones.
+
+## CSMA/CD
+Usado en conexiones Ethernet, viene de *Carrier Sense Multiple Access with Collision Detection* o Detección de Portador de Acceso Múltiple con Detección de Colisiones en español.
+
+Un nodo **usa todo el ancho de banda** cuando transmite.
+\
+Se **comprueba si está libre el canal**. En tal caso, se transmite de inmediato. De lo contrario, se **espera** a que esté libre.
+\
+Mientras se transmite **se comprueba que no haya colisiones**.
+
+La **prestación** que se utiliza es **total** entre el emisor y el receptor.
+
+Si se produce una **colisión** se **envía una señal** que, una vez detectada por el emisor, **interrumpe la transmisión de la trama** y, en su lugar, el emisor más cercano a la colisión transmite una **señal de atasco** de 48 bits a todo el sistema.
+\
+Tras ello, los emisores **esperan un tiempo aleatorio** basado en el **algoritmo de retroceso exponencial binario** y, después, envían la señal.
+
+Un detalle importante es la necesidad de establecer un **tamaño mínimo de la trama** puesto que es posible que **la colisión se detecte después de que el emisor termine de transmitir**. En tal caso, el receptor enviaría una señal de atasco que el emisor ignora creyendo que se envió la trama correctamente.
+
+### Algoritmo de retroceso exponencial binario
+Tambien llamado ***Binary Backoff*** en inglés, se asigna el **tiempo de espera**:
+
+$$\text{``tiempo de espera''} \equiv 512 \ k \cdot \frac{1}{R}$$
+
+> $n \equiv$ "número de colisiones"
+> \
+> $k$ es electo aleatoriamente entre $\{ \ k \in \N \ | \ k < 2^{m}-1 \ \}$
+> \
+> $m = min(n,10)$
+> \
+> $R^{-1} \equiv$ "tiempo de bit"
+
+## CSMA/CA
+Usado en conexiones Wi-Fi, viene de *Carrier Sense Multiple Access with Collision Avoidance* o Detección de Portador de Acceso Múltiple con Evasión de Colisiones en español.
+\
+Es **similar CSMA/CD** puesto que sigue siendo CSMA.
+
+- El **emisor** detecta si el **canal está libre por DIFS** segundos. En tal caso **transmite la trama completa**. Si no, espera un tiempo aleatorio según el **algoritmo *BinaryBackoff***.
+- El **receptor** comprueba si la **trama recibida es correcta**. En tal caso, devuelve **ACK** (*acknowledge*).
+
+### Evitación de colisión RTC/CTS
+Una estación solicita al AP (*Access Point*) **transmitir** una trama de datos con una **trama específica** a la que llamamos **RTS** (*Request To Send*) en la que **se indica el tiempo necesario para transmitir** toda la trama.
+
+El AP contesta por **difusión** enviando otra **trama específica** llamada **CTS** (*Clear To Send*) que da **permiso para transmitir al solicitante** e informa al **resto de dispositivos para que no envíen**.
+
+> Nota: se realiza el intercambio RTS/CTS cuando el tamaño de la trama supera el umbral definido por la estación. Normalmente no se utiliza porque el umbral suele ser mayor que el MTU.
+
+![Evasión de colisión RTS/CTS](https://1.bp.blogspot.com/-PPrAOeC0O3M/YFMYV5KmUVI/AAAAAAAACQE/1aobX4TQ6UcOJ9mVDxtBnPR1oT_brjHYgCLcBGAsYHQ/s740/RTS_CTS_Message_Exchange.JPG "Wi-Fi DoS: CTS Frame Attack, por Mario Valiente, en Blog de ISecAuditors")
+
+## Paso de testigo
+Es una forma de acceso al medio **libre de colisión** muy utilizado en **topologías de anillo**.
+
+A lo largo del sistema se transmite el **testigo**. El dispositivo que tiene el testigo tiene **permiso para transmitir**.
+
+Si un nodo quiere transmitir sin testigo debe esperar a tenerlo.
+\
+En el caso de tenerlo, transmite un **máximo de tramas** y, posteriormente, pasa el testigo. Si no tiene nada que transmitir, sencillamente, **pasa el testigo**.
+
+El motivo de su bajo uso es que **el sistema completo falla con la caída de un solo dispositivo**.
+
+![Topología en anillo](https://redesinalambricasycableadas.wordpress.com/wp-content/uploads/2014/10/descarga-4.jpg "Topologia de anillo: Redes Inalambricas y Cableadas en WordPress")
