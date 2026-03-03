@@ -372,3 +372,38 @@ Representa en un grafo el análisis. Es el más **descriptivamente potente** y b
 
 - Los caminos pueden **dividirse** y **unirse** mediante el uso de segmentos de rectas que sean apuntados por una serie de flechas. Es una operación distinta a la fusión. La unión y división requieren que **todos ellos sucedan**.
 - Opcionalmente, puede dividirse el diagrama en **calles** que engloben un área en el que, si una actividad se encuentra dentro, se espera que dicha actividad le corresponda a esa parte del sistema.
+
+# TEMA 4: Análisis
+Para ello se obtiene un aherramienta sobre la que pensar y analizar. Para ello, se utilizan el **modelo conceptual**, de **dominio** o, generalizado, de **análisis**.
+
+Lo más probable es que en muchos de estos conceptos, representados en un **diagrama de clases** como **clases**, acaben siendo también **clases a nivel de implementación**. Esto se debe a que el ingeniero adopta papel múltiple en el desarrollo aunque se deben entender como entidades separadas.
+\
+Se debe tener en cuenta que en los diagramas conceptuales las clases **no tienen métodos** porque son puramente conceptuales.
+
+A diferencia de los CdU, en análisis se habla a nivel **técnico** revisando con detenimiento y **sin cajas negras**.
+
+## Diagrama de clases
+Queda especificado por Larman. Tiene clases e interfaces y relaciones aunque **no tiene operaciones**.
+> Ct: Al profesor no le terminan de convencer las interfaces en los diagramas de clase.
+
+Para cada **escenario** del modelo de Casos de Uso se identifican **clases conceptuales** relacionadas. Se recomienda **especificar por exceso** y **repetir mismos nombres** para mismos conceptos o entidades evitando así ambigüedades.
+\
+Es fundamental tener en cuenta que tenemos el **modelo de CdU a mano** y, por ello, se pretende:
+- **Evitar nombres abstractos** refiriéndose a aquellos nombres que no representan clases conceptuales.
+- **Elegir nombres significativos** con sentido de que puedan comprenderse fácilmente sin recurrir a diccionarios o a sinónimos que simplifiquen su significado.
+
+> Nota: El nombre de las clases es en sustantivo **singular**.
+
+De esa forma se logra mitigar los daños producidos por el uso del **lenguaje natural**. También se debe aprovechar la **heurísitca**.
+
+> Nota: Para información adicional, revisar tabla de transformaciones en las transparencias.
+
+Por norma general, si se crea un **diagrama conceptual de clases**, en caso de duda, se prefiere ir al **exceso** y crear dicha entidad como clase.
+\
+Por norma general, se distingue un **atributo** de una clase por no tener atributos.
+
+### Asociación
+Es un tipo de **relación** que representa como una clase **forma parte** de otra, en general, en cualquier sentido. Se distinguen tres niveles afectados:
+- **Conceptual**: implica una relación conceptual específica.
+- **Especificaión**: representan responsabilidades y formas de actuar entre clases.
+- **Implementación**: convierte a ambas clases como atributos entre sí.
