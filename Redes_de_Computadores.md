@@ -625,3 +625,113 @@ En el caso de tenerlo, transmite un **máximo de tramas** y, posteriormente, pas
 El motivo de su bajo uso es que **el sistema completo falla con la caída de un solo dispositivo**.
 
 ![Topología en anillo](https://redesinalambricasycableadas.wordpress.com/wp-content/uploads/2014/10/descarga-4.jpg "Topologia de anillo: Redes Inalambricas y Cableadas en WordPress")
+
+---
+
+## Estándares de LAN
+El estándar que define el comportamiento es el IEEE 802.
+> Nota: Para información detallada revisar transparencias. Interesa fundamentalmente la parte física de 802.3, 802.3z, 802.3u y sus subclasificaciones (LAN, MAN...)
+
+La longitud de la trama debe ser de entre 64 a 1518 bytes. Esto  se debe a que 64B es el mínimo para encontrar colisiones.
+
+- Ethernet
+- Fast Ethernet
+- Gigabit Ethernet
+- 10 Gigabit Ethernet
+
+> Nota: Para más información revisar transparencias.
+
+Es interesante apreciar la diferencia entre los **tipos de conexiones** usadas y el uso de **hubs o switches** entre ellos.
+
+> Ct: Se pide entender la notación, más o menos.
+
+# TEMA 4: Protocolo de Internet (IP)
+Para pasar los datos al enviar un paquete es necesario apoertar información. Aunque los **switches corresponden a la capa 2** y los **routers a la capa 3**, hoy en día se utiliza lo que se llama **routers de la capa 3**, que reúnen ambas caracterísitcas.
+
+Un router tiene, **al menos, dos adaptadores de red**. El router **asciende hasta el protocolo IP** entre adaptadores para conectar los dispositivos por IP en su interior.
+
+En cuanto se le añade la cabecera IP se habla de **datagramas** IP o paquetes.
+
+## Datagrama IPv4
+![Cabecera de datagrama IPv4](https://personales.upv.es/rmartin/tcpip/imagenes/formato-ip.gif "Protocolo de Internet (IP), por R. Martín, en UPV")
+
+Está compuesto por los siguientes elementos:
+- **Versión**: Son 4 bits que representan la versión IPv4 o IPv6. Pueden valer 4 (`0x4`) o 6. IPv6 tiene otra cabecera.
+- **Longitud**: Indica el tamaño total de la cabecera del datagrama medido en 32 bits por unidad.
+    > Eg: si la longitud es `0b0101`, o bien `0x5`, entonces la cabecera ocupa un total de $32 \text{b} \cdot 5 = 160 \text{b}$
+- **Tipo de servicio**: Inidica la forma de enviar los datos
+    > Ct: No es interesante.
+- **Longitud total**: Es un campo de 16 bits que indica la longitud del datagrama en bytes pudiendo valer un máximo teórico de $2^{16} - 1 = 65535$ bytes.
+\
+Es redundante porque el MTU suele estar limitado a mucho menos.
+- **Identificación**: Es un campo, normalmente autoincremental, que identifica el datagrama y cuyo valor está dado por el **host**.
+- ***Flags***: Son una serie de 3 bits que indican información sobre fragmentación.
+- ***offset* de fragmento**: Identifica el fragmento del datagrama.
+- **Tiempo de vida**: El **TTL** se reduce por cada salto evitando que paquetes perdidos circulen eternamente por la red.
+- **Protocolo**: Indica qué protocolo se está usando: UDP, TCP, ICMP...
+- **Checksum de la cabecera**: Permite encontrar alteraciones en la cabecera.
+- **Dirección IP de la fuente**.
+- **Dirección IP del destino**.
+
+### Tiempo de servicio (TOS)
+Funciona de tal manera que tiene 3 bits de precedencia que indica **códigos de servicio** a los que le siguen otros **4 bits DTAC** y un último bit a 0 que no se usa:
+- **D**elay para minimizar el retardo.
+- **T**hroughput para maximizar la productividad.
+- **R**eliability para maximizar fiabilidad.
+- **C**ost para minimizar el coste.
+
+### Time-To-Live (TTL)
+Se recomienda un **valor inicial de 64 saltos**, normalmente debe ser **superior a 16** para poder legar al destino y se suele escribir en **potencias de 2**.
+\
+Es un valor que se **inicializa en el host** y, por cada dispositivo por el que salta, se **reduce en 1** su valor.
+
+### Protocolo
+Indica un código que corresponde a algún protocolo de la **misma u otra capa**:
+- UDP con 17 o `0x0011`.
+- TCP con 6 o `0x0006`.
+- ICMP con 1 o `0x0001`.
+
+### Checksum
+Es un método para encontrar alteraciones con la información de la cabecera.
+> Nota: Para encontrar un ejemplo se recomienda buscar el ejercicio sobre Checksum en las transparencias.
+
+## Fragmentación de datagramas
+Puede ocurrir de diferentes formas, por ejemplo, si un intermediario **reduce el MTU** de la trayectoria este mismo tendrá que fragmentarlo. El MTU máximo teórico de IP es el que corresponde con la longitud de su cabecera, es decir, 65535 bytes o 64kB.
+
+Cuando se fragmenta, la **identificación** y los **flags** siempre se mantienen. En general, se suele copiar gran parte de la cabecera.
+
+Entre los **flags** hay dos bits fundamentales:
+- **DF** (do not fragment): indica que **no se debe fragmentar**.
+- **MF** (more fragments): indica que **quedan más fragmentos**.
+
+> Eg: en la práctica se vio que al forzar un tamaño mayor al MTU y el flag DF se avisaba de que el paquete no podía llegar porque superaba el MTU.
+
+Es posible que un datagrama fragmentado **también necesite fragmentarse**.
+
+En cualquier caso, los flags y desplazamiento están conformados por:
+- **res**
+    \
+    Es un bit para uso reservado aunque ya se le ha dado algún uso.
+- **DF**
+- **MF**
+- ***offset***
+    \
+    Es una cuenta para **identificar fragmentos**. El fragmento 0 es el primer fragmento. El dato del *offset* corresponde a la fórmula $\text{``posición de la información''} \over{8}$.
+    > Eg: si un datagrama de 1200B pasa por una red con MTU de 600B se dividirá en dos fragmentos con
+    > - fragmento 1: $\textit{offest} = 0$
+    > - fragmento 2: $\textit{offset} = \frac{600\text{B}}{8} = 75\text{B}$
+
+> Nota: Cuando se fragmenta un datagrama se **recalcula el Checksum**.
+
+## Procesamiento de datagramas
+> Nota: Para ver información sobre el procesamiento en host revisar diagrama de flujo en transparencias.
+
+El **router puede actuar como host** pero, en la mayoría de situaciones, se dedica a efectuar el **tráfico de red**.
+
+Tras **verificar el Checksum**, lo primero que hace es **reducir el TTL**.
+\
+Posteriormente, sigue de la forma esperada. Para información completa revisar el diagrama de las transparencias.
+
+> Ct: Esto cae en los exámenes: el **datagrama *siempre* cambia** entre saltos porque se reduce el TTL.
+
+> Ct: En el examen las longitudes de las partes de los datagramas van a cuadrar con lo esperado.
