@@ -2,7 +2,7 @@
 title: Ingeniería del Software
 author: Christian Velasco Pérez
 ---
-# Ingeniería del Software
+# **Ingeniería del Software**
 *Autor:* Christian Velasco Pérez <img src="https://iili.io/fpTTGnt.md.jpg" alt="Skopez" align="right" style="width:15%; margin-left:4%;margin-bottom:2%">
 \
 El siguiente contenido corresponde a un **apoyo** educativo para cualquier interesado y por eso puede contener fallos. El documento está orientado al curso de *Ingeniería del Software* del Grado en Ingeniería Informática de la Universidad de La Rioja y se considera completa responsabilidad del lector lo que haga con la información de este documento.
@@ -407,3 +407,57 @@ Es un tipo de **relación** que representa como una clase **forma parte** de otr
 - **Conceptual**: implica una relación conceptual específica.
 - **Especificaión**: representan responsabilidades y formas de actuar entre clases.
 - **Implementación**: convierte a ambas clases como atributos entre sí.
+
+La **multiplicidad** indica la forma en la que se relaciona la cantidad:
+- `k` indica que solamente puede ser el número $k$ indicado.
+- `*` indica que puede contener entre 0 y $n$ valores. También puede representarse con `0..*`
+- `a..b` indica que puede contener valores perteneciente al intervalo $[a,b]$
+
+La **navegación** indica la dirección de la asociación.
+
+La **clasificación** puede aplicarse para indicar relaciones respecto a un concepto específico.
+> Nota: Para ver un ejemplo revisar transparencias.
+
+> Nota: Hay privacidad de atributos.
+
+### Asociación de agregación
+Es un caso de asociación en el que se relaciona **el todo y sus partes**.
+\
+En la agregación las partes **pueden pertenecer a varios todos** de tal forma que **la desaparición del todo no implica la desaparición de la parte**.
+> Nota: Se representa con un rombo en el todo.
+
+### Asociación de composición
+Es un caso de asociación en el que se relaciona **el todo y sus partes**.
+\
+En la composición se **exije exclusividad y dependencia** por lo que **la existencia de las partes está ligada a la del todo**. La multiplicidad de las partes siempre es 1 por lo que se omite su notación.
+> Nota: Suelen representar elementos físicos.
+
+> Nota: Se representa con un rombo relleno en el todo.
+
+### Asociación reflexiva
+Hace refrencia a cuando una clase se asocia con ella misma.
+
+### Asociación $n$-aria
+Son difíciles de interpretar y se pueden escribir por pares.
+> Ct: No entra.
+
+### Clases de asociación
+Se refiere a situaciones en las que **una asociación contiene atributos**. Es una **clase que forma parte de la asociación** y se representa conectada a la arista de la asociación con una línea discontinua.
+
+### OCL para asociaciones
+OCL proporciona **notación adicional** para UML. Incorpora, con una relación, **otra relación** entre relaciones o clase, o, fundamentalmente, aporta **información adicional** mediante llaves.
+> Nota: Para información aclaratoria revisar transparencias.
+
+### Generalización o herencia
+Cumple con los estándares esperados de la **relación de herencia**.
+
+Une dos entidades en forma de **generalización** y **especialización** en la que la especialización es una clase general a su vez.
+
+Se distinguen restricciones predefinidas:
+- **disjunto/solapado**
+- **incompleto/completo**
+
+También pueden darse situaciones de **herencia múltiple** que favorece la expresión pero dificulta la implementación.
+
+### Clases abstractas
+Corresponde a una clase de generalización que reúne conceptos **sin aportar funcionalidad propia**. Se indica en cursiva o con una etiqueta "*\<\<abstract\>\>*".

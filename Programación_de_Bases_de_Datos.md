@@ -284,10 +284,79 @@ Es especialmente útil porque **almacena la ruta de la transacción** aumentando
 >
 > En `PreparedStatement` el código se dispondría tal que:
 > ```java
-> PreparedStatement statement = connection.preparedStatement("SELECT * FROM user WHERE usr=? AND pwd=?");
+> PreparedStatement statement = connection.preparedStatement(
+>       """
+>       SELECT * 
+>       FROM user 
+>       WHERE usr=?
+>          AND pwd=?"
+>       """
+> );
 > statement.setString(1, user);
 > statement.setString(2, password);
 > ```
 > El dato se introduce directamente a la consulta evitando dicho problema.
 
 > Nota: Los problemas y las soluciones con los `null`s persisten. 
+
+## Interfaz **`CallableStatement`**
+Sirven para **llamar programas almacenados** y extiende `PreparedStatement. Se pueden llamar ***procedure**s* o ***function**s*.
+
+Al usar `[? = ]call <procedure_name>[(?, ?...)]` como el argumento del método `prepareCall(String): String` del objeto `Connection` se prepara la llamada de acuerdo con los parámetros {`in`, `out`, `inout`} que se disponen en el final de la expresión
+
+Para obtener los datos usamos `registerOutParameter(int, Types.[tipo]): void` y posteriormente el comando *getter* adecuado.
+
+---
+
+## Transacción JDBC
+Cuando se necesita que **las transacciones SQL se hagan como bloques** hace falta formarlos como un bloque o **transacción JDBC**.
+
+En JDBC el `autocommit` está habilitado por defecto. Para deshabilitarlo se usa el método `setAutoCommit(boolean): void` de la interfaz `Connection`.
+
+> Nota: Llamamos **contexto transaccional** a aquello que nos indica cómo se realiza la transacción.
+> > Eg: queda compuesto tras hacer:
+> > 1. `connection.setAutoCommit(false)`
+> > 2. `try { . . . ; connection.commit(); }`
+> > 3. `catch (SQLException e) { . . . ; connection.rollback(); }`
+
+Hay **situaciones en las que *no* hace falta arreglar el bloque**. 
+> Eg: una **instrucción única** provoca que, por su propia arquitectura, cualquier error provoque un ***rollback* a nivel de instrucción**. Un sistema gestor de base de datos que corrompiese la base de datos por, por ejemplo, un corte de luz, sería un mal sistema gestor.
+
+> Ct: se exige saber cuándo se debe o no hacerlo y penaliza muchísimo porque se entiende que no comprendes nada de los contenidos.
+
+Existen **save points** para que el *rollback* vuelva al punto determinado.
+
+> Nota: Siempre y cuando el driver cumpla con JDBC 4.1 se puede usar ***try-with-resources*** para cerrar el `Connection`.
+
+### Control de concurencia
+Se trata con mayor profundidad en el tema 4.
+\
+Se logra mediante el **aislamiento** del que se distinguen 4 formas proporcionadas por JDBC.
+
+### **`SQLException`**
+Proporciona métodos:
+- `getMessage(): String` devuelve el mensaje de error.
+- `getErrorCode(): int` devuelve el código de **error SQL**. Sirve para la redirección del usuario en caso de errores.
+- `getNextException(): SQLException` proporciona el siguiente error.
+
+### **`DatabaseMetaData`**
+Permite obtener **metainformación** relativa a la base de datos como su esquema e **información sobre el sistema gestor de base de datos**.
+\
+Sus métodos devuelven un `ResultSetMetaData`.
+
+### Pool de conexiones
+Existe una **piscina de conexiones** en la que, en vez de cerrar una `Connection`, se almacena en una *pool* y se recoge cuando vuelva a hacer falta.
+\
+Suele **combinarse con `PreparedStatement`** aprovechando el plan de ejecución ya que, de lo contrario, se pierde junto con el cierre de la `Connection`.
+
+### Actualizaciones por lotes
+Disponible desde JDBC 4, consiste en añadir operaciones con `addBatch(String): void` y, finalmente, **ejecutar todo de golpe** lo que mejora el rendimiento. Está orientada a **modificaciones** y no debería usarse en consultas. Devuelve un array con los resultados de las operaciones al usar `executeBatch(): int[]`.
+> Nota: Las operaciones de modificación devuelven la cantidad de filas modificadas.
+
+> Nota: Para el método `clearParameters` revisar transparencias.
+
+> Nota: En MySQL es necesario añadir una cláusula adicional para usar lotes en la conexión.
+
+Es inviable hacer lotes muy grandes por lo que normalmente toca hacer **múltiples lotes**. En todos ellos se debe hacer el **contexto transaccional** dado que cada uno de ellos se ejecuta como un único `Statement`.
+
+> Nota: Oracle recomienda lotes de entre 50 y 100 operaciones.
