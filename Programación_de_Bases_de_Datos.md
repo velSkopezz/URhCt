@@ -360,3 +360,114 @@ Disponible desde JDBC 4, consiste en añadir operaciones con `addBatch(String): 
 Es inviable hacer lotes muy grandes por lo que normalmente toca hacer **múltiples lotes**. En todos ellos se debe hacer el **contexto transaccional** dado que cada uno de ellos se ejecuta como un único `Statement`.
 
 > Nota: Oracle recomienda lotes de entre 50 y 100 operaciones.
+
+> ¿Anexo?: Existe `ResultSet` actualizable-
+
+# TEMA 4: Procesamiento de transacciones y acceso concurrente
+El objetivo es **garantizar la consistencia y calidad de los metadatos**. La pérdida de esta calidad puede darse **al modificar** la información.
+
+Esto puede afectar a las consultas en múltiples casos, especialmente, en caso de **concurrencia**. La solución suele ser usar lotes.
+
+El sistema gestor de bases de datos debe garantizar la **coherencia** representativa con el mundo y, al mismo tiempo, **firmeza** en sus operaciones.
+> Nota: Hay problemas tipo y estos serán los estudiados a lo largo del temario.
+
+## Análisis de un problema y recuperación
+Todo se basa en la consistencia de la base de datos.
+\
+Cuando se realiza una operación DDL o DML la base de datos entra en una fase de peligro en la que cualquier concurrencia puede ser motivo de un error.
+
+Cualquier tipo de **interrupción** o **concurrencia** puede provocar situaciones en las que se deba recuperar la base de datos. Para garantizar la seguridad es fundamental usar lotes o **batches**.
+
+La recuperacion puede concluir de dos formas:
+- Con la **terminación** mantenieno los efectos.
+- Con la **anulación** de tal forma que se revierta el estado al anterior.
+
+Además, la recuperación puede tener dos alcances:
+- Sobre toda la **base de datos**
+- Sobre una **transacción**
+
+Una recuperación puede hacerla el **sistema gestor de bases de datos** o el **usuario** según la casuística.
+
+## Concurrencia
+Son la fuente de muchos peligros. Algunos de ellos tienen nombre propio.
+
+Para trabajar con concurrencias se suele utilizar **recursos compartidos**, es decir, se evita el paralelismo en la base de datos.
+
+### Problema de la actualización perdida
+Se da cuando un usuario $T_{1}$ y un segundo usuario $T_{2}$ siguen el siguiente esquema de tal forma que en el quinto tiempo la modificación de $T_{2}$ pisa la realizada por $T_{1}$.
+
+tiempo | 1 | 2 | 3 | 4 | 5
+:--- | :---: | :---: | :---: | :---: | :---:
+$T_{1}$ | transferirBloque(X) | modificarBloque(X) |  | modificar(X) |  |
+$T_{2}$ |  |  | transferirBloque(X) |  | modificar(X)
+
+### Problema de la lectura sucia
+Ocurre cuando un usuario $T_{2}$ lee unos datos modificados po una operación que se va a abortar:
+
+tiempo | 1 | 2 | 3 | 4
+:--- | :---: | :---: | :---: | :---:
+$T_{1}$ | transferirBloque(Y) | modificar(Y) |  | rollback(Y)
+$T_{2}$ |  |  | leer(Y) | 
+
+> Nota: El dato que lee $T_{2}$ está alterado por $T_{1}$ por lo que, luego del *rollback*, se está leyendo un dato falso. Esto no sucede en Oracle pero sí en MySQL y SQLServer-.
+
+### Problema del resumen incorrecto
+Ocurre cuando $T_{2}$ sucede entre dos transacciones de otro usuario:
+
+tiempo | 1 | 2 | 3 | 4 | 5 | 6
+:--- | :---: | :---: | :---: | :---: | :---: | :---:
+$T_{1}$ | transferirBloque(X) | modificar(X) |  |  | transferirBloque(Y) | modificar(Y)
+$T_{2}$ |  |  | leer(X) | leer(Y) |  |
+
+> Nota: $T_{2}$ lee un dato inconsistente de un bloque y consistente del otro.
+
+### Otros problemas
+Entre otros problemas comunes se encuentran la lectura no repetible y la lectura fantasma cuya principal diferencia es la adición o modificación:
+- **Lectura no repetible**
+    \
+    Una consulta que no es repetible porque, concurrentemente, se ha modificado o eliminado algún registro.
+- **Lectura fantasma**
+    \
+    Una consulta que proporciona datos erróneos porque se ha añadido una *tupla fantasma* de forma concurrente.
+
+## Herramientas de control de concurrencia
+Aparte de las ya vistas **transacciones por lotes**, se dispone de las siguientes operaciones:
+- commit
+- rollback
+- abort
+
+## Estados de una transacción
+Se distinguen distintos estados de una transacción:
+- **Activa**
+    \
+    Una transacción es activa cuando realiza operaciones de lectura o escritura.
+- **Parcialmente confirmada**
+    \
+    Una transacción está parcialmente confirmada cuando se acepta la operación pero no se realiza un *commit*. Suele relacionarse con restricciones diferidas.
+- **Confirmada**
+    \
+    Una transacción está confirmada cuando se ha efectuado un *commit*.
+- **Fallida**
+    \
+    Una transacción ha fallado si en algún momento se ha abortado.
+- **Terminada**
+    \
+    Una transacción está terminada cuando se ha abortado o completado exitosamente.
+
+![Estados de una transacción](https://miro.medium.com/0*FYOwlEL8-6yMBMoP. "Diagrama de estados de una transacción, por Toni Mas, en Medium")
+
+Se espera que una transacción tenga las **propiedades ACID**:
+- Atomicidad
+- Consistencia
+- Aislamiento
+- Durabilidad
+
+### Restricciones de integridad
+Hay dos formas de **restricción de integridad**:
+- inmediata
+- diferida
+
+Las restricciones inmediatas son aquellas que suceden durante la operación. En cambio, las **operaciones diferidas** se destacan porque **posponen la revisión al commit**. Esta distinción es la que provoca la diferencia prinicpal entre la fase de parcialmente confirmada y confirmada.
+> Eg: el caso más claro es el de las restricciones de referencia cíclicas
+
+Un error de restricción diferida hace un *rollback*, es decir, **deshace toda la transacción** en vez de únicamente la tupla afectada.
