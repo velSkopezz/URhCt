@@ -461,3 +461,28 @@ También pueden darse situaciones de **herencia múltiple** que favorece la expr
 
 ### Clases abstractas
 Corresponde a una clase de generalización que reúne conceptos **sin aportar funcionalidad propia**. Se indica en cursiva o con una etiqueta "*\<\<abstract\>\>*".
+
+### Interfaces de clases
+Son clases que estructuran e indican funciones mínimas de sus especializaciones. Están orientados a la implementación.
+
+### Atributos
+Hay diferentes visibilidades de atributos que afectan al **acceso**:
+- `+ pública`
+- `- privada`
+- `# protegida`
+
+## Paquetes
+Son carpetas que permiten englobar diagramas UML. También se pueden relacionar entre paquetes. Funcionan a modo de carpetas.
+
+# TEMA 5: Diseño
+El trabajo en diseño es el que define en casi su totalidad la **calidad del software**.
+\
+El diseño es la fase en la que se define la arquitectura, interfaces y otras características según IEEE. Algunas veces nos puede preocupar en diseño la implementación de algunos algoritmos.
+
+El diseño se adapta al **contexto de implementación** y hace falta considerar aspectos del sistema y sus necesidades específicas.
+
+El resultado de esta fase es el **modelo de diseño**.
+
+## Actividades del diseño
+Define la **modularidad del sistema** ofreciéndose distintos modelos. Corresponde luego el **proceso de diseño** cuyo carácter es, a su vez, iterativo.
+- Diseño arquitectónico: se define la modularidad del sistema.
