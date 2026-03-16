@@ -735,3 +735,138 @@ Posteriormente, sigue de la forma esperada. Para información completa revisar e
 > Ct: Esto cae en los exámenes: el **datagrama *siempre* cambia** entre saltos porque se reduce el TTL.
 
 > Ct: En el examen las longitudes de las partes de los datagramas van a cuadrar con lo esperado.
+
+## Direcciones IPv4
+Indican la **dirección lógica** de un host. Son virtuales porque son interpretadas a nivel de software y hay tantas como adaptadores.
+
+Se representan con **4 octetos** y, por tanto, 4 grupos de $2^{32}-1=255$.
+
+### Routers y direccionamiento
+Cada router tiene, al menos, dos direcciones IP. Una de ellas es privada y su fin es comunicarse con la red privada. La otra es pública y permite el acceso a Internet.
+
+![Direccionamiento de la red](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-TWU0Jgdcli6V5XZQNrlt52C5RDznXLDZRHW6iUetd1qfW5q2CrJfeZSPsqG46gVKb778NdbktzXYk2thIhaUZ2U4YiIxQVYJcCVCRIblzZhn8WxxNwZC_tkaFbXuE8u8nQ-Kr6VPK__d/s1600/puerta-de-enace-o-gateway.jpg "Tecnologías de Información, Comunicaciones y Automatización, por Cibervirtual")
+
+### Direcciones especiales
+Hay ciertas direcciones que son especiales por sus condiciones:
+- Direcciones de la **red**: `<prefijo de red>, <resto en 0>`
+- Direcciones de **loopback**: `127.<dirección>`
+- Dirección del **host**: `0.0.0.0`
+- Dirección de **difusión dirigida**: `<prefijo de red>, <resto en 1>`
+- Dirección de **difusión en red**: `255.255.255.255`
+- Direcciones de **redes privadas**
+
+> Nota: "Resto en 1" hace referencia a la escritura bit a bit.
+
+### Tipos de direccionamiento en Internet
+Hay dos tipos de direccionamiento según si viene con **máscara de subred** especificada se considera sin clase. De lo contrario, se usa el direccionamiento con clase.
+- **Direccionamiento con clase**: pueden ser **A**, **B**, **C**, *D* o *E*.
+- **Direccionamiento sin clase**: se proporciona una máscara de subred.
+
+En las redes con clase se identifica la clase por medio del primer bit:
+```
+* 0<red> - Red de clase A
+* 1<red> - Red de clase B 
+* 01<red> - Red de clase C
+* 001<red> - Red de clase D
+* 0001<red> - Red de clase E
+```
+> Nota: Se debe recordar que `127.<red>` corresponde a una red especial.
+
+Según la clase de la red habrá más espacio para **subredes o  hosts**.
+
+#### Direccionamiento sin clase
+También abreviado como CIDR, no hay clases basadas en el prefijo de la red. Esta proporciona una **solución a la falta de direcciones**.
+
+Estas redes son de la forma `<dirección IP>/<máscara de subred>`. La máscara es la **cantidad de bits a 1 desde la izquierda en la IP compartida con notación en binario**.
+> Eg: con IP `255.255.240.0` tenemos en bits `11111111.11111111.11110000.00000000` corresponde con una subred `255.255.240.0/20` dado que hay un total de 20 bits a 1 desde la izquierda.
+
+La **dirección de broadcast** corresponde con disponer a 1 todos los bits finales, es decir, **no se debe poner 255 de golpe** dado que induce a error.
+
+Igualmente sucede con la **dirección de la puerta de enlace** que puede provocar error si se realiza con datos incorrectos la operación AND.
+> Ct: En los exámenes deben haber problemas con la dirección de broadcast y puerta de enlace cuando hay máscaras de subred.
+
+> Nota: Para más información ver ejemplo en las transparencias.
+
+### Superred
+Consiste en disponer redes de forma **contígua**, dentro de un mismo octeto, de tal forma que tienen un **prefijo común** disponiendo así de **múltiples redes a la vez**. Su se da fundamentalmente en entornos empresariales.
+
+### Direcciones privadas
+Corresponden a direcciones lógicas **no encaminables** por los routers de Internet. Sus rangos corresponden a:
+- `10.0.0.0/8` - 1 red de clase A
+- `172.16.0.0/12` - 16 redes de clase B
+- `192.168.0.0/16` - 256 redes de clase C
+
+> Nota: La máscara de subred para las redes privadas de la clase B no es divisible entre 8 lo que implica que su notación no corresponde a redes con clase.
+
+#### Obtención de una dirección IP
+Manualmente, el administrador de red puede asignar valores a un host. De forma automatizada se utiliza **DHCP**.
+
+Un bloque de direcciones se consigue a través del **ISP** que ha pagado por ellas. A su vez, el IPS proporciona direcciones de forma enumerada y ordenada.
+
+Un IPS obtiene las direcciones IP por medio del **ICANN** que proporciona direcciones IP, direcciones DNS y **resuelve posibles conflictos** entre concesiones. Los países delegan la administración a espacios **geográficos**.
+> Eg: España delega la administración a **RIPE NCC**.
+
+Al revisar la reserva de direcciones IP en la [página de IANA](https://www.iana.org/assignments/ipv4-address-space/ipv4-address-space.xhtml) se puede notar que hay redes reservadas por la propia organización. Estas corresponden a distintos motivos como direcciones de *broadcast*, direcciones privadas o reservadas para uso futuro.
+> Eg: la red 193 es la utilizada por la Universidad de La Rioja y está reservada por RIPE NCC.
+
+### Encaminamiento IP
+Incluye las pautas sistemáticas de lo que hace el router.
+\
+Los routers y hosts tienen **tablas de encaminamiento** que deben ser **compactas y pequeñas** con información únicamente fundamental:
+- Direccion IP de **destino**
+- **Máscara de red**
+- Adaptador de **salida**
+- Dirección IP de **próximo salto**
+
+> Nota: Para ver ejemplos se recomienda revisar las transparencias.
+
+Es importante recordar que el **router tiene una tabla ARP**.
+
+El ISP compra un prefijo de dirección IP que usará para redireccionar a diferentes hosts. Ese prefijo de red va a dividir otros prefijos de forma que **engloba el direccionamiento de redes en packs de 16**.
+Dicho de otra forma, los proveedores **suborganizan en 16 redes** por prefijo creando diferentes subredes.
+> Nota: Para información aclaratoria revisar transparencias (CIDR reduce el tamaño de las tablas de encaminamiento) notar que `/20` corresponde a 16:
+
+> Eg:
+> - ISP compra `200.25.0.0/16`
+> - Destina `200.25.16.0/20`
+> - A partir de ahí se instalan hosts
+
+## NAT
+El *Network Address Translation* es el encargado de gestionar el problema de la **falta de direcciones IPv4 públicas para todos los hosts**. Para ello, se asignan **direcciones IP privadas** a todos los hosts.
+\
+Hay dos tipos:
+- NAT:
+    \
+    $1 = Card(\text{``hosts privados''}) \ge Card(\text{``hosts públicos''})$
+- PAT:
+    \
+    $1 > Card(\text{``hosts privados''}) \ge Card(\text{``hosts públicos''})$
+
+Cuando se utiliza **NAT**, el **router intercambia su IP por la de origen** a la salida de la información de tal forma que el destino ignora la existencia del host privado. A la llegada de información, el router **reencamina la información de acuerdo con una tabla NAT**.
+
+Cuando se utiliza **PAT**, el router, aparte de intercambiar la IP de origen así como gestionar la información de llegada de acuerdo con una tabla NAT, se utiliza y el método se **replica con puertos**. Está orientado a múltiples hosts.
+
+### Limitaciones de NAT
+Aunque NAT funciona correctamente para las secciones con **control del router**, es decir, capas 2 y 3, el protocolo encuentra **problemas con el resto de capas**.
+
+Es común que se replique la información IP en la cabecera de la capa de aplicación lo que, evidentemente, **escapa al router y a NAT por consiguiente** lo que puede generar problemas.
+
+## DHCP
+El *Dynamic Host Configuration Protocol* tiene como objetivo **proporcionar una dirección IP privada**.
+
+Este protocolo permite, además, reutilizar direcciones IP.
+
+El mecanismo tiene 4 fases (DORA):
+- **Discover**
+    \
+    El host envía por difusión `255.255.255.255` que su dirección IP corresponde a `0.0.0.0` con el fin de que le proporcionen alguna.
+- **Offer**
+    \
+    **Múltiples servidores DHCP** ofrecen múltiples direciones para el host por medio de protocolos de **dirección MAC**. Además, se envía el IP del servidor DHCP y un **tiempo de vida** para el servicio.
+- **Request**
+    \
+    El host envía por la **dirección de broadcast** y desde la IP `0.0.0.0` la dirección IP que pretende tomar.
+- **Acknowledge**
+    \
+    Este mensaje se envía con las **direcciones IP definitivas**.
+    
