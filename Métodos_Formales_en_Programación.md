@@ -126,3 +126,22 @@ De esta forma dada la implementación con un *array* $v$ de tamaño $n$, utiliza
 La complejidad de sus operaciones es fundamentalmente **logarítmica** \( $O \log_{2}(n)$ \).
 \
 La implementación dinámica lo empeora por la complejidad de las operaciones para volver al padre del nodo.
+
+# TEMA 3: TADs y Orientación a Objetos
+La intención es crear una **estructura modular** dedicada a dividir problemas en un objeto separado que **funcione por sí solo**.
+
+El problema de los TADs desestructurados es que no hay forma sencilla de **instanciar ni finalizar** el objeto ni existe una forma de **extender el TAD**.
+\
+Como solución, se inventa el **paradigma orientado a objeto**:
+- **abstracción**
+- **encapsulamiento**
+- **herencia**
+- **polimorfismo**
+
+## Complejidad de operaciones
+Según la implementación las operaciones pueden variar en su complejidad. Se tendrá en cuenta la implementación de Java:
+- **`ArrayList`**: Corresponde a un **array estático** con **posiciones indexadas** y cuyo tamaño puede **incrementarse automáticamente** en una operación de complejidad lineal.
+- **`LinkedList`**: Corresponde a una **lista doblemente enlazada** y, por ello, implementa la interfaz `Deque`. Se tiene en cuenta la proximidad al dato por lo que, en el peor de los casos, la complejidad de su algoritmo es de $n/2$ y, de media $n/4$.
+- **`ArrayDeque`**: También llamada simplemente *Deque* por su interfaz, corresponde a una implementación estática en forma de reloj cuya complejidad en sus algoritmos es de $O(1)$.
+- **`TreeMap`**: Implementa `Map` utilizando operaciones que garantizan la ordenación de sus elementos. Su complejidad es de $O(\log_{2}{n})$.
+- **`HashMap`**: Implementa `Map` utilizando operaciones con códigos Hash. Su complejidad es de $O(1)$.
