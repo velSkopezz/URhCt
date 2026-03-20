@@ -486,3 +486,83 @@ El resultado de esta fase es el **modelo de diseño**.
 ## Actividades del diseño
 Define la **modularidad del sistema** ofreciéndose distintos modelos. Corresponde luego el **proceso de diseño** cuyo carácter es, a su vez, iterativo.
 - Diseño arquitectónico: se define la modularidad del sistema.
+    > Eg: modelo de 3 capas.
+- Diseño de datos: tiene **influencia en la estructura** dado que condiciona funcionalidades.
+- Diseño procedimental: incluye el nivel de **algoritmos**.
+- Diseño de la interfaz: es una parte fundamental porque es la parte orientada a la **comunicación humano-máquina**. Se debe tener en cuenta la psicología del usuario.
+
+Las **cuatro actividades son fundamentales** para que el software tenga **calidad**. Funcionan como pilares.
+
+## Calidad y diseño
+Permite una **traducción** correcta entre requisitos y funcionalidad.
+\
+Comúnmente se suele reducir el tiempo de diseño para trabajar sobre algo tangible. Esto no suele funcionar dado que se pierde un mayor tiempo depurando sobre un software mal diseñado que diseñando un buen software. Se debe dar el **tiempo adecuado de diseño**.
+
+Hay conceptos fundamentales para conseguir un diseño de calidad:
+- Abstracción/**ocultación** de la información
+- **Modularidad**
+- **Arquitectura** del software
+- **Jerarquía** de control
+- **División** estructural
+- **Estructura** de datos
+
+### Ocultacion de la información
+La abstracción permite **facilitar el mantenimiento** de tal forma que se favorece el **encapsulamiento**. El cliente no puede usar ni conocer la parte oculta. Por ello, la parte oculta suelen ser los detalles de implementación
+
+### Modularidad
+Un diseño modular efectivo proporciona **alta cohesión** y **bajo encapsulamiento**, es decir, módulos con funcionalidad completa sin excesiva interacción. Se facilita:
+- **extensibilidad**
+- **reusabilidad**
+- **portabilidad**
+
+### Cohesión
+Es la medida de **relación funcional** entre elementos. El objetivo es que **elementos designados a una misma tarea pertenezcan a un mismo módulo**.
+
+El objetivo es **maximizar la cohesión**.
+
+### Acoplamiento
+Es la medida de **interconexión entre módulos**. Una conectividad sencilla indica un software sencillo de comprender. También evita el **efecto "ola"**, es decir, cuando un error se propaga al resto del sistema.
+\
+Un nivel de acoplamiento bajo indica independencia y se entiende mejor.
+
+El objetvio es **minimizar el acoplamiento**.
+> Eg: el uso de *flags* aumenta el acoplamiento.
+
+### Robustez y extensibilidad
+En cuanto a la extensibilidad, es fundamental aprovechar el **polimorfismo** y tener en cuenta que, como mucho, una clase sólo debe conocer sus **asociaciones y generalizaciones**.
+> Nota: Esto se conoce como el *Principio de Demeter* o de *mínimo conocimiento*.
+
+## Conceptos esenciales del diseño
+Se consideran síntomas de un diseño pobre:
+- rigidez
+- fragilidad
+- inmovilidad
+- complejidad innecesaria
+- repetición innecesaria
+- opacidad
+
+### Problema de complejidad innecesaria
+Corresponde al **principio KISS** ("*keep it simple, stupid!*"). Software complejo produce problemas en las pruebas y mantenimiento.
+
+### Problema de repetición innecesaria
+Resulta fundamental modular los programas y funciones. El mantenimiento y depuración se convierte en algo muy pesado. Le corresponde el principio **DRY** ("*Don't Repeat Yourself*").
+
+### Problema de la opacidad
+Corresponde a códigos enrevesados y difíciles de entender. Si es muy difícil, de cara a futuro, nadie podrá entenderlo inlcuyendo al creador.
+> Nota: Nuevamente, cabe recordar la instrucción `goto`.
+
+### Principios SOLID
+Corresponden a principios para la **orientación a objetos**.
+
+#### *Single responsibility principle*
+Corresponde a la alta choesión. Si una de las opreaciones e una clase **no es reflexiva** probablemente no corresponda a su clase.
+
+#### *Open/Closed principle*
+Las clases deben estar hechas de tal forma que permitan herencia pero no se espere de ellas una actualización.
+- **abiertas a extensión**
+- **cerradas a modificación**
+
+#### *Liskov substitution principle*
+Todas las clases son siempre sustituibles por sus especializaciones.
+\
+Este principio es fundamental para **interfaces** puesto que necesitan el cumplimiento estricto del contrato. Esto se debe hacer mediante **precondiciones y poscondiciones**. Además, en cada generalización, hacia sus especializaciones, **no se exige más pero no se acepta menos**.
