@@ -986,4 +986,5 @@ Para el envío de un **paquete de estado de enlace** (PEE) se copia, se comprueb
 
 ### Open Shortest Path First
 El coste del envío se hace por medio de la siguiente operación:
+
 $$C = max(int(\frac{10^{8}}{velocidad}, 1))$$
