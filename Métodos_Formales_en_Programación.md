@@ -145,3 +145,22 @@ Según la implementación las operaciones pueden variar en su complejidad. Se te
 - **`ArrayDeque`**: También llamada simplemente *Deque* por su interfaz, corresponde a una implementación estática en forma de reloj cuya complejidad en sus algoritmos es de $O(1)$.
 - **`TreeMap`**: Implementa `Map` utilizando operaciones que garantizan la ordenación de sus elementos. Su complejidad es de $O(\log_{2}{n})$.
 - **`HashMap`**: Implementa `Map` utilizando operaciones con códigos Hash. Su complejidad es de $O(1)$.
+
+# TEMA 4: Especificación formal de algoritmos
+Incluye la forma de escribir de manera fomralizada el fundamento del algoritmo de tal forma que queda **disponible para verificación formal**. Para ello se utiliza la **lógica de predicados** evitando así ambigüedades, dando pruebas y automatizando la generación de pruebas.
+
+$$\{Q\}s\{R\}$$
+
+> $Q$ es un predicado
+> $R$ es un predicado
+> $s$ es una cabecera de función o procedimiento. Las funciones podrán devolver múltiples parámetros.
+
+## Predicados
+Un predicado podrá ser:
+- Una **fórmula atómica**
+- Una **negación de otro predicado**
+- Una **conjunción de predicados**
+
+Se pretende que **siempre que se comience con un estado** $\bold{Q}$ al aplicar $s$ **siempre se obtenga una poscondición** $\bold{R}$ de forma garantizada.
+\
+Las variables libres estarán entre la entrada y salida.
