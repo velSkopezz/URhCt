@@ -470,4 +470,136 @@ Hay dos formas de **restricción de integridad**:
 Las restricciones inmediatas son aquellas que suceden durante la operación. En cambio, las **operaciones diferidas** se destacan porque **posponen la revisión al commit**. Esta distinción es la que provoca la diferencia prinicpal entre la fase de parcialmente confirmada y confirmada.
 > Eg: el caso más claro es el de las restricciones de referencia cíclicas
 
-Un error de restricción diferida hace un *rollback*, es decir, **deshace toda la transacción** en vez de únicamente la tupla afectada.
+Un error de restricción diferida **deshace toda la transacción** en vez de únicamente la tupla afectada.
+
+Para definir una restricción de integridad:
+1. Declarar la **restricción diferible**
+    \
+    Para declarar una variable diferible se utilizan las siguientes opciones:
+    - `DEFERABLE`
+    - `NOT DEFERABLE`
+
+    > Nota: Las transacciones son `NOT DEFERABLE` por defecto.
+
+2. Diferirla
+    \
+    Se hace mediante la adición de un `CONSTRAINT`. Para ello se distinguen dos tipos:
+    - `INITIALLY INMEDIATE`
+    - `INITIALLY DEFERRED`
+    
+    Ello indica la forma en la que **se trata por defecto**, por ello, lo común es dejarlo en `INITIALLY INMEDIATE`.
+
+    > Nota: Por defecto se encuentra en `INITIALLY INMEDIATE`.
+
+    > Eg: `CONSTRAINT <nombre> <características> INITIALLY INMEDIATE` y, posteriormente, `SET CONSTRAINT <nombre> DEFERRED`.
+
+## Recuperación de base de datos
+Se pueden hablar de recuperacion a dos **niveles**:
+- **Base de datos**: recuperar suele incluir restaurar el estado.
+- **Transacción**: recuperar suele incluir el aborto de la transacción.
+
+Estas recuperaciones pueden hacerse mediante diarios o **logs**.
+
+### Actualizacion diferida
+Consiste en trabajar con 3 elementos:
+- caché
+- log
+- base de datos
+
+De la hoja de transacción pasa al caché, del caché al hacer *commit*, al log y, después, se formaliza el cambio del caché a la base de datos. Todos los cambios de la base de datos deben pasar primero por el log.
+\
+El objetivo es que **el log registre todos los cambios** y que, en el peor de los casos, **recupere una transacción**.
+
+Recibe el nombre de **diferida** porque se trabaja sobre una caché que se **limpia tras la transacción** o al hacer un ***rollback***. Además, si el resultado de una consulta está presente en la caché, el sistema gestor evita acceder a la base de datos en su búsqueda.
+
+![Actualización diferida](https://static.packt-cdn.com/products/9781788291804/graphics/0d085f8b-9535-4fec-b3f1-fcc57643fdc5.png "İnternetin kara kutusu Log, por Arenklorden, TurkHackTeam")
+
+### Actualización inmediata
+No utiliza caché por lo que es necesario **deshacer o rehacer** cambios. Algunas operaciones pueden registrarse antes en la base de datos que en el log.
+
+> Nota: Oracle usa actualización inmediata con 2 logs.
+
+### Puntos de recuperación y *rollback* de instrucción
+Los puntos de recuperación (*savepoint*) hacen referencia a instrucciones específicas entre *commit* y *commit* a los que se puede regresar en vez de realizar un *rollback* y perder todo el progreso de la transacción.
+
+La base de datos suele utilizar un *rollback* a nivel de **instrucción** por lo que **escribir contexto transaccional en operaciones únicas** resulta innecesario.
+
+> Ct: Los puntos de recuperación son poco usados en el entorno profesional.
+
+### Diario del sistema (log)
+Se guardan en disco dado que, de lo contrario, podría perderse la información por algún imprevisto en **memoria no persistente**. Hay 5 tipos de registros en el log:
+- `start_transaction, T`
+- `write_item, T, X, <valor_anterior>, <valor_actual>`
+- `read_item, T, X`
+- `commit, T`
+- `abort, T`
+
+Para deshacer una transacción se lee el diario y se retorna al estado anterior. El proceso consiste en **leer hacia atrás el documento** y realizar las operaciones **actualizando en cascada**.
+
+Para deshacer instrucciones, el sistema debe buscar transacciones efectuadas con **`start_transaction`** sin ***commit***.
+\
+Para rehacer instrucciones, el sistema debe buscar transacciones no efectuadas con **`start_transacion`** con ***commit***.
+
+#### Puntos de control
+No debe confundirse con el punto de recuperación.
+\
+Los puntos de control se disponene en el **guión** y se incluyen de forma **arbitraria por el sistema gestor de bases de datos**.
+
+Los puntos de control son **globales al diario** y sirven para **confirmar la permanencia** de las últiams operaciones de tal forma que no se desvíen recursos de la base de datos al guión durante la operación.
+
+#### Recuperación en Oracle
+Oracle utiliza **actualización inmediata** con dos logs:
+- ***redo-records*** guarda en ***redo-logs***. Adicionalmente, almacena valores anteriores por el remanente de transacciones de actualización.
+- ***undo-records*** guarda en ***rollback segments*** y RBS. Se almacenan en **memoria primaria** y **encadena datos de misma transacción**.
+
+Los *undo-records* se almacenan en memoria volátil y encadenados por transacción por cuestiones de eficiencia. Por remanente, los *rollback segments* son **reconstruibles** por los *redo-records*.
+
+Nuevamente, en la base de datos no se formalizan cambios hasta que pasen por los *redo-records*.
+
+Los ***redo-records* permitirán rehacer** cambios interrumpidos y los ***undo-records* permitirán deshacer** los cambios que no debieron completarse.
+
+## Aislamiento de transacciones
+Pretende controlar en qué medida los datos de una transacción pueden ser modificados o accedidos por otra transacción.
+\
+Se consideran **niveles de aislamiento** definidos por SQL2:
+
+Nivel de aislamiento | Lectura sucia | Lectura no repetible | Lectura fantasma
+:--- | :---: | :---: | :---:
+**Lectura no confirmada** | ⚠️ | ⚠️ | ⚠️ |
+**Lectura confirmada** | 🛡️ | ⚠️ | ⚠️ |
+**Lectura repetible** | 🛡️ | 🛡️ | ⚠️ |
+**Serializable** | 🛡️ | 🛡️ | 🛡️ |
+
+- ***read uncommited***
+    \
+    Se pueden leer los datos no confirmados o sin confirmar, es decir, sin que haya pasado un *commit*.
+
+- ***read commited***
+    \
+    Solo se pueden leer los datos con *commit* protegiendo la transacción de la **lectura sucia**.
+
+- ***repeteable read***
+    \
+    Solo se pueden leer datos confirmados y, además, todos los datos de consultas **deben dar el mismo resultado**.
+
+- ***serializable***
+    \
+    Solo se pueden leer datos confirmados, las consultas deben dar mismos resultados y **trabaja sobre una *"foto"*** de tal forma que la transacción no trabaja sobre la base de datos hasta aportar los resultados.
+
+## Configuración de transacciones
+Se especifican con **`SET TRANSACTION <config>`**. Se pueden indicar:
+- **modo de acceso**
+    - `READ ONLY`
+    - `READ WRITE`
+
+    > Nota: *Read only* trabaja sobre una copia serializable.
+
+- **nivel de aislamiento** con `SET TRANSACTION ISOLATION LEVEL`
+    - `READ UNCOMMITED`
+    - `READ COMMITED`
+    - `REPETEABLE READ`
+    - `SERIALIZABLE`
+
+    > Nota: En JDBC se omite el "`LEVEL`".
+
+    > Nota: Oracle solo implementa `READ COMMITED` (por defecto) y `SERIALIZABLE`.
