@@ -695,6 +695,9 @@ Indica un código que corresponde a algún protocolo de la **misma u otra capa**
 Es un método para encontrar alteraciones con la información de la cabecera.
 > Nota: Para encontrar un ejemplo se recomienda buscar el ejercicio sobre Checksum en las transparencias.
 
+# TEMA 5: Aspectos adicionales sobre el Protocolo de Internet
+> Sobre el documento: La entrada del tema 5 en las transparencias es un poco anterior. En cualquier caso es indiferente puesto que el tema 4 y 5 tratan conceptos relativos a las mismas cuestiones.
+
 ## Fragmentación de datagramas
 Puede ocurrir de diferentes formas, por ejemplo, si un intermediario **reduce el MTU** de la trayectoria este mismo tendrá que fragmentarlo. El MTU máximo teórico de IP es el que corresponde con la longitud de su cabecera, es decir, 65535 bytes o 64kB.
 
@@ -837,10 +840,10 @@ El *Network Address Translation* es el encargado de gestionar el problema de la 
 Hay dos tipos:
 - NAT:
     \
-    $1 = Card(\text{``hosts privados''}) \ge Card(\text{``hosts públicos''})$
+    $1 = Card(\text{hosts privados}) \ge Card(\text{hosts públicos})$
 - PAT:
     \
-    $1 > Card(\text{``hosts privados''}) \ge Card(\text{``hosts públicos''})$
+    $1 < Card(\text{hosts privados}) \ge Card(\text{hosts públicos})$
 
 Cuando se utiliza **NAT**, el **router intercambia su IP por la de origen** a la salida de la información de tal forma que el destino ignora la existencia del host privado. A la llegada de información, el router **reencamina la información de acuerdo con una tabla NAT**.
 
@@ -870,3 +873,117 @@ El mecanismo tiene 4 fases (DORA):
     \
     Este mensaje se envía con las **direcciones IP definitivas**.
     
+## Protocolo ICMP
+Es encargado de informar de fundamentalmente **posibles errores** en la entrega de un datagrama.
+\
+Cumple con el siguiente formato:
+- **tipo** (1B): identifica el tipo de mensaje.
+- **código** (1B): espeifica el tipo de mensaje.
+- **checksum** (2B): con mismo algoritmo que IP.
+- **resto de cabecera** (4B): dependiente del tipo y código.
+
+Hay 15 tipos de error siendo fundamentales los de **petición de *echo*** y los de **error**.
+
+Los mensajes de error de ICMP siguen un formato específico:
+tipo de dato | tamaño | contenido
+---: | :--- | :--
+Type | 1B | Identificación del error de ICMP
+Code | 1B | Especificación del error de ICMP
+Checksum | 2B | Verificación de integridad de la cabecera
+Rest of header | 4B | Contenido adicional dependiente del Type y Code
+Data | 1472B | Copia de la cabecera IP e ICMP del mensaje perdido
+
+El objetivo es **evitar la aturación de red** por cabecera de errores.
+
+Los dispositivos pueden enviar mensajes de error en distintas situaciones:
+- **Routers**
+    \
+    Pueden enviar un **mensaje ICMP de error** cuando el **TTL=1**.
+- **Hosts**
+    \
+    Pueden provocar un error si envían más datos de los que se pueden cargar.
+
+En el caso de que no se pueda llevar al receptor el datagrama se obtiene **destino inalcanzable**, con múltiples códigos para ese tipo.
+
+![Codes de destino inalcanzable](https://telematika2.wordpress.com/wp-content/uploads/2011/03/tabla2_icmp.jpg "Protocolo de Control de Mensajes en Internet (ICMP) en Telematika2")
+
+## IPv6
+Los motivos principales son **el agotamiento de espacio de direcciones**, las **nuevas aplicaciones** y los **grupos de trabajo a nivel internacional**. Proporciona una infromación de identificación con 128 bits. Hay 3 tipos de direcciones:
+- **Unicast**: de un solo computador
+- **Multicast**: de un grupo de computadores a todos
+- **Anycast**: de un grupo de computadores a uno
+
+![Cabecera IPv6](https://certificaciondesistemasoperativos.wordpress.com/wp-content/uploads/2016/04/b2ec6-cabecera.png?w=484&h=254 "IPv4 – IPv6 en Certificacion De Sistemas Operativos")
+
+Se tiene previsto una **fase de transición** donde convivan IPv4 e IPv6.
+\
+Durante la transición hay **túneles** que permiten encapsular el tráfico IPv6 que pase por las conexiones destinadas a IPv4.
+\
+Hay formas de mapear direcciones IPv4 en IPv6. Entre las más relevantes se incluye mapear la IPv4 por medio del prefijo `::FFFF:<IPv4>`.
+
+En los túneles es esperable problemas como la **superación del MTU** cuya gestión la realiza automáticamente el router con las técnicas vistas.
+
+# TEMA 6: Enrutamiento a nivel de red
+Hay dos tipos de enrutamiento:
+- Enrutamiento por **estado de enlace**
+    \
+    Utilizando el protocolo OSPF con el algoritmo de Dijkstra
+- Enrutamiento por **vector de distancia**
+    \
+    Utilizando el protocolo RIP con el algoritmo de Bellman-Ford
+
+## Algoritmos de encaminamiento
+Se pretende determinar el **mejor camino** en el que, representado como un **grafo**, será el camino que pase por la menor cantidad de aristas o **enlaces** de acuerdo un un **valor numérico de coste**. Este valor depende fundamentalmente de la calidad de la red y la distancia.
+\
+La red de Internet suele estar dividida y enumerada por **sistemas autónomos** que utilizan un **mismo algoritmo de encaminamiento**. Los sistemas autónomos se interconectan en **enrutamiento jerárquico**.
+
+![Sistemas autónomos de red](https://blog.gonzaleztroyano.es/content/images/2022/10/image-1.png "¿Qué es un Sistema Autónomo? Y, ¿qué es Internet?, por Pablo González Troyano, en Pablo González Troyano")
+
+Según las caracterísitcas se pueden distinguir distintos **tipos de encaminamiento**. Lo normal es que sean **escalables y distribuidos**:
+- **estático**: con actualización **manual**.
+- **dinámico**: sensibles al cambio en el tráfico o **topología de red**.
+
+Hay tipos de protocolos de enrutamiento:
+- **Intradominio**
+    - **RIP**: *distance vector*
+    - **OSPF**: *link state*
+- **Interdominio**
+    - **BGP**: *path vector*
+
+## Encaminamiento por estado del enlace
+Necesita dos condiciones:
+1. Cada nodo conoce la **topología completa**
+2. Cada nodo conoce la **condición del enlace** (*up or down*)
+
+En tal caso, se puede **obtener la tabla de encaminamiento** por algoritmo de **Dijkstra**.
+
+El router, que conoce los costes del resto de routers, prepara y **difunde un paquete de estado de enlace** a todos los routers de la red. A partir de ahí, cada grafo:
+1. **Construye el grafo de la red**
+2. **Calcula el camino más corto de Dijkstra**
+3. **Construye la tabla de encaminamiento**
+
+Este proceso puede suceder por dos motivos:
+- **Periódicamente**, normalmente tras horas.
+- Tras **cambios en la topología** de la red.
+
+> Nota: El cambio periódico es modificable por el administrador del sistema.
+
+Cada nodo conoce la **distancia a sus vecinos**. Esta información se **difunde** por toda la red. Con esa información se calcula el **algoritmo de Dijkstra** para cada destino.
+\
+Cada nodo construye el paquete con:
+- Nodo **transmisor**
+- Lista de **vecinos y distancia**
+- Número de **secuencia**
+- Timpo de vida (**TTL**)
+
+Para el envío de un **paquete de estado de enlace** (PEE) se copia, se comprueba que su número de secuencia es mayor al presente en el dispositivo y, posteriormente y en tal caso, lo difunde a sus vecinos.
+
+> Ct: Hacer el agloritmo del router para sacar la tabla de encaminamiento es ejercicio que ha caído en examen.
+
+> Nota: Para ver un ejemplo de las transparencias se recomienda ver las transparencias.
+
+> Ct: Se ha explicado durante 1 hora el algoritmo de Dijkstra y la obtención de la tabla de encaminamiento.
+
+### Open Shortest Path First
+El coste del envío se hace por medio de la siguiente operación:
+$$C = max(int(\frac{10^{8}}{velocidad}, 1))$$
