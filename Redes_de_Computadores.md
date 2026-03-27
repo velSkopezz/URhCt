@@ -984,7 +984,79 @@ Para el envío de un **paquete de estado de enlace** (PEE) se copia, se comprueb
 
 > Ct: Se ha explicado durante 1 hora el algoritmo de Dijkstra y la obtención de la tabla de encaminamiento.
 
-### Open Shortest Path First
+### Open Shortest Path First (IP/OSPF)
+Es un algoritmo por **estado de enlace**. Peculiarmente, se envía  **directamente** sobre la cabecera IP pero **no pertenece a la capa de transporte**.
+
+Utiliza el algoritmo de Dijkstra para conocer el camino más cercano y modificar así la tabla de enrutamiento.
+
 El coste del envío se hace por medio de la siguiente operación:
 
 $$C = max(int(\frac{10^{8}}{velocidad}, 1))$$
+
+Hay una serie de características adicionales destacables sobre OSPF que no tiene RIP:
+- ***jerarquías de encaminamiento***
+- **seguridad**
+- **múltiples caminos**
+- **diferentes métricas**
+- **multicast**
+
+
+![Relación de zonas fronterizas](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjV6tK7cgczo1aNfsqYgbVeNRcKJAiV5gAUmE-d9Kw4cTj_tdjjPLNyxKiD8wARvkCMlUnOOfD2wIxMIZQdgTSpbiMpyvjmam8XkI925Ds4e4TyHqDStYNb6CSLA-F2khX3dJxMPRpMCLg/s1600/Jerarquia_OSPF.gif "OSPF, por Luis Angel Saldaña Torres, en o0oyandel.blogspot.com")
+
+## Encaminamiento por vector de distancias
+Cada nodo mantiene un **vector de distancias** que contiene una estimación de **su distancia al resto de nodo de la red**.
+\
+A partir de la información conocida y de lelgada se estiman los nodos óptimos.
+
+El algoritmo es **iterativo y asíncrono** porque se repite periódicamente y también responde a cambios de costes. 
+\
+Es un algoritmo **distribuido** porque no hay ningún nodo central.
+
+El algoritmo funciona de tal forma que **el vecino proporciona su tabla** y, a partir de ella, se estima el coste **sin conocer la topología de la red**. Su funcionamiento es casi recursivo: el nodo origen calcula el coste del nodo destino a partir de su coste al siguiente salto (vecino) y el coste del destino con respecto al vecino.
+
+Se supone que el costo a un **nodo inaccesible** es infinito.
+
+### Problema de la cuenta al infinito
+Si un nodo cae es lo **teóricamente esperado** que se produzca una emisión repetida para informar a un nodo inaccesible.
+\
+La solución fue **dar por perdido el nodo tras 16 intentos** .
+
+### Routing Information Protocol (RIP) IP/UDP
+Aunque es parametizable, si un router no da señal tras 180 segundos, se da por muerto. En tal caso, se **elimina el nodo de la tabla de encaminamiento** y se **detiene la propagación del error** tras 16 saltos.
+
+---
+
+## Encamianmiento en Internet
+Internet no es una red plana por lo que es necesario que se cumpla:
+- **Escalabilidad**
+- **Autonomía administrativa**
+
+> Nota: Los algoritmos tendrían problemas de convergencia si no se utilizasen sistemas autónomos y la red se saturaría con paquetes de control.
+
+La solución es el **encaminamiento jerárquico de sistemas autónomos**. Estos sistemas autónomos tienen funciones de encaminamiento **intra-SA** pero, además hay **routers pasarela** con un algoritmo adicional **inter-SA** que rara vez es RIP u OSPF. En cuyo caso, se usa BGP (IPv6/TCP)
+
+![Relación de sistemas autónomos por BGP](https://www.researchgate.net/profile/Shaza-Hanif/publication/265626655/figure/fig1/AS:669443558498308@1536619190306/BGP-protocol-illustration.jpg "BGP - Border Gateway Protocol Bgp Optimale Routen Reflektion Cisco, por Pamela Knowles, en rytomiajygybi")
+
+### Encaminamiento entre sistemas autónomos: Border Gateway Protocol (IPv6/TCP)
+Permite a los sistemas autónomos **obtener y propagar información**. Es un protocolo complejo que hace uso de **TCP semi-permanente** que se llaman **sesiones** dentro y fuera del sistema autónomo.
+\
+Los routers no hacen uso necesariamente de una conexión directa entre routers.
+
+Hace uso de un algoritmo por **vector de caminos** que trabaja con **rutas completas**. Cada sistema autónomo está identificado por un único **ASN**. Cada pasarela informa de la secuencia de sistemas autónomos atravesados hasta el destino.
+\
+Trabajar con rutas completas impide los bucles por caída.
+
+# TEMA 7: Nivel de transporte: UDP
+El **nivel de transporte** roporciona un servicio de **comunicación entre extremos** posicionándose entre la capa de aplicación y de la de red.
+
+## Direccionamiento de transporte
+El puerto de dirección de transporte es **distinto al puerto de nivel de red**. El **puerto de red** es un punto de conexión entre computadores mientras que los **puertos a nivel de transporte** es un punto de conexión entre **aplicaciones**.
+
+El puerto proporciona un **identificador de servicio** entre `0`-`65535` valores con sus respectivos **valores reservados**:
+- `0`-`1024`: puertos conocidos.
+- `1025`-`49151`: puertos registrados.
+- `49152`-`65535`: puertos de uso privado/personalizado dinámicos.
+
+> Nota: Para ver detalles de programación relacionados con creación de mensajes UPD y TCP revisar transparencias.
+
+> Nota: Por norma general, los puertos **conocidos y registrados** son utilizados por **servidores** mientras que los puertos **privados** son usados por **clientes**.
