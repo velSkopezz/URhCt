@@ -586,7 +586,7 @@ Nivel de aislamiento | Lectura sucia | Lectura no repetible | Lectura fantasma
     \
     Solo se pueden leer datos confirmados, las consultas deben dar mismos resultados y **trabaja sobre una *"foto"*** de tal forma que la transacción no trabaja sobre la base de datos hasta aportar los resultados.
 
-## Configuración de transacciones
+### Configuración de transacciones
 Se especifican con **`SET TRANSACTION <config>`**. Se pueden indicar:
 - **modo de acceso**
     - `READ ONLY`
@@ -603,3 +603,63 @@ Se especifican con **`SET TRANSACTION <config>`**. Se pueden indicar:
     > Nota: En JDBC se omite el "`LEVEL`".
 
     > Nota: Oracle solo implementa `READ COMMITED` (por defecto) y `SERIALIZABLE`.
+
+### Niveles de aislamiento en Oracle
+Solamente proporciona **`READ COMMITED`** Y **`SERIALIZABLE`** por lo que Oracle no tiene riesgo de lectura sucia. EL nivel por defecto es `READ COMMITED`.
+
+Por consecuencia, se debería suponer que `SERIALIZABLE` sea **bloqueante**. No obstante, en Oracle esto no es así. Si un **dato es cambiado durante otra transacción serializable** se le avisa para que lo gestione por medio de un error con el fin de que lo gestione. La transacción serializable sigue trabajando sobre una copia.
+
+Oracle recomienda el uso de **`READ COMMITED`** cuando no pueda suceder el problema, recomienda **`SERIALIZABLE`** cuando la probabilidad de colisión sea baja y recomienda medidas **bloqueantes** cuando la probabilidad de colisión sea alta.
+
+> Nota: Si se da el caso de que una opración seralizable no pueda serializar un cambio porque otra consulta entra en conflicto **se imponen los cambios de toda la transacción salvo que sean conflictivas**. Ello provocaría un error de serialización.
+
+> Nota: Los bloqueos a nivel de instrucción afectan a todo el registro. Esto es necesario para protegerse de la actualización perdida.
+
+### JDCB
+Para aplicar el nivel de seguridad se usa **`setTransactionIsolation(...)`**. No obstante, también puede usarse `execute(String)` para lograrlo.
+- `setTransactionIsolation` proporciona un nivel de aislamiento para la **conexión**.
+- `execute` **pierde el nivel de aislamiento** tras el `commit` o el `rollback`.
+
+### Bloqueos
+Los ***locks*** son recursos que permiten reservar recursos a usuarios impidiendo nuevos accesos. Es un medio que **reduce la concurrencia** y muy particuñar según el sistema gestor de bases de datos.
+\
+Se distinguen, a nivel teórico, tres niveles de bloqueos:
+- **Lectura/escritura**
+
+    Una transacción con **bloqueo de lectura** impone una reserva que impide modificar datos. El objetivo es mantener la integridad de la repetición de lectura.
+    
+    Particularmente, **Oracle no bloquea** la modificación ni lectura propia.
+    
+    **Ninguna otra transacción podrá leer los registros sin bloquearlo también**, por ello se habla de **bloqueo compartido**. Para evitar otras lecturas se debe usar una **promoción de bloqueo de lectura**.
+
+    Una transacción con **bloqueo de lectura** solo permite una transacción bloqueante y no permite que **nadie lea o escriba** los registros afectados.
+
+- **Granularidad**
+
+    La granularidad permite bloquear entre **tablas**, **tuplas** y **atributos** aunque, a nivel práctico, ningún sistema de gestión proporciona bloqueo a nivel de atributo.
+    \
+    Es interesante a nivel de eficiencia **bloqueos de mayor grano**. Por ello, si el número de filas es muy grande, algunos sistemas gestores hacen ***lock escalation*** y bloquean toda la tabla.
+
+- **Implícito/explícito**
+
+    Los **bloqueos implícitos** son realizados por el sistema gestor de bases de datos y sirven para la integridad de los datos. Por contraparte, los **bloqueos explícitos** están dados por instrucciones proporcionadas por el usuario.
+
+Los niveles de aislamiento se relacionan con el uso de *locks*:
+- `READ UNCOMMITED`:
+    - *locks* liberados **tras la operación**
+- `READ COMMITED`:
+    - *locks* de **escritura** liberados **tras la transacción**
+    - *locks* de **lectura** liberados **tras la operación**
+- `REPETEABLE READ`:
+    - *locks* se liberan **tras la transacción**
+- `SERIALIZABLE`:
+    - algunos sistemas gestores **bloquean toda la tabla** o **bloquean los índices**
+
+#### Bloqueos en Oracle
+Sigue dos principios:
+- **lectores no bloquean a escritores**
+- **escritores no bloquean a lectores**
+
+Esto se logra por medio de la **consistencia de lectura** para casos de lectura y escritura simultánea. Para esto se utilizan los **rollback segments**.
+\
+Los rollback segments almacenan un ***system change number*** (SCN) asociado al valor del atributo. Si la transacción tiene un SNC inferior al último valor almacenado entonces dicho valor se ignora y se **recupera el último valor previo al SNC** de la transacción. Hay **consistencia de lectura a nivel de operación y de transacción**. Este proceso es fundamental para las *"fotos"* del `SERIALIZABLE`.
