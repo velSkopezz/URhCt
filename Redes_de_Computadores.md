@@ -1060,3 +1060,72 @@ El puerto proporciona un **identificador de servicio** entre `0`-`65535` valores
 > Nota: Para ver detalles de programación relacionados con creación de mensajes UPD y TCP revisar transparencias.
 
 > Nota: Por norma general, los puertos **conocidos y registrados** son utilizados por **servidores** mientras que los puertos **privados** son usados por **clientes**.
+
+## Demultiplexado con conexión
+Es un juego de puertos de origen y destino. El servidor **siempre trabaja con el mismo puerto** pero las conexiones tienen **distintos puertos en el lado del cliente** permitiendo múltiples conexiones a un mismo dispositivo.
+
+## Protocolo UDP
+Es un protocolo de transferencia **no fiable** porque no comprueba el estado de la conexión.
+\
+Su ventaja es tener una **sobrecarga mínima de cabecera** con **bloques de hasta 64kB** permitiendo enviarse en difusión. Proporciona una conexión full dúplex.
+
+Si es necesario, el paquete se **segmenta** en paquetes de datagramas. No obstante, cualquier **pérdida de estos paquetes debe ser tratada por la aplicación**.
+
+Dado que el peso de su cabecera es mínimo, permite llevar más información  en un solo mensaje. No se almacena **ningún búfer** por lo que el mejor recurso para asegurar la información es el **número de secuencia** que permitirá a la aplicación comprobar y ordenar paquetes.
+
+La cabecera UDP está conformada por 2 gruposde 32B (64B):
+- Puerto **origen**
+- Puerto **destino**
+- **Longitud** de datagrama
+- ***Checksum***
+
+El *Checksum* se calcula sobre una **pseudocabecera** seguido de la cabecera real y datos UDP. El proceso es similar al convencional.
+
+Conviene usar UPD en casos de:
+- **pocos datos**
+- **multihost** o **broadcast**
+- paquetes a **tiempo real**
+- reducir necesidades en recursos
+- esquema de **verificación proporiconado por aplicación**
+
+# TEMA 8: Nivel de transporte: TCP
+TCP se caracteriza por proporcionar medios de **comprobación del mensaje**. Para asegurar la fiabilidad se deben contemplar los **distintos niveles de transferencia en la red**.
+
+A diferencia de un canal ideal, en un canal real pueden darse situaciones de **error de transmisión**, **congestión de red**, **mal encaminamiento**, **permutación**...
+> Nota: Deben distinguirse estos problemas, no son sinónimos.
+
+## Automatic Repeat Request
+El ARQ proporcioa una serie de emdios para **detectar errores**. Los mecanismos previstos son:
+- **Reconocimientos**: Mensajes ACK cuya llegada puede fallar.
+- **Retransmisión**: Con un respectivo *timeout*.
+
+Teóricamente, lo que se ve se plantea en la capa de enlace pero funciona mejor en la capa de transporte de cara a la realidad.
+
+### Detección de pérdida de segmento
+Se envían una serie de datos. Los datos enviados funcionan de acuerdo con el diagrama de secuencia proporcionado.
+
+![ARQ por reconocimientos](https://w3.ual.es/~vruiz/Docencia/Apuntes/Networking/Protocols/Level-4/04-protocolos_ARQ/ARQ_stop_and_wait_ACK_perdido.png "Protocolos ARQ, por Vicente González Ruiz, en Universidad de Almería")
+
+El problema sucede cuando **se pierde el mensaje de ACK**. En tal caso, se enviará la información duplicada.
+
+#### Stop & Wait
+Pretende solventar el problema de los duplicados por medio de un **enumerador de paridad** de 1 bit.
+\
+El ACK funciona de tal forma que, una vez obtenido el mensaje de paridad 0 se exige el 1, tras obtener el 1 se exige el próximo 0 siguiendo así de forma sucesiva. Si no se llegase a recibir se enviaría de nuevo el paquete perdido.
+
+El mayor problema de este método son **los tiempos en grandes distancias**.
+
+![Stop&Wait](https://media.geeksforgeeks.org/wp-content/uploads/Stop-and-Wait-ARQ-7.png "Stop and Wait ARQ en GeeksforGeeks")
+
+### Ventana deslizante
+Es un método de **envío de información a mayores distancias**. Funciona de tal forma que se envían **múltiples segmentos** y, al mismo tiempo, se **exige el siguiente segmento**.
+
+Funciona de una forma más comunicativa que Stop & Wait-
+\
+Se conforma una **ventana deslizante de una cantidad de segments**. Estos segmentos son enviados, el receptor envía un mensaje **exigiendo el siguiente segmento de la ventana** tras la recepción. La enumeración del segmento de la ventana se reinicia una vez terminada la ventana.
+
+El problema que enfrenta este método es la llegada de **segmentos desordenados**. Hay dos métodos de resolución:
+- **go-back**: No se contempla ni se utiliza en la realidad.
+- **selectivo**: Para su uso necesita una **ventana de recepción**.
+
+![Ventana deslizante](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Ventana_deslizante_2.JPG/1280px-Ventana_deslizante_2.JPG "Ventana deslizante en Wikipedia, la enciclopedia libre")
