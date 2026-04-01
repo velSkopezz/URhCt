@@ -566,3 +566,55 @@ Las clases deben estar hechas de tal forma que permitan herencia pero no se espe
 Todas las clases son siempre sustituibles por sus especializaciones.
 \
 Este principio es fundamental para **interfaces** puesto que necesitan el cumplimiento estricto del contrato. Esto se debe hacer mediante **precondiciones y poscondiciones**. Además, en cada generalización, hacia sus especializaciones, **no se exige más pero no se acepta menos**.
+
+#### *Interface Segregation principle*
+Ninguna clase debe implementar métodos que no usa. Si hiciera falta un nuevo método para la implementación de alguna interfaz se segrega de esta. En todo caso, se crea una nueva interfaz.
+
+#### *Dependency inversion principle*
+Hay que evitar el uso de **concreciones** favoreciendo el de interfaces de tal forma qeu el código de alto nivel deje de depender del código de bajo nivel. Si se puede eliminar instanciar las clases dentro del método en pos de convertirlo en un argumento de la función mejora: el objetivo es reducir el **acoplamiento**.
+
+### Diseño multicapa
+El objetivo es **agrupar funcionalidades** de la lógica de la aplicación. Una capa aglomera funcionalidades y se dedica a implementarlas de forma independiente.
+
+La diferenciación de las capas permite **contratar peronsal especializado** en una sola capa y facilitar el **mantenimiento** por la simplicidad lógica.
+
+Un inconveniente es que **el rendimiento puede verse afectado** por la comunicación entre capas.
+
+- El **rendimiento** se reduce con capas por la comunicación.
+- La **seguiridad** aumenta con capas por el encapsulamiento.
+- La **disponibilidad** puede obligar a tener redundancias.
+- El **mantenimiento** se facilita por división lógica.
+
+### Diseño de clases
+Hrabá que identificar **operaciones**, **atributos** y en qué clases colocarlas. Además, respecto a las clases, habría que notar cuáles son sus relaciones.
+
+En diseño ya se conocen factores como el **lenguaje de programación**. Por ello, a diferencia del análisis, en diseño se suelen incorporar facilidades de implementación.
+
+> Eg: evitar poner herencias múltiples si el lenguaje de programación es Java
+
+Conveine describir, además, con **diagramas de estado**.
+
+### Diseño de casos de uso
+> Nota: Para información de requisitos específicos revisar transparencias.
+
+Los casos de uso son la forma principal de ilustrar las **funcionalidades del sistema**. A veces llamados eventos del sistema, la metodología propone **especificar el contrato** de todos ellos. No obstante, las empresas suelen especificar el contrato de algunas.
+
+Se asume que **se cumplen las precondiciones**. A esto se le llama **diseño por contrato** dado que es quien llama a la función el responsable de asegurar que se cumplen las precondiciones.
+\
+El diseño por contrato es el recomendado por Proceso Unificado.
+
+### Modelado de interacciones entre objetos
+Corresponde a "abrir la *caja negra* del sistema". La función es reflejar la **interacción entre objetos** para llevar a cabo una función. El Proceso Unificado propone dos artilugios como **diagramas de interacción**:
+- Diagramas de secuencia
+- Diagramas de colaboración
+
+> Ct: Dichos diagramas no se trabajan en este curso
+
+### *General Responsibility Assignment Software Patterns*
+Los patrones GRASP proporcionan buenas prácticas y **principios de diseño de clases**. Se proporcionan dos patrones fundamentales de alrededor de 6 existentes:
+
+#### Experto en información
+Pretende **asignar la información** al "experto", es decir, la clase encargada de gestionar la información es la responsable de tener la información maximizando la cohesión y minimizando el acoplamiento.
+
+#### Controlador
+Pretende **asignar el rol de interacción con un usario** no necesariamente humano a una **clase especializada** en la lógica del sistema de tal forma que este controlador (***driver***) se dedica a redirecionar la información a la clase adecuada.
