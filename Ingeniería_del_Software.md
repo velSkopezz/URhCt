@@ -617,4 +617,42 @@ Los patrones GRASP proporcionan buenas prácticas y **principios de diseño de c
 Pretende **asignar la información** al "experto", es decir, la clase encargada de gestionar la información es la responsable de tener la información maximizando la cohesión y minimizando el acoplamiento.
 
 #### Controlador
-Pretende **asignar el rol de interacción con un usario** no necesariamente humano a una **clase especializada** en la lógica del sistema de tal forma que este controlador (***driver***) se dedica a redirecionar la información a la clase adecuada.+
+Pretende **asignar el rol de interacción con un usario** no necesariamente humano a una **clase especializada** en la lógica del sistema de tal forma que este controlador (***driver***) se dedica a redirecionar la información a la clase adecuada.
+
+---
+
+### Tarjetas CRC
+Son herramientas de trabajo encargadas de **distribuir** el trabajo entre las clases según sus responsabilidades. Se dispone el nombre de la clase, sus **responsabilidades** y sus **colaboradores**. Esta disposición proporciona información clara sobre la cohesión y el acoplamiento respectivamente.
+
+# Patrones de diseño
+Uno de los principales objetivos es construir sistemas **reutilizables**, **mantenibles** y **flexibles**. Para ello, surgen los **patrones de diseño** como ideas no implementadas de carácter general de resolución problemas generalizados y les dota de un nombre distintivo:
+- **Nombre**
+- **Problema**
+- **Solución**
+- **Consecuencias**
+
+Es una solución que trata de **reutilizar la experiencia** dado que los patrones corresponden a soluciones de problemas reales.
+> Ct: La tabla de las transparencias no hay que aprendérsela de memoria.
+
+## Herencia
+Es una herramienta valorada por su definición "*is-a*" fuertemente usada por el **polimorfismo**, muy ligada al Principio de Liskov. No obstante, es una herramienta con **mucho acoplamiento**: la clase hija es totalmente **dependiente de la clase padre** por lo que cada cambio en una clase no final puede provocar cambios y errores inesperados.
+
+## Composición
+Su definición corresponde a "*has-a*". Las clases involucradas están **desacopladas** en su medida porque las tareas son **delegadas**. Es una relación con mayor simplicidad que la herencia y todas las relaciones de herencia pueden ser hechas como relaciones de composición.
+
+## Patrón Singleton
+Su propósito es garantizar que una clase tenga **una única instancia de acceso global**.
+
+Es útil cuando se **comparte un recurso limitado** y puede ofrecer un servicio a sus uisuarios desde un único y **mismo punto de acceso**. Es muy visto en clases estáticas.
+
+## Patrón Adapter
+El propósito es permitir la **comunicación entre dos sistemas sin modificarlos**.
+
+Al cliente no le interesa obtener un producto que realice el servicio, le basta con un **producto que adapte el servicio** a las condiciones del cliente si ya se tiene otro sistema que realiza el servicio.
+> eg: un ejemplo físico es el adaptador de corriente entre, por ejemplo, un Tipo C europlug y un Tipo A americano
+
+## Patrón Template Method
+Pretende proporcionar el **esqueleto de un algoritmo** delegando operaciones minimas a sus subclases.
+
+Una adición son los **hooked methods** que proporcionan una implementación por defecto que puede ser redefinida por las subclases en el caso de que lo necesiten. Es un punto intermedio entre los métodos comunes y los métodos abstractos.
+> eg: un ejemplo es la creación de té y café. Todas pasan por calentar agua en un mismo dispositivo y por dejar el producto en una taza así que, de cara a implementarlos, puede ser rentable abstraer procesos comunes en un esqueleto que no haga individualidades.
