@@ -166,4 +166,4 @@ Se pretende que **siempre que se comience con un estado** $\bold{Q}$ al aplicar 
 Las variables libres estarán entre la entrada y salida.
 
 ### Convenio de temporalidad
-Para ilustrar la temporalidad en predicados se añade una cláusula en la precondición tal que $p=P$ siendo $P$ un parámetro de entrada y siendo $p$ un parámetro usable en la poscondición.
+Para ilustrar la temporalidad en predicados se añade una cláusula en la precondición tal que $P=p$ siendo $P$ un parámetro de entrada y siendo $p$ un parámetro usable en la poscondición.

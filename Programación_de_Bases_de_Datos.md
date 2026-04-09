@@ -663,3 +663,110 @@ Sigue dos principios:
 Esto se logra por medio de la **consistencia de lectura** para casos de lectura y escritura simultánea. Para esto se utilizan los **rollback segments**.
 \
 Los rollback segments almacenan un ***system change number*** (SCN) asociado al valor del atributo. Si la transacción tiene un SNC inferior al último valor almacenado entonces dicho valor se ignora y se **recupera el último valor previo al SNC** de la transacción. Hay **consistencia de lectura a nivel de operación y de transacción**. Este proceso es fundamental para las *"fotos"* del `SERIALIZABLE`.
+
+#### Bloqueo implícito en Oracle DML
+Es un bloqueo exclusivo (para lectura) hasta confirmada o deshecha la transacción.
+
+Se ilustra mejor con un ejemplo:
+
+tiempo | 1 | 2 | 3
+---: | :---: | :---: | :---:
+$T_1$ |  | update |  
+$T_2$ | update |  | finalizar 
+
+Veamos los casos quese pueden dar:
+- Si se **deshace** $\bold{T_2}$ entonces $T_1$ se ejecutará en el tercer tiempo cuando $T_2$ termine.
+- Si se **efectúan los cambios** el resultado dependerá del nivel de aislamiento:
+    - Si es `READ_COMMITED` se efectuará tras el tiempo 3.
+    - Si es `SERIALIZABLE` obtendremos un error de serialización.
+
+> Nota: En las transparencias se pueden encontrar ejemplos muy reveladores
+
+#### Bloqueo implícito en Oracle DDL
+Los bloques DDL utilizan también bloqueos por lo que **no pueden haber dos usuarios concurrentes editando la estructura** de una tabla.
+\
+Se distinguen tipos:
+- ***Shared***: se pueden modificar **datos** pero no estructuras. Se utiliza en la creación de vistas.
+- ***Exclusive***: no se permite ningún tipo de modificación. Es la más común en DDL.
+
+#### Bloqueos explícitos en Oracle
+Hay 5 tipos de bloqueos. Para llamarlos se utiliza:
+`LOCK TABLE <tablas> IN <lockmode> MODE [NOWAIT/WAIT]`
+> Nota: La cláusula `WAIT` funciona de tal manera que establece un tiempo de espera en el caso de que el recurso ya estuviera bloqueado por otra transacción. Utilizar `NOWAIT` intentará hacer uso del recurso aunque esté bloqueado dando un error instantáneamente en el caso de que lo esté lo que permite evitar *deadlocks* o largos tiempos de espera ya que, por defecto, se suspende la transacción hasta poder realizarse.
+
+Oracle **nunca impide la lectura**.
+De los modos de bloqueos solamente interesan 2 de cara al curso:
+- *Shared*
+- *Exclusive*
+
+Para realizar un **bloqueo explícito por registro** se utiliza un `SELECT` con una cláusula adicional `FOR UPDATE [NOWAIT/WAIT]`. Es un bloqueo exclusivo que afecta a los registros que se obtienen tras ejecutar la consulta.
+
+Esto significa que se puede **simular `REPETEABLE_READ`** utilizando un `SELECT` con un **bloqueo de sólo lectura** o con un **bloqueo explícito por registro**, aunque lo recomendable es **evitar el uso de bloqueos** en favor del aislamiento `SERIALIZABLE`.
+> Puede ser rentable usar el bloqueo cuando la probabilidad de que se produzca un error de serialización sea alta y ello evite recibir muchos errores.
+
+### *Deadlock*
+Un ***deadlock*** ocurre cuando **dos transacciones se bloquean entre ellas**. Por ejemplo, dos transacciones cruzadas cambiando un atributo de dos registros.
+
+En tal caso, el sistema gestor, Oracle al menos, **envía un error a alguna de las transacciones** indicando la detección de un *deadlock*. Esta transacción no se ejecuta y, en cambio, se ejecuta la otra.
+
+Para evitar *deadlocks* se utilizael **Two Phase Locking**:
+1. Fase 1: **Expansión**
+    \
+    Se bloquean todos los recursos que se van a utilizar.
+2. Fase 2: **Contracción**
+    \
+    Se liberan los recursos gradualmente tras su uso.
+
+### Transacciones autónomas
+A veces, una transacción debe iniciar otra **subtransacción** que debe ejecutarse de forma autónoma.
+
+### Concurrencia optimista
+Consiste en intentar **evitar bloqueos** proporcionando **soluciones que detecten** el error susceptible.
+
+En ciertos casos, lo comun es usar un **campo timeStamp** que proporcione el **momento de último cambio**. Para ello, se **requiere que la tabla tenga un campo timeStamp**. Al momento del `UPDATE`, por ejemplo, se puede revisar si el timeStamp corresponde al adecuado evitando así situaciones de actualización perdida.
+
+# TEMA 5: Técnicas de Mapeo Objeto-Relacional
+Un ORM es una herramienta, framework o técnica de programación encargado de mapear entidades relacionales de bases de datos a objetos de orientación a objetos. No obstante, en la práctica, también proporcionan técnicas para objetos NoSQL.
+
+Entre los ORM de Java se encuentra **JPA**.
+
+## Impedance Mismatch
+Hace referencia a las diferencias de mundos que impiden la correspondencia directa entre el mundo de los objetos de Orientación a Objetos y las tablas SQL:
+- **Granularidad**
+    > eg: algo que sea un atributo en SQL y un objeto en Orientación a Objetos
+- **Herencia**
+    > eg: relativo a implementación de herencia de nivel conceptual a físico 
+- **Identidad**
+    > eg: si no se reescribe equals(Object):boolean de Java
+- **Asociación**
+- **Navegación**
+    > Nota: Se puede hablar de las $n+1$ transacciones de OML
+
+## ORM
+ORM pretende aportar persistencia de forma **automáticay transparente**. Para ello se utiliza metainformación de mapeo logrando que solo se tenga que realizar el ejercicio **una única vez**.
+
+Se componen de:
+- **API** para operaciones CRUD.
+- **API** para consultas sobre clases.
+- Medio para especificar **metadatos de mapeo**.
+- Tácnicas de **optimización**.
+
+El mayor problema de OMR es que suele hacer falta analizar si es rentable su uso para la casuística determinada.
+
+## JPA
+En esta asignatura se utiliza JPA por su **capacidad de abstracción** que proporciona múltiples implementaciones para distintos sitemas gestores de bases de datos.
+
+En su creación se aprovechó de los ORMs existentes para integrar ventajas de otros OMRs.
+
+Utiliza la **persistencia basada en POJOs** (objetos planos con su constructor, getters y setters). No se espera que las clases tengan ninguna caracterísitca particular.
+
+JPA trabaja sobte **clases y sus propiedades** por lo que la cláusula JPA `SELECT atributo FROM Clase` está buscando un **atributo `atributo`** de la **clase `Clase`** siendo el lenguaje sensible a mayúsculas y minúsculas.
+\
+Es importante tener en cuenta que **las consultas no se realizan sobre la base de datos**.
+
+Para mapear clases con tablas se puede usar **XML** o **anotaciones** sobre el código. Cada una proporciona sus ventajas e inconvenientes.
+> eg: en el siguiente ejemplo el `@Override` corresponde a una anotación
+> ```java
+> @Override
+> public String toString() { . . . }
+> ```

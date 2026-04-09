@@ -617,4 +617,4 @@ Los patrones GRASP proporcionan buenas prácticas y **principios de diseño de c
 Pretende **asignar la información** al "experto", es decir, la clase encargada de gestionar la información es la responsable de tener la información maximizando la cohesión y minimizando el acoplamiento.
 
 #### Controlador
-Pretende **asignar el rol de interacción con un usario** no necesariamente humano a una **clase especializada** en la lógica del sistema de tal forma que este controlador (***driver***) se dedica a redirecionar la información a la clase adecuada.
+Pretende **asignar el rol de interacción con un usario** no necesariamente humano a una **clase especializada** en la lógica del sistema de tal forma que este controlador (***driver***) se dedica a redirecionar la información a la clase adecuada.+
