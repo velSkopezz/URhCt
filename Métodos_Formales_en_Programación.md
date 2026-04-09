@@ -167,3 +167,35 @@ Las variables libres estarán entre la entrada y salida.
 
 ### Convenio de temporalidad
 Para ilustrar la temporalidad en predicados se añade una cláusula en la precondición tal que $P=p$ siendo $P$ un parámetro de entrada y siendo $p$ un parámetro usable en la poscondición.
+
+## Java Modeling Language
+Se utiliza JML para **especificar formalmente** en Java siguiendo el **paradigma de diseño por contratos**.
+
+La especificación se hace por medio de **comentarios** para que no interfiera con la compilación.
+
+Se anota con `/*@ @*/` o `//@`. La **precondición** se indica con `requires` y la **poscondición** con `ensures`. Si no se indica explícitamente ni `requires` ni `ensures` se presupone que son `true`.
+
+Notación natural | JML
+---: | :---
+$<$ | `<`
+$>$ | `>`
+$\le$ | `<=`
+$\ge$ | `>=`
+$=$ | `==`
+$+$ | `+`
+$-$ | `-`
+$\land$ | `&&`
+$\lor$ | `||`
+$\ne$ | `!=`
+$\rightarrow$ | `==>`
+$\leftrightarrow$ | `<==>`
+$\forall$ | `\forall`
+$\exists$ | `\exists`
+
+Además, hay ciertas *keywords*:
+- `\result` hace referencia al valor que devuelve la función.
+- `\old` hace referencia al valro de entrada de alguna variable.
+
+> Nota: Para usar $\forall$: `\forall integer i: (0<=i<n) ==> P`
+> \
+> que puede traducirse tal que $\forall{i} ((0 \le i < n) \rightarrow P)$
