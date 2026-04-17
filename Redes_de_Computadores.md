@@ -1253,3 +1253,42 @@ Con respecto al `RST`, puede darse un cierre distinto.
 
 ![RST TCP](https://i0.wp.com/lab.wallarm.com/wp-content/uploads/2024/01/297.jpg?w=770&ssl=1 "TCP Resets from Client and Server aka TCP-RST-FROM-Client en Wallarm")
 
+## Control de congestión
+Los routers tienen unos ***buffers* de capacidad limitada**. Si se llenan los *buffers* se **descartan los paquetes**. Como los segmentos perdidos se retransmiten, **la pérdida por congestión tiende a retroalimentarse**.
+
+El protocolo TCP **pretende reducir la congestión proporcionando un trato equitativo** de la capacidad. Para ello, se usa la **ventana de congestión**.
+
+### Ventana de congestión
+Corresponde a una **estimación de tráfico máximo para la red de la conexión**.
+\
+La ventana de congestión, dependiente de las capacidades de la red, **limita el tamaño de la ventana de transmisión**:
+```
+ventanaTransmisiónMAX = min(win, ventanaCongestión)
+``` 
+Se proporcionan tres algoritmos, que suelen implementarse juntos, cuyo fin es reducir la congestión de red:
+- ***Slow Start*** (Arranque lento)
+- ***Congestion Avoidance*** (Incremento aditivo)
+- ***Multiplicative Decrease*** (Reducción multiplicativa)
+
+En el caso de que se detecte algún problema se seguirá la siguiente tabla:
+Detección del problema | Actuación | Arranque | Interpretación 
+:--- | ---: | :--- | :---
+***timeout*** | Reducir **umbral** a su mitad | *Slow Start* | Hay congestión en la red y algún router no ha podido almacenar el mensaje en su *buffer*.
+**3 `ACKs` duplicados** | Reducir el **umbral** y la **ventana de congestión** | *Congestion Avoidance* | Hay congestión en la red, al receptor no le llega el mensaje y es la tercera vez que lo pide.
+
+#### *Slow Start*
+No se comienza retransmitiendo todos los segmentos de la ventana. En su lugar, **inicialmente la ventana de congestión es pequeña** y, posteriormente, tiene un **crecimiento exponencial**.
+```
+ventanaCongestión = 2 // Mensajes
+while (comunicación) {
+    ventanaCongestión = ventanaCongestión * 2
+}
+```
+
+#### *Congestion Avoidance*
+Se utiliza un **umbral** que puede ser **inicialmente igual a *win***. Prosigue con un **crecimiento lineal** del umbral. El crecimiento se detiene en los siguientes casos:
+- El tamaño **alcanza la ventana de recepción**.
+- Hay **algún problema** en la comuniación:
+    - Si hay **motivo de pérdida** por vencimiento de *timeout* se **reduce el umbral a la mitad**.
+    - Si hay **motivo de 3 `ACK`s duplicados** se interpreta que hay congestión y se **reduce el umbral y la ventana de congestión**.
+
