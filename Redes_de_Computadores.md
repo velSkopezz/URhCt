@@ -1129,3 +1129,92 @@ El problema que enfrenta este método es la llegada de **segmentos desordenados*
 - **selectivo**: Para su uso necesita una **ventana de recepción**.
 
 ![Ventana deslizante](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Ventana_deslizante_2.JPG/1280px-Ventana_deslizante_2.JPG "Ventana deslizante en Wikipedia, la enciclopedia libre")
+
+#### Go-Back-N ARQ
+El **receptor ignora las tramas fuera de orden**. Si el remitente no recibe un ACK después de un tiempo de espera entonces el remitente **vuelve a enviar la totalidad de la ventana**.
+
+El método no es muy efectivo debido a la pérdida de tiempo en **retransmisión**, **propagación** y posterior espera al ***timeout*** puesto que el receptor desecha los paquetes que no corresponden al orden adecuado. El remitente reinicia tras el último paquete correcto.
+
+Se consume mucho ancho de banda en paquetes a desechar. Si la red está congestionada los routers se atascan y asesinan los paquetes que no quepan en el *buffer*. Además, este problema escala por **retroalimentación**.
+
+#### Selective Repeat ARQ
+Añade una **ventana de recepción** en la que el receptro **almacena paquetes en desorden** dejando en dicha ventana **huecos** dispoinbles para paquetes perdidos o desordenados.
+
+La ventana de recepción se incrementa con cada **llegada de paquete ordenado**. En el remitente cada paquete tiene su *timeout*. Si el receptor pierde un paquete deja un hueco de la ventana y **espera a que el remitente lo reenvíe por espera de *timeout***.
+
+#### Piggybacking
+Es una técnica que consiste en **enviar reconocimientos en paquetes de comunicación** lo que puede reducir el tráfico en la red. No obstante, requuiere **comunicación bilateral**.
+
+## Segmento TCP
+El Transmission Control Protocol es un servicio orientado a conexión.
+### Maxmum Segment Size
+El **MSS** es un dato comunicado al inicio de la conexión. Se obtiene a partir del **MTU**.
+\
+Por defecto, el MSS es de 536 bytes para TCP por IPv4. El máximo con un MTU de 1500 bytes se calcula restando las cabeceras tal que $1500\text{B}_{MTU} - 20\text{B}_{cabecera\ IP} - 20\text{B}_{cabecera\ TCP} = 1460\text{B}_{MSS}$.
+
+![Encajonamiento de cabeceras TCP](https://www.malwaresa.com/wp-content/uploads/2023/01/intro_42-1.png "3.1.4.2. Estructura de datos de los protocolos de la suit IP/TCP en Malware SA")
+
+### Formato de un segmento TCP
+![Formato del segmento TCP](https://cv.uoc.edu/UOC/a/moduls/90/90_329/web/imagenes/f6_18.gif "Formato del segmento TCP en Universitat Oberta de Catalunya")
+
+- **Puerto de origen** (16b).
+- **Puerto de destino** (16b).
+- **Número de secuencia** (32b): Permite la **ordenación de segmento** por **numeración de bytes** tomando un **valor inicial aleatorio**.
+- **Número de reconocimiento** (32b): Similar al número de secuencia a nivel de **recepción**.
+    > Nota: Se toma un valor aleatorio inicial (**ISN**) y se va incrementando de tal forma que el cliente pide el siguiente byte a recibir.
+    > > Eg: si el número de secuencia absoluto es 532 y se reciben 536 bytes el host pedirá en el número de reconocimiento el byte $532 + 536 = 1068$.
+    >
+    > Ello con la salvedad de recibir un flag `SYN` o `FIN` puesto que consumen un número de secuencia aunque no lleven datos (**byte fantasma**).
+    > > Eg: siguiendo con el ejemplo, supondría un número de reconocimiento de 1069.
+
+- **Longitud de cabecera** (4b).
+- **Reserva** (6b): Ya se le ha dado uso a alguno.
+- **Código** (6b): *flags*.
+- ***Win*** (16b): Indica el **tamaño de ventana** y, posteriormente, se añadió un multiplicador en el campo de opciones debido a los avances en *hardware*.
+- ***Checksum*** (16b).
+- **puntero a datos urgentes** (16b): Se puede disponer un puntero a datos de lectura urgente.
+
+#### Campo de *flag*
+Códgo | Valor | Descripción
+---: | :---: | :---
+14 | `SYN` | Indica el **inicio de la conexión**. La respuesta es un `SYN + ACK`.
+15 | `FIN` | Indica el **final de la conexión**. La respuesta suel ser un `FIN + ACK`.
+11 | `ACK` | Indica la **validez del reconocimiento** y pide el **próximo byte**.
+12 | `PSH` | Indica una solicitud de **push a la aplicación**.
+10 | `URG` | Indica **datos urgentes** obtenibles fuera de orden. (Eg: `CTRL+C`)
+13 | `RST` | Indica un **cierre repentino**.
+
+> Ct: Se verán con profundidad luego.
+
+#### Números de secuencia y reconocimiento
+Son campos de 32 bits (5 bytes) que identifican el **orden del segmento**. El número de secuencia del emisor es el de recepción del receptor.
+
+Se inicializan con un valor inicial aleatorio llamado ***initial secuence number*** (**ISN**). Este número se **incrementa con bytes reconocidos**. El primero reconocimiento lleva el **ISN**. Todos llevan $ISN+N \cdot MSS$ siendo $n \equiv \text{número de segmento}$ inicializado en 0.
+
+#### Opciones
+Pueden indicar diferente información:
+- `0`: nada
+- `1`: sin operación
+- `2`: MSS
+
+En el caso del 2 se indica el tamaño del MSS al receptor. Se **reservan 4 bits** para indicarlo.
+\
+Entre opreaciones suele haber un 1 (`NOP`: sin operación) para separar opciones.
+\
+Entre otros casos, el caso 3 proporciona el tamaño de la ventana. Se le proporciona una longitud de 3 y un campo multiplicador debido a los avances en el *hardware*.
+
+Existe una **longitud determinada por opción** orientada a la cantidad de argumentos que requiere y su tamaño.
+
+## Control y flujo del error
+El objetivo es **reconocer y transmitir las pérdidas** detectadas por el *Checksum*.
+\
+La ventana deslizante proporciona una solución a la llegada de **paquetes en desorden** pero **limita la cantidad de paquetes pendientes de reconocimiento** debido a la ventana de transmisión.
+
+### Temporizador RTO
+El **RTO** es una variable **no constante** que depende de los retrasos de la red, la cantidad de tráfico y las velocidades de transmisión. Por ello es de carácter **adaptativo**. Para que funcione correctamente es necesario que se cumpla $RTO > RTT$.
+
+Para estimar el RTO se utiliza el **algoritmo de van Jacobson**:
+- $RTT_\text{estimado} = (1 - \alpha) \cdot RTT_{\text{estimación}} + \alpha \cdot RTT_\text{muestra}$ tal que $\alpha \in [0, 1)$, normalmente $\alpha = 1/8$
+- $RTT_\text{dev} = (1 - \beta) \cdot RTT_\text{dev} + \beta \cdot | RTT_\text{muestra} - RTT_\text{estimado}$ tal que, normalmente, $\beta = 1/4$
+- $RTO = RTT_\text{estimado} + 4 \cdot RTT_\text{dev}$
+
