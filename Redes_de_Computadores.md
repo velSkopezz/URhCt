@@ -1292,3 +1292,45 @@ Se utiliza un **umbral** que puede ser **inicialmente igual a *win***. Prosigue 
     - Si hay **motivo de pérdida** por vencimiento de *timeout* se **reduce el umbral a la mitad**.
     - Si hay **motivo de 3 `ACK`s duplicados** se interpreta que hay congestión y se **reduce el umbral y la ventana de congestión**.
 
+# TEMA 9: API de Sockets
+Corresponde a las herramientas para construir en alto nivel envíos de información. Puede ser problema decidir qué host debe enviar o recibir la información. Por ello, es común la arquitectura **cliente-servidor**.
+
+Un socket es una **abstracción del sistema operativo** en el que figuran los puertos de la conexión. Distinguiremos dos tipos de sockets de red:
+- **Socket TCP**: también llamados de tipo **Stream**
+- **Socket UDP**: también llamados de tipo **Datagram**
+
+## Socket TCP
+Para iniciar la conexión el cliente inicializa su socket y lo **transfiere a un servidor que escucha**. El servidor escucha y, tras transferir la información, alguno de los dos **cierra la conexión**.
+
+## Sockets en Java 
+Se refiere al paquete **`java.net`** en el que se tienen tres tipos de sockets en clases:
+- **Socket**
+- **ServerSocket**
+- **DatagramSocket**
+
+### InetAddress
+Se trata de una clase que **almacena direcciones IP**.
+- `getByName(String): InetAddress`
+- `getHostAddress(): String`
+- `getHostName(): String`
+- `getLocalHost(): InetAddress`
+- `getAllByName(String): InetAddress[]`
+
+### Socket
+Proporciona lo necesario para un socket de clientes.
+- `Socket(InetAddress, int)`
+- `Socket(String, int)`
+
+> Nota: El entero se trata del puerto.
+
+> Nota: También hay constructores para añadir **información local**.
+
+- `close(): void`
+- `getInputStream(): InputStream`
+- `getOutputStream(): OutputStream`
+- `bind(SocketAddress): void`
+- `connect(SocketAddress): void`
+
+> Nota: Los métodos del tipo `getStream` proporcionan **descriptores** de socket para leer o escribir en ellos.
+
+> Nota: Para más información documentarse respecto la clase [Scanner](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html "Class Scanner en Oracle") y [PrintWriter](https://docs.oracle.com/javase/8/docs/api/java/io/PrintWriter.html "Class PrintWriter en Oracle").
