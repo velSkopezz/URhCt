@@ -1215,6 +1215,41 @@ El **RTO** es una variable **no constante** que depende de los retrasos de la re
 
 Para estimar el RTO se utiliza el **algoritmo de van Jacobson**:
 - $RTT_\text{estimado} = (1 - \alpha) \cdot RTT_{\text{estimación}} + \alpha \cdot RTT_\text{muestra}$ tal que $\alpha \in [0, 1)$, normalmente $\alpha = 1/8$
-- $RTT_\text{dev} = (1 - \beta) \cdot RTT_\text{dev} + \beta \cdot | RTT_\text{muestra} - RTT_\text{estimado}$ tal que, normalmente, $\beta = 1/4$
+- $RTT_\text{dev} = (1 - \beta) \cdot RTT_\text{dev} + \beta \cdot | RTT_\text{muestra} - RTT_\text{estimado} |$ tal que, normalmente, $\beta = 1/4$
 - $RTO = RTT_\text{estimado} + 4 \cdot RTT_\text{dev}$
+
+### Duplicación del intervalo de espera
+Proporciona un problema: hay ambigüedad de RTT en retransmisiones. La solución es no tener en cuenta las medidas de RTT de los segmentos retransmitidos Como se dobla el tiempo se habla de ***Exponential Backoff***.
+
+### Reconocimientos acumulativos
+Se reconoce el **último segmento recibido correctamente y en seceuncia**: cada recepción tiene la **posibilidad de generar un reconocimiento**.
+
+### Generación de reconocimientos
+No es necesario enviar un `ACK` por cada segmento, se pretende **retrasar hasta dado algún caso**:
+- recibir varias segmentos
+- enviar un segmento de datos en sentido contrario (*piggybacking*)
+
+> Nota: Reduce el tráfico.
+
+### Reconocimientos duplicados
+No se retrasan los segmentos, se envían junto a los reconocimientos. Puede generar **segmentos desordenados o perdidos**.
+
+## Gestión de la conexión TCP
+Corresponde a lo relativo a las condiciones fáticas.
+### Establecimiento de la conexión
+Requiere tres segmentos para el establecimiento.
+1. **Petición** del cliente.
+2. **Aceptación** por el reconocimiento del servidor.
+3. **Reconocimiento** del cliente al servidor.
+
+![Sincronización TCP](https://www.ionos.es/digitalguide/fileadmin/_processed_/d/e/csm_EN-tcp_0da4a9188a.webp "TCP (Tra­n­s­mi­s­sion Control Protocol): retrato del protocolo de tra­n­s­po­r­te en IONOS")
+
+### Cierre de conexión
+Hay distintas formas de cerrar la conexión. Se proporciona el cierre en **4 fases**.
+
+![Finalización TCP](https://www.ionos.es/digitalguide/fileadmin/_processed_/2/b/csm_EN-tcp-verbindungsabbau_f34500b450.webp "TCP (Tra­n­s­mi­s­sion Control Protocol): retrato del protocolo de tra­n­s­po­r­te en IONOS")
+
+Con respecto al `RST`, puede darse un cierre distinto.
+
+![RST TCP](https://i0.wp.com/lab.wallarm.com/wp-content/uploads/2024/01/297.jpg?w=770&ssl=1 "TCP Resets from Client and Server aka TCP-RST-FROM-Client en Wallarm")
 
