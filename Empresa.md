@@ -172,3 +172,61 @@ De acuerdo con las sociedades mercantiles también pueden distinguirse:
 - **Prestar servicios fundamentales**.
 - **Garantizar independencia económica**.
 - **Realizar actividad con beneficio**.
+
+# TEMA 2: La función directiva
+Una empresa desempeña dos funciones fundamentales por medio del **proceso de dirección estratégica**:
+- **Coordinación**
+- **Motivación**
+
+La **estrategia** es el modo en el que la empresa se relaciona con su entorno para conseguir sus objetivos.
+\
+Está integrada por 4 niveles jerárquicos en el que **las decisiones de cada nivel determinan las que se pueden tomar en el nivel inmediatamente posterior**.
+1. **Social**
+2. **Corporativo**
+3. **Competitivo** o de negocio
+4. **Funcional**
+
+![Estrategia empresarial](https://lh6.googleusercontent.com/LAEYNHZAciUaI1BkLlJHFHhp19VyXVqvQeSzzua3HdMzWhjbTMk5UTi97LCZeFPKRhKLyMMXvPHvxHPxaFEv8_z6jS5z4fiFSQXU1zv47DP-BVL8q-jyMTmVMGFmpxueU_LWTwY "ESTRATEGIA EMPRESARIAL en Administración Gerencial")
+
+## Nivel social
+Tiene la mayor integración por el entorno. Por ello, las empresas utilizan este nivel para **obtener legitimidad** y aceptación.
+> Se habla de Responsabilidad Social Corporativa y ética empresarial.
+
+## Nivel corporativo
+Responde a la cuestión de los **negocios en los que debe participar** la empresa.
+- Grado de diversificación
+- Avance en el mercado
+- Abandono de negocios
+- Transferencia de recursos
+
+## Nivel competitivo o de negocio
+Responde a la cuestión relativa a la **competitividad** de la empresa.
+- Obtención de ventajas competitivas
+- Estrategia de liderazgo
+- Estrategia de diferenciación
+
+## Nivel funcional
+Refiere a la **coordinación de las áreas funcionales** de la empresa.
+- Producción
+- Marketing
+- Finanzas
+- RRHH
+
+## Formulación estratégica
+La empresa debe establecer:
+- **Misión**
+  Se refiere al propósito de organizarse.
+- **Visión**
+  Se refiere a la percepción de la empresa a futuro.
+- **Objetivos estratégicos**
+  Concretan el camino para cumplir la misión y la visión.
+
+## Responsabilidad Social Corporativa
+La Comisión Europea la define como una **integración voluntaria de las preocupaciones sociales y medioambientales** de una empresa.
+
+Juega un papel importante el cambio en la percepción de las empresas:
+Antes | Ahora
+:-- | :--
+El objtevo de la empresa es maximizar el valor económico creado. | Una empresa tiene obligaciones sociales por encima del cumplimiento de las leyes: deben responsabilizarse de sus externalidades negativas y procurar externalidades positivas
+
+> La RSC no implica mayores costes. Es común que incurrir en ello proporcione mayores beneficios por una mejor imagen.
