@@ -1,4 +1,4 @@
-# Paso 1
+# PASO 1: Direcciones DNS con `ipconfig`
 Ejecutamos el programa con la opción `ipconfig /displaydns`. Obtendremos algo así
 
 ##### open/close
@@ -1053,7 +1053,7 @@ Configuraci¢n IP de Windows
 
 ```
 
-# Paso 2
+# PASO 2: Conenido DNS con Wireshark
 Vamos a utilizar Wireshark para visualizar un mensaje DNS.
 \
 Notaremos que se envía un mensaje a cierto servidor. En el caso de la facultad se notará un envío a un srevidor con dirección `10.0.1.11` o `10.0.1.12`. Estas direcciones son **los servidores locales de DNS** del Complejo Científico Tecnológico de la Universidad de La Rioja.
@@ -1080,11 +1080,12 @@ Conviene conocer el formato DNS de pregunta.
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 ```
 
-Nótese que el puerto 53 (DNS) es intercambiado durante la comunicación.
+Nótese que el puerto 53 (`0x0035`) (DNS) es intercambiado durante la comunicación.
 
 Entre las respuestas es posible que encontremos notación como `0xc0 0x0c` en la **dirección DNS de la respuesta**. No es posible encontrar un subdominio DNS con longitud mayor a 63.
 
 Se toman los valores `0x11------ 0x--------` para indicar un puntero. Por ello es común encontrar punteros en `0xc-` aunque también pueden ser con `d`, `e` o `f`. Además, suele haber un *offset* de valores bajos, especialmente de 12, por lo que lo más común es encontrar un puntero de la forma `0xc0 0x0c`.
+> Los punteros saltan a la etiqueta de tamaño, incluida. Saltan **en octetos**.
 
 Respecto al apartado de respuestas, conviene recordar:
 ```
@@ -1110,3 +1111,35 @@ Respecto al apartado de respuestas, conviene recordar:
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 ```
 > Nótese que todos ocupan 32 bits.
+
+# PASO 3: Observaciones con nslookup
+Parte de la práctica no puede ser hecha correctamente en la facultad debido a las condiciones DNS específicas.
+
+Si ejecutamos en la facultad `nslookup` obtenemos:
+```bash
+Servidor predeterminado:  dns-int1.unirioja.es
+Address:  10.0.1.11
+
+```
+
+Podemos ejecutar consultas DNS al servidor. Véase, por ejemplo, `www.example.com`. Veremos una respuesta no autoritativa.
+
+Podemos ejecutar `set type=NS` para forzar DNS. Si preguntamos por `www.example.com` obtenemos:
+```bash
+Servidor:  dns-int1.unirioja.es
+Address:  10.0.1.11
+
+example.com
+        primary name server = elliott.ns.cloudflare.com
+        responsible mail addr = dns.cloudflare.com
+        serial  = 2403488901
+        refresh = 10000 (2 hours 46 mins 40 secs)
+        retry   = 2400 (40 mins)
+        expire  = 604800 (7 days)
+        default TTL = 1800 (30 mins)
+```
+
+Se puede utilizar `set type` para distintas opciones. Por ejemplo, para utilizar IPv6 se puede escribir `set type=AAAA`.
+
+## Cuestiones no comprobables en la facultad
+
