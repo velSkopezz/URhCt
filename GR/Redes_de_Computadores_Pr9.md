@@ -1,4 +1,4 @@
-# PASO 1: Direcciones DNS con `ipconfig`
+# PASO 1: Direcciones DNS con ipconfig
 Ejecutamos el programa con la opción `ipconfig /displaydns`. Obtendremos algo así
 
 ##### open/close
@@ -1017,7 +1017,6 @@ Observamos distinta información al respecto. Nos interesa ejecutar `ipconfig /f
 \
 Notaremos una disminución en la cantidad de registros.
 
-##### open/close
 ```bash
 
 Configuraci¢n IP de Windows
@@ -1142,4 +1141,9 @@ example.com
 Se puede utilizar `set type` para distintas opciones. Por ejemplo, para utilizar IPv6 se puede escribir `set type=AAAA`.
 
 ## Cuestiones no comprobables en la facultad
+Todo ello puede encontrarse en las transparencias de la asignatura. El objetivo es utilizar `set norecurse` para realizar un contacto con el servidor de nombres y poder **efectuar la tarea manualmente de forma iterativa**.
 
+El motivo por el que no puede efectuarse es porque en la Universidad de La Rioja no se permite cuestionar servicios de nombre sin pasar obligatoriamente por el Servidor DNS de la universidad. El *router* corta el puerto 53 (DNS) fuera de la universidad.
+
+# EJERCICIO
+La evaluación consiste en una prueba (test) al inicio de clase. Se complementa que los ejercicios del examen de DNS consistirán en decodificar la información del datagrama.
