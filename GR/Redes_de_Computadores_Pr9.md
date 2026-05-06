@@ -2,7 +2,7 @@
 Ejecutamos el programa con la opción `ipconfig /displaydns`. Obtendremos algo así
 
 ##### open/close
-```
+```bash
 Configuraci¢n IP de Windows
 
     telemetry-incoming.r53-2.services.mozilla.com
@@ -1018,7 +1018,7 @@ Observamos distinta información al respecto. Nos interesa ejecutar `ipconfig /f
 Notaremos una disminución en la cantidad de registros.
 
 ##### open/close
-```
+```bash
 
 Configuraci¢n IP de Windows
 
@@ -1053,3 +1053,60 @@ Configuraci¢n IP de Windows
 
 ```
 
+# Paso 2
+Vamos a utilizar Wireshark para visualizar un mensaje DNS.
+\
+Notaremos que se envía un mensaje a cierto servidor. En el caso de la facultad se notará un envío a un srevidor con dirección `10.0.1.11` o `10.0.1.12`. Estas direcciones son **los servidores locales de DNS** del Complejo Científico Tecnológico de la Universidad de La Rioja.
+
+También notaremos una "`A`" mayúscula muy notoria en el mensaje. Esta indica que se está haciendo una consulta Internet por IPv4.
+
+Conviene conocer el formato DNS de pregunta.
+```
+
+                                    1  1  1  1  1  1
+      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      ID                       |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    QDCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    ANCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    NSCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    ARCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+```
+
+Nótese que el puerto 53 (DNS) es intercambiado durante la comunicación.
+
+Entre las respuestas es posible que encontremos notación como `0xc0 0x0c` en la **dirección DNS de la respuesta**. No es posible encontrar un subdominio DNS con longitud mayor a 63.
+
+Se toman los valores `0x11------ 0x--------` para indicar un puntero. Por ello es común encontrar punteros en `0xc-` aunque también pueden ser con `d`, `e` o `f`. Además, suele haber un *offset* de valores bajos, especialmente de 12, por lo que lo más común es encontrar un puntero de la forma `0xc0 0x0c`.
+
+Respecto al apartado de respuestas, conviene recordar:
+```
+                                    1  1  1  1  1  1
+      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                                               |
+    /                                               /
+    /                      NAME                     /
+    |                                               |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      TYPE                     |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                     CLASS                     |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      TTL                      |
+    |                                               |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                   RDLENGTH                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--|
+    /                     RDATA                     /
+    /                                               /
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+```
+> Nótese que todos ocupan 32 bits.
