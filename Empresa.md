@@ -227,6 +227,126 @@ La Comisión Europea la define como una **integración voluntaria de las preocup
 Juega un papel importante el cambio en la percepción de las empresas:
 Antes | Ahora
 :-- | :--
-El objtevo de la empresa es maximizar el valor económico creado. | Una empresa tiene obligaciones sociales por encima del cumplimiento de las leyes: deben responsabilizarse de sus externalidades negativas y procurar externalidades positivas
+El objetivo de la empresa es maximizar el valor económico creado. | Una empresa tiene obligaciones sociales por encima del cumplimiento de las leyes: deben responsabilizarse de sus externalidades negativas y procurar externalidades positivas.
 
 > La RSC no implica mayores costes. Es común que incurrir en ello proporcione mayores beneficios por una mejor imagen.
+
+# TEMA 3: Análisis estratégico
+## Análisis externo
+El objetivo es conocer el **entorno** por el que se mueve la empresa, es decir, los **factores que no puede controlar**.
+\
+Se habla de:
+- **Oportunidades**
+- **Amenazas**
+
+### Entorno general
+Son factores que **afectan a todas las empresas de un marco** amplio o sociedad.
+\
+Pueden agruparse en 4 categorías según el análisis PEST.
+- Político-legales
+- Económicos
+- Sociales
+- Tecnológicos
+
+El entorno general puede caracterizarse entre dos extremos según variables que pueden proporcionar un entorno estable con rentabilidad en **previsión** o un entorno turbulento con rentabilidad en **prospección**.
+**Entorno estable** | **Entorno turbulento**
+:-- | :--
+Simple | Complejo
+Estático | Dinámico
+Certidumbre | Incertidumbre
+
+### Entorno específico
+Son factores que afectan a **empresas de características comunes**. El entorno específico ejerce una **mayor influencia** sobre los resultados empresariales.
+> Un sector queda definido por un conjunto de empresas que ofrecen productos sustituibles entre sí.
+
+La **intensidad de competencia** en un sector depende de aspectos **estructurales** resumidas en 5 fuerzas básicas.
+
+![Fuerzas de Porter](https://www.master-malaga.com/wp-content/uploads/2024/11/cinco-fuerzas-competitivas-porter.jpg "Análisis de las Cinco Fuerzas de Porter en MBA")
+
+> Para mayor información sobre cada fuerza ver ejemplos en las transparencias.
+
+![Resumen de entornos](https://crearempresas.com/wp-content/uploads/2020/05/entorno-300x225.jpg "1.2 Entorno de la empresa en Crear Empresas")
+
+## Análisis interno
+Pretende identificar los **factores internos** de la empresa:
+- **Fortalezas**
+- **Debilidades**
+
+El procedimiento es el siguiente:
+1. Determinar **áreas funcionales**
+2. Identificar **factores clave**
+3. Valorar la **calidad de desempeño** en cada factor clave
+4. Representar de forma **gráfica**
+5. Incorporar un **perfil estratégico** de referencia
+
+**Perfil estratégico de la empresa** | Identificar puntos fuertes y débiles.
+:-- | :--
+Objetivo | Valorar el potencial en cada variable clave.
+Elaboración: Lista de variables | Aspectos clave que deben ser analizados.
+Elaboración: Valoración de las variables | Valorar el comportamiento de variables clave según Escala Likert.
+Interpretación | Los picos a la derecha indican fortalezas. Los picos a la izquierda indican debilidades.
+
+> Para más información revisar transparencias
+
+**Cadena de valor de la empresa** | Desagrega la empresa de las actividades básicas.
+:-- | :--
+Objetivo | El objetivo es conocer las **fuentes de ventajas competitivas**.
+Fuentes | Actividades básicas, interrelaciones entre actividades, interrelaciones dentro del sistema de valor
+Actividades de la cadena de valor | Actividades primarias y de apoyo
+
+> Para información específica revisar transparencias
+
+### Teoría de los recursos y capacidades de la empresa
+Se disponen unas **hipótesis básicas**:
+1- Los recursos constituyen la fuente primaria del beneficio empresarial.
+2- Los recursos de la empresa proporcionan la dirección básica de su
+estrategia.
+3- Las empresas de una industria pueden ser heterogéneas con respecto a
+los recursos que controlan.
+4- Los recursos de la empresa pueden no ser perfectamente móviles a
+través de las empresas, por lo que esa heterogeneidad puede ser
+duradera en el tiempo.
+
+#### Recursos de la empresa
+Se utiliza una **unidad básica de análisis**: el **recurso**.
+- Recursos tangibles
+- Recursos intangibles
+  
+> Eg: Un objeto es tangible y una información es intangible.
+
+#### Capacidades de la empresa
+Desde un punto de vista estratégico es más importante tener un **aprovechamiento eficaz** que mayor cantidad de recursos.
+\
+La capacidad es la habnilidad de la empresa para utilizar los recursos de forma organizada. Estas no disminuyen con su uso sino que se potencian por ello. No obstante, se desvanecen si no se usan.
+> Eg: La empresa de videojuegos Capcom, tras la creación de RE Engine, suele publicar *remakes* de sus videojuegos para entrenar al equipo en el uso del motor.
+
+Una forma de aplicar dicha organización es mediante **rutinas organizativas**
+
+#### Evaluación estratégica de los recursos
+Son productos **estratégicamente interesantes** los que cumplen las siguientes características:
+- Proporcionan una **posición de ventaja** respecto a competidores
+  - Recurso valioso
+  - Recurso escaso
+- Proporcionan una **ventaja duradera** sobre competidores
+  - Recurso durable
+  - Recurso difícilmente adquirible por otras empresas
+  - Recurso imperfectamente reproducible
+  - Recurso imperfectamente sustituible
+- Proporcionan **resultados aprovechables** a la empresa
+  - Recurso apropiado por la empresa
+
+## Matriz DAFO
+Contiene 4 aspectos fundamentales:
+
+\ | **Interno** | **Externo**
+:-- | :--: | :--:
+**Positivo** | Fortaleza | Oportunidad
+**Negativo** | Debilidad | Amenaza
+
+Según la posición de la empresa en la empresa puede requerir distintos tipos de acciones:
+\ | **Oportunidad** | **Amenaza**
+:-- | :--: | :--:
+**Fortaleza** | Acciones de éxito: usar la fortaleza para aprovechar la oportunidad. | Acciones defensivas: usar la fortaleza para contrarrestar la amenaza.
+**Debilidad** | Acciones complementarias: corregir la debilidad para aprovechar la oportunidad. | Acciones de supervivencia: corregir la debilidad para contrarrestar la amenaza.
+
+A partir de esto se realiza un **plan de acción**.
