@@ -350,3 +350,68 @@ Según la posición de la empresa en la empresa puede requerir distintos tipos d
 **Debilidad** | Acciones complementarias: corregir la debilidad para aprovechar la oportunidad. | Acciones de supervivencia: corregir la debilidad para contrarrestar la amenaza.
 
 A partir de esto se realiza un **plan de acción**.
+
+# TEMA 4: Implantación de la estrategia
+## Estrategia competitiva
+Determina la posición competitiva de la empresa. Le corresponde al equipo directivo obtener **ventajas competitivas**.
+
+### Ventaja competitiva
+Una empresa tiene ventaja competitiva cuando puede crear más valor que sus competidores.
+
+Para cuantificar el valor que crea la empresa se utilizan dos aproximaciones:
+- Aproximación del **valor económico**
+  Las empresas crean valor cuando existe una **diferencia entre el precio percibido y su coste**.
+  \
+  Un cliente compra un producto cuando tiene **excedente positivo** y lo preferirá ante otro cuanto mayor sea el excedente.
+
+  ![Valor percibido](https://www.vadezero.com/wp-content/uploads/2023/03/Costo-Valor-Precio.jpg "Cómo poner precio a mi producto, por jarteaga11, en Vadezero")
+  
+- Aproximación **contable**
+  Mide el valor que crea la empresa por medio de métricas estándar incluidas en estados contables.
+  > Eg: Cuenta de pérdidas y ganancias: ofrece BAIT, BAT y beneficio.
+
+  Son importantes las métricas, por tanto, que relacionen los beneficios con los recursos en uso de la empresa.
+  
+  $$\text{"Rentabilidad económica''} \equiv ROA = \frac{BAIT}{\text{"Activo''}}$$
+
+  $$\text{"Rentabilidad financiera''} \equiv ROE = \frac{BAT}{\text{"Fondos propios''}}$$
+
+  Esta aproximación recibe críticas porque **sólo conoce el pasado** sin garantizar el futuro e **sólo contabiliza activos tangibles** tomando por gastos inversiones humanas.
+  > Se estima que desde los 2000 el valor de las empresas está mayoritariamente no capturado en libros (~75%).
+
+Es un error creer que son competidoras todas las empresas de la misma industria. Se debe tener en cuenta que **no todas las empresas pueden ejercer presión competitiva**. Las empresas tratarán de obtener **ventajas competitivas sostenibles**, es decir, que se mantiene en el tiempo.
+\
+La sostenibilidad de una ventaja competitiva depende de factores:
+- Dinamismo de la industria
+- Barreras a la imitación.
+  La posibilidad de imitar es dependiente de factores.
+  > Puede ser difícil si la empresa a imitar tuviera ventaja por condiciones históricas o por ambigüedad causal.
+
+### Tipos de estrategias competitivas
+Para diseñar la estratégica competitiva se debe tener en cuenta:
+- **Tipo de ventaja** competitiva deseada
+- **Alcance competitivo**
+
+\ | **Ventaja en menor coste** | **Ventaja en exclusividad**
+:-- | :--: | :--:
+**Alcance amplio** | Liderazgo en costes | Diferenciación
+**Alcance reducido** | Concentración al coste | Concentración a la diferencia
+
+El alcance puede ser amplio o reducido:
+- **Alcance amplio**
+  La empresa atiende a toda la demanda pudiendo seguir estrategias.
+  - Estrategia **indiferenciada**: Mismo producto para todos los segmentos.
+  - Estrategia **diferenciada**: Producto adaptado al segmento del mercado.
+    
+- **Alcance reducido**
+  La empresa concentra la oferta en segmentos específicos del mercado.
+
+Se consideran por formas de generar más valor que los rivales:
+- **Reducción de costes**: Ofrece un menor coste que el competidor.
+- **Diferenciación**: Ofrece más valor que el competidor.
+
+#### Ventaja por reducción de costes
+Trata de obtener mayor margen al reducir los costes sin afectar gravemente al valor percibido por el cliente.
+## Estrategia corporativa
+### Dirección del crecimiento de la empresa
+### Métodos de crecimiento de la empresa
