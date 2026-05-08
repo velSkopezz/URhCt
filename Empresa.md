@@ -410,8 +410,80 @@ Se consideran por formas de generar más valor que los rivales:
 - **Reducción de costes**: Ofrece un menor coste que el competidor.
 - **Diferenciación**: Ofrece más valor que el competidor.
 
+No obstante, lo común en la actualidad es aceptar que ambas estrategias pueden ser compatibles simultáneamente.
+
 #### Ventaja por reducción de costes
-Trata de obtener mayor margen al reducir los costes sin afectar gravemente al valor percibido por el cliente.
+Trata de obtener mayor margen al reducir los costes sin afectar gravemente al valor percibido por el cliente. Es una opción sensata cuando el mercado ofrece **productos homogéneos con precios competitivos**.
+> Eg: Fenómeno *low-cost* y Primark.
+
+Para lograrlo:
+- Aumento de producción para **economías de escala**.
+- Comercializar otros productos para **economías de alcance**.
+- Incorporar nuevas tecnologías.
+- Ventajas en localización.
+
+#### Ventaja por diferenciación
+Trata de aumentar el valor percibido por el cliente por ofrecerle un producto diferenciado no necesariamente por beneficios. Es una opción sensata cuando el mercado ofrece **productos diferenciables con calidad exigida**.
+\
+Se distinguen:
+- Diferenciación **vertical**.
+  Un caso en el que un producto proporciona ciertos **beneficios unánimes** con algún coste.
+- Diferenciación **horizontal**.
+  Un caso en el que un producto tiene ventaja respecto a otro por las **preferencias específicas** del cliente.
+
+Hay dos formas de aumentar por diferenciación el valor percibido por el cliente:
+- Basada en características de **producto**.
+- Basada en características de **empresa**.
+
 ## Estrategia corporativa
+Se encarga de definir el **alcance** de las **operaciones** de la empresa. Se define a partir de las **decisiones de crecimiento**.
+\
+La decisión de crecimiento tiene dos dimensiones:
+- **Dirección** de crecimiento.
+- **Método** de crecimiento.
+
 ### Dirección del crecimiento de la empresa
+La dirección de crecimiento podrá ser de dos tipos:
+- **Expansión** si se trata con productos o mercados actuales.
+- **Diversificación** si se trata con productos y mercados nuevos
+  
+![Matriz de Ansoff](https://www.cyberclick.es/hs-fs/hubfs/04.%20BLOG/Matriz%20ANSOFF-ejemplo%20(2).jpg?width=800&height=800&name=Matriz%20ANSOFF-ejemplo%20(2).jpg "Matriz de Ansoff: qué es y cómo crearla en tu empresa en Cyberclick")
+
+#### Penetración de mercado
+Se pretende **aumentar la frecuencia de ventas** o **captar nuevos clientes del mercado** existentes.
+\
+Es sensato cuando existen **consumidores insatisfechos**, es **posible aumentar las compras** o existe **beneficio por economía de escala**.
+
+#### Desarrollo de productos
+Se pretende ofrecer **nuevos productos en el mismo mercado** sin que sea necesariamente nuevo. Basta con mejorar la funcionalidad del producto.
+\
+Es sensato cuando existe **competencia con precios comparables**, el **ciclo de vida del producto es bajo** o existe **beneficio por economía de alcance**.
+
+#### Desarrollo de mercados
+Se pretende **introducir un producto existente a un nuevo mercado**.
+\
+Es sensato cuando hay **capacidad productiva infrautilizada** o **mercados en desarrollo**.
+
+#### Diversificación
+Se pretende **introducir nuevos productos a sus mercados**.
+\
+Es sensato cuando **no se puede crecer por las vías existentes** o se quiere **reforzar la empresa**.
+
+La diversificación puede ser de dos tipos según la intensidad con la que se salte de mercado:
+- **Relacionada**
+- **No relacionada**
+
 ### Métodos de crecimiento de la empresa
+Se diferencian tres métodos de crecimiento:
+- **Crecimiento interno**
+  La propia empresa adquiere los productos necesarios. Proporciona centralización.
+  
+- **Crecimiento externo**
+  La empresa toma control de otras empresas para obtener los productos. Es un método veloz que elimina las barreras de entrada y reduce tanto el riesgo como la competencia pero es común adquirir recursos innecesarios o no deseados.
+  - Adquisición: La empresa adquiere el control de otra manteniendo su personalidad jurídica.
+  - Fusión: Las empresas acuerdan unirse con pérdida de personalidad jurídica.
+    - Pura: Se crea una nueva empresa.
+    - Absorción: Una empresa adopta la personalidad de otra.
+  
+- **Cooperación**
+  > Desarrollado en el tema 3.
