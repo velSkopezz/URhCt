@@ -343,8 +343,6 @@ Contiene 4 aspectos fundamentales:
 **Positivo** | Fortaleza | Oportunidad
 **Negativo** | Debilidad | Amenaza
 
-![Matriz DAFO](https://th.bing.com/th/id/R.385b285fbec83f9eae189d229e354c78?rik=V7VILndPziMy5A&riu=http%3a%2f%2feloyrodriguez.com%2fwp-content%2fuploads%2f2017%2f01%2fEstrategias-DAFO-para-la-web-01.png&ehk=hGKf0EgHZuDloK%2f75HbaGSn0yg%2fOCBtB67qdl106B9E%3d&risl=&pid=ImgRaw&r=0 "¿Quieres conseguir un restaurante de éxito? Prepara un Análisis DAFO, por Eloy Rodriguez, en eloy.")
-
 Según la posición de la empresa en la empresa puede requerir distintos tipos de acciones:
 \ | **Oportunidad** | **Amenaza**
 :-- | :--: | :--:
