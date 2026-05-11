@@ -298,12 +298,12 @@ Actividades de la cadena de valor | Actividades primarias y de apoyo
 
 ### Teoría de los recursos y capacidades de la empresa
 Se disponen unas **hipótesis básicas**:
-1- Los recursos constituyen la fuente primaria del beneficio empresarial.
-2- Los recursos de la empresa proporcionan la dirección básica de su
+1. Los recursos constituyen la fuente primaria del beneficio empresarial.
+2. Los recursos de la empresa proporcionan la dirección básica de su
 estrategia.
-3- Las empresas de una industria pueden ser heterogéneas con respecto a
+3. Las empresas de una industria pueden ser heterogéneas con respecto a
 los recursos que controlan.
-4- Los recursos de la empresa pueden no ser perfectamente móviles a
+4. Los recursos de la empresa pueden no ser perfectamente móviles a
 través de las empresas, por lo que esa heterogeneidad puede ser
 duradera en el tiempo.
 
@@ -342,6 +342,8 @@ Contiene 4 aspectos fundamentales:
 :-- | :--: | :--:
 **Positivo** | Fortaleza | Oportunidad
 **Negativo** | Debilidad | Amenaza
+
+![Matriz DAFO](https://th.bing.com/th/id/R.385b285fbec83f9eae189d229e354c78?rik=V7VILndPziMy5A&riu=http%3a%2f%2feloyrodriguez.com%2fwp-content%2fuploads%2f2017%2f01%2fEstrategias-DAFO-para-la-web-01.png&ehk=hGKf0EgHZuDloK%2f75HbaGSn0yg%2fOCBtB67qdl106B9E%3d&risl=&pid=ImgRaw&r=0 "¿Quieres conseguir un restaurante de éxito? Prepara un Análisis DAFO, por Eloy Rodriguez, en eloy.")
 
 Según la posición de la empresa en la empresa puede requerir distintos tipos de acciones:
 \ | **Oportunidad** | **Amenaza**
