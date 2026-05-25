@@ -402,7 +402,7 @@ $T_{1}$ | transferirBloque(X) | modificarBloque(X) |  | modificar(X) |  |
 $T_{2}$ |  |  | transferirBloque(X) |  | modificar(X)
 
 ### Problema de la lectura sucia
-Ocurre cuando un usuario $T_{2}$ lee unos datos modificados po una operación que se va a abortar:
+Ocurre cuando un usuario $T_{2}$ lee unos datos modificados por una operación finalmente alterada.
 
 tiempo | 1 | 2 | 3 | 4
 :--- | :---: | :---: | :---: | :---:
@@ -412,23 +412,25 @@ $T_{2}$ |  |  | leer(Y) |
 > Nota: El dato que lee $T_{2}$ está alterado por $T_{1}$ por lo que, luego del *rollback*, se está leyendo un dato falso. Esto no sucede en Oracle pero sí en MySQL y SQLServer-.
 
 ### Problema del resumen incorrecto
-Ocurre cuando $T_{2}$ sucede entre dos transacciones de otro usuario:
+Es un problema que sucede cuando $T_2$ realiza una función de agregación (`SUM`, `AVG`...) mientras se alteran los datos de la base de datos de tal forma que los datos leídos alteran su valor **durante la función** de agregación.
 
-tiempo | 1 | 2 | 3 | 4 | 5 | 6
-:--- | :---: | :---: | :---: | :---: | :---: | :---:
-$T_{1}$ | transferirBloque(X) | modificar(X) |  |  | transferirBloque(Y) | modificar(Y)
-$T_{2}$ |  |  | leer(X) | leer(Y) |  |
+tiempo | 1 | 2 | 3 | 4 | 5 
+:--- | :---: | :---: | :---: | :---: | :---: 
+$T_{1}$ | transferirBloque(X) |  | modificar(X) |  |  
+$T_{2}$ |  | funcion(X[0::n/2]) |  | funcion(X[n/2::n]) | resultadoFuncion()
 
 > Nota: $T_{2}$ lee un dato inconsistente de un bloque y consistente del otro.
+
+> Nota: El problema encuentra su solución con el aislamiento de, al menos, `REPETEABLE_READ`.
 
 ### Otros problemas
 Entre otros problemas comunes se encuentran la lectura no repetible y la lectura fantasma cuya principal diferencia es la adición o modificación:
 - **Lectura no repetible**
     \
-    Una consulta que no es repetible porque, concurrentemente, se ha modificado o eliminado algún registro.
+    Una consulta que no es repetible porque, concurrentemente, se ha **modificado o eliminado** algún registro.
 - **Lectura fantasma**
     \
-    Una consulta que proporciona datos erróneos porque se ha añadido una *tupla fantasma* de forma concurrente.
+    Una consulta que proporciona datos erróneos porque se ha **añadido** una *tupla fantasma* de forma concurrente.
 
 ## Herramientas de control de concurrencia
 Aparte de las ya vistas **transacciones por lotes**, se dispone de las siguientes operaciones:
