@@ -626,6 +626,7 @@ Para aplicar el nivel de seguridad se usa **`setTransactionIsolation(...)`**. No
 Los ***locks*** son recursos que permiten reservar recursos a usuarios impidiendo nuevos accesos. Es un medio que **reduce la concurrencia** y muy particuñar según el sistema gestor de bases de datos.
 \
 Se distinguen, a nivel teórico, tres niveles de bloqueos:
+
 - **Lectura/escritura**
 
     Una transacción con **bloqueo de lectura** impone una reserva que impide modificar datos. El objetivo es mantener la integridad de la repetición de lectura.
@@ -656,6 +657,18 @@ Los niveles de aislamiento se relacionan con el uso de *locks*:
     - *locks* se liberan **tras la transacción**
 - `SERIALIZABLE`:
     - algunos sistemas gestores **bloquean toda la tabla** o **bloquean los índices**
+ 
+En resumen:
+
+criterio | tipo | descripción
+:-- | :--  | :--:
+lectura/escritura | lectura | Impide la escritura y es compartido.
+lectura/escritura | escritura | Impide la lectura y es exclusivo.
+granularidad | campo | No se suele implementar.
+granularidad | fila | Puede escalar a granularidad de tabla en un proceso de *lock escalation*.
+granularidad | tabla | Se pierde menos espacio en almacenamiento de sobre el *lock*.
+implícito/explícito | implícito | Lo realiza el sistema gestor en sus operaciones.
+implícito/explícito | explícito | Se indica de forma explícita por el usuario.
 
 #### Bloqueos en Oracle
 Sigue dos principios:
@@ -665,6 +678,16 @@ Sigue dos principios:
 Esto se logra por medio de la **consistencia de lectura** para casos de lectura y escritura simultánea. Para esto se utilizan los **rollback segments**.
 \
 Los rollback segments almacenan un ***system change number*** (SCN) asociado al valor del atributo. Si la transacción tiene un SNC inferior al último valor almacenado entonces dicho valor se ignora y se **recupera el último valor previo al SNC** de la transacción. Hay **consistencia de lectura a nivel de operación y de transacción**. Este proceso es fundamental para las *"fotos"* del `SERIALIZABLE`.
+
+En resumen, en Oracle:
+
+tipo | descripción
+:--  | :--:
+`ROW SHARE` | Intención de modificación. Impide bloqueos `EXCLUSIVE`.
+`ROW EXCLUSIVE` | Se adquiere con órdenes de modificación. Impide bloqueos de otros tipos.
+`SHARE` | Únicamente impide modificación.
+`SHARE ROW EXCLUSIVE` | Similar a `ROW EXCLUSIVE` pero es un *lock* exclusivo.
+`EXCLUSIVE` | Sólamente permite consultas. Impide el resto de operaciones, incluidos bloqueos.
 
 #### Bloqueo implícito en Oracle DML
 Es un bloqueo exclusivo (para lectura) hasta confirmada o deshecha la transacción.
