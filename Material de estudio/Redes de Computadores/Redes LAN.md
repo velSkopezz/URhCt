@@ -79,7 +79,7 @@ El formato de la trama para que no te pierdas como un tonto y poco más. Y que A
 
 Es que no va a entrar nada de este tema, ¿qué quieres que te diga? Por entrar no va a entrar ni el CRC de la captura copypasta que te va a traer de Wireshark. Ni de las otras 19 capturas tampoco.
 
-Es más, dijo explícitamente en clase que de las implementaciones físicas de Ethernet entender más o menos qué significa el nombre. O quizás lo dijo con los cables del tema 1.
+Es más, dijo explícitamente en clase que de las implementaciones físicas de Ethernet entender más o menos qué significa el nombre. O quizás lo dijo con los cables del nivel físico.
 \
 Mira, no tengo ni idea, pero no preguntó ni uno ni otro. Simplemente pasa al tema siguiente y ya.
 
