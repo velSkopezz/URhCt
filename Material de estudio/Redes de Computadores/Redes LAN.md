@@ -51,7 +51,7 @@ Para asociar una dirección física (MAC) con una lógica (IP) se hace uso del *
 
 Se identifica con el código `0x 08 06` así como IP se identifica con `0x 08 00`. Forma parte de la capa de enlace aunque se encapsule en una trama.
 
-El protoclo se dedica a averiguar la dirección MAC de una IP. Para ello, se hace una consulta por difusión que se responde con discriminación.
+El protocolo se dedica a averiguar la dirección MAC de una IP. Para ello, se hace una consulta por difusión que se responde con discriminación.
 
 ![ARP](https://media.geeksforgeeks.org/wp-content/uploads/20240117160730/long1-(1).png "ARP")
 
