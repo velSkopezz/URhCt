@@ -161,6 +161,10 @@ Existe una medida llamada *Maximum Segment Size* (MSS) cuyo valor por defecto es
   \
   Apunta a un byte del segmento que debe ser leído con urgencia.
 
+- Opciones
+  \
+  Hay muchas opciones pero interesa leer la combinación `0x 02 04 XX XX` donde `XX XX` indica el valor del MSS.
+
 Adicionalmente, si se trata de una comunicación bidireccional se puede hacer *piggybacking*, es decir, unir en un sólo segmento un reconocimiento (ACK) con datos de la comunicación.
 
 ## Temporizador RTO
@@ -251,6 +255,8 @@ Vale la pena aprenderse la situación de SYN y FIN porque van a aparecer en el e
 
 La ventana de congestión la puedes ignorar. Sencillamente, no puede preguntarlo sin sacrificar preguntar por otros 2 temas de la asignatura. Tampoco es que sea algo especialmente importante porque pretende solucionar problemas del año de la pera: cuando 250 kB de memoria persistente valía casi tanto como 8 GB de DDR5 en la actualidad. Hace unos años serían 32 GB, pero los centros de datos me van a obligar a editar el símil. Además, las empresas utilzan otros algoritmos de congestión que logran mayores velocidades percibidas.
 
-Lo de que no va a aparecer ni el algoritmo de van Jacobson o como se llame, ni las opciones de TCP, ni la ventana de congestión es tan seguro que hasta, y doy aviso, se ha omitido información en el documento o, al menos, no incluido imágenes.
+Lo de que no va a aparecer ni el algoritmo de van Jacobson o como se llame ni la ventana de congestión es tan seguro que hasta, y doy aviso, se ha omitido información en el documento o, al menos, no incluido imágenes.
+
+Importantísimo saberse lo del `02 04 XX XX` de las opciones para saber MSS. Da igual que el profesor lo haya dado corriendo y mal. Da igual que no esté en el anexo. Da igual cualquiera de las excusas válidas por las que no deberías aprenderte eso. Cae y ya está. Autodidactismo como siempre en la universidad porque aquí es más fácil hacer exámenes y culpar al alumnado que aprender a enseñar y tener honestidad.
 
 Adicionalmente, se supone que hay 12 temas pero el 9 son sockets cuyo interés es nulo hasta para el profesor y el PDF del tema 9 (Sockets) incluye el tema 10 (Clientes y servidores).
