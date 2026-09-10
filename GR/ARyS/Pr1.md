@@ -1,4 +1,4 @@
-# **ARYS: Práctica 1**
+# **ARyS: Práctica 1**
 
 # Placa base
 Sirve para disponer los componentes. Se distinguen de acuerdo a su **factor de forma**:
