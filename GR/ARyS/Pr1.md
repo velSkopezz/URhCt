@@ -5,9 +5,9 @@ Sirve para disponer los componentes. Se distinguen de acuerdo a su **factor de f
 - Factor **pequeño**
 - Factor de **torre**
 - Factor de **rack**
-      > Nota: Las de clase son 19''.
+  > Nota: Las de clase son 19''.
       
-      > Nota: Existen los llamados ***Blade Servers***. Son más pequeños y se insertan de forma vertical en un **mismo bastidor**
+  > Nota: Existen los llamados ***Blade Servers***. Son más pequeños y se insertan de forma vertical en un **mismo bastidor**
 
 > Nota: El factor de forma también decide la disposición de los componentes en la placa.
 
