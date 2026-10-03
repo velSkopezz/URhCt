@@ -82,7 +82,7 @@ Se dice que el transistor es un **dispositivo de estado sólido** por su indivis
 
 Es la ventaja del transistor la que constituye la segunda generación.
 
-### Generación 3
+### Generación 3+
 El problema de los transistores es que generan **inseguridad** puesto que pueden caerse y necesitar ser **resoldados**. Conforme aumentaba la complejidad de los computadores también lo hacía su cantidad de transistores, aumentando el peligro.
 
 Por contraparte, se decidió **unir múltiples transistores en un único silicio** para constituir piezas diferenciadas. Es decir, deshacerse de **componentes discretos** en forma de transistor para crear un **circuito integrado**.
@@ -110,3 +110,17 @@ Es **consecuencia de la Ley de Moore**:
 - **Mayor versatilidad**
     > Por capacidad de hardware.
 - **Mayor conssitencia**
+
+Los avances más interesantes entre estas últimas generaciones fueron la **memoria semiconductora**y el **microprocesador**.
+
+#### Memoria semiconductora
+Inicialmente, la memoria se implementaba mediante **núcleos de ferrita**: anillos de material ferromagnético con cables entrelazados que podían ser magnetizados con distinta polaridad según el sentido de la corriente.
+\
+Estos núcleos son:
+- **voluminosos** (2 milímetros para almacenar un bit)
+- **costosos**
+- con **lectura destructiva**
+
+La memoria semiconductora **sustituyó a los núcleos de ferrita** porque superaba sus inconvenientes y proporcionaba, además, mayor **velocidad**.
+
+
