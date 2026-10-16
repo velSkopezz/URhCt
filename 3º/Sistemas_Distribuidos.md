@@ -193,3 +193,189 @@ try (ServerSocket server = new ServerSocket(INTERNAL_PORT)) {
 ### *Multithread*
 
 Se ve con detenimiento en el próximo tema. Permite el **paralelismo** aumentando rápidamente la velocidad por medio del uso de múltiples núcleso. Se crea un *thread* por cliente y se utiliza un ***pool* de *threads*** para optimizar su creación.
+
+# TEMA 3: Programación concurrente
+
+Es fundamental en **servidores** puesto que es obligatorio para poder tratar con **múltiples clientes** eficientemente. A veces es necesaria también la **comunicación entre hilos**.
+
+> En principio, con $n$ núcleos puedes ejecutar $n$ hilos de forma paralela. No obstante, la tecnología ***hyperthreading*** permite ejecutar $2n$ hilos.
+
+El objetivo es **dividir** las tareas en tanto que sea posible. No obstante, el programador **no tiene control sobre el core al que se delega ni el momento en el que se ejecuta**. Esto se debe a que la tarea de elegir el core forma parte del **planificador del sistema operativo**.
+
+> Tomar un hilo tiene cierto coste que se traduce en pérdida de tiempo. Por ello, hay que evitar hacer *threads* de más.
+
+## Estados de un *thread*
+
+Se identifican cuatro esrados entre los que se desplaza un *thread* deacuerdo con sus subrutinas:
+
+- **nuevo**
+- **ejecutable**
+- **no ejecutable**
+- **muerto**
+
+> La documentación de Java desaconseja forzar la detención de hilos. Esto se hace mediante métodos como `wait()`, `stop()`...
+
+## *Daemons*
+
+Un ***daemon*** es un *thread* que continúa su **ejecución sin que sea necesario** para el programa después de que el *thread* principal termine.
+
+Para cerrar su ejecución tras el final del *thread* principal se puede usar el método **`setDaemon(boolean): void`** que debe uitilizarse **antes de ejecutar `start(): void`** puesto que en ejecución no se revisa el *flag* que activa.
+
+## [`Thread`](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html) y [`Runnable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html)
+
+Para usar *threads* en Java se requiere **crear una clase que extienda de `Thread`** e implementar su método **run**. Luego, hay que ejecutar el método **`start(): void`**.
+
+```java
+public class Hilo extends Thread {
+    public void run() {
+        /* . . . */
+    }
+}
+
+public class Main {
+    public void main(String[] args) {
+        Hilo th = new Hilo();
+        th.start()
+    }
+}
+```
+
+Existe otra forma de hacerlo en el caso de que la clase requiriese tener herencia. Para ello, se necesita que **implemente la interfaz `Runnable`**. Esto es así para poder usar clases que ya hereden de ortas. Funciona de forma similar a `Thread` pero se debe instanciar con un filtro `Thread`.
+
+```java
+public class Hilo implements Runnable {
+    public void run() {
+        /* . . . */
+    }
+}
+
+public class Main {
+    public void main(String[] args) {
+        Hilo th = new Thread(new Hilo());
+        th.start();
+    }
+}
+```
+
+> También se pueden usar **clases anónimas**:
+> 
+> ```java
+> public class Main {
+>     public void main(String[] args) {
+>         Thread th = new Thread(new Runnable() {
+>             public void run() { /* . . . */ }
+>         });
+>     }
+> }
+> ```
+
+### Parámetros `Thread` de Java
+
+Para ejecutar un Thread en Java se utiliza **`start(): void`** que ejecuta un **`run(): void`**. Para pasar parámetros es necesario **crear parámetros de clase** y **devolverlos en un *getter*** específico del `Thread` creado. De forma similar se hace cuando es necesario **lanzar excepciones** puesto que el método `run(): void` no tiene `throws` en su cabecera.
+
+```java
+public class Hilo extends Thread {
+    private Object in_Parameter;
+    private Object outParameter;
+    private Exception throwable;
+
+    public Hilo(Object input) { this.in_Parameter = input; }
+    public void run() {
+        try {
+            /* . . . */
+        } catch (Exception e) {
+            this.throwable = e;
+        }
+    }
+    public Object getResult() throws Exception {
+        if (this.throwable != null) { throw this.throwable; }
+        return this.outParameter;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Object in = new Object();
+        Object result = null;
+        Hilo th = new Hilo(in);
+        th.start();
+        try {
+            th.join();
+            result = th.getResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /* . . . */
+    }
+}
+```
+
+### Parada de un `Thread`
+
+Se utilizan distintos métodos para **enviar una señal de interrupción** de tal fomra que el *thread* se **detiene de forma segura**.
+
+> Cita: "Cómo se interrumpe un hilo en Java es pregunta de examen"
+
+Para establecer el control, los *threads* tienen un método **`isInterrupted(): boolean`** que muestra un *flag* que se puede activar con el método **`interrupt(): void`**.
+
+El método `interrupt(): void` no fuerza la interrupción, en su lugar, indica al *thread* que debe cerrarse.
+\
+El *thread* debe **saber cómo interrumpirse**, de lo contrario, no se interrumpirá ya que el poder de interrupción lo tiene el propio *thread* y no su padre.
+
+> El método `interrupt(): void` puede lanzar **`InterruptedException`** al interrumpir.
+
+### Protección contra concurrencia
+
+El objetivo es evitar problemas de concurrencia como la actualización perdida.
+
+> Para más información sobre problemas de concurrencia véase el temario de [Progrmación de Bases de Datos](../2º/Programación_de_Bases_de_Datos.md).
+
+- **`volatile`**
+    \
+    Es un modificador poco utilizado. Entre *threads*, siempre lee el último valor modificado de la variable.
+
+- **`synchronized`**
+    \
+    En un **método**, proporciona **exclusión mútua sobre su instancia**.
+
+    > Hay que destacar que es sobre la instancia. Sobre la siguente clase,
+    >
+    > ```java
+    >   public class Clase {
+    >       public Clase() { }
+    >       public synchronized void metodo() { /* . . . */ }
+    >   }
+    > ```
+    >
+    > y con las siguientes instancias,
+    > 
+    > ```java
+    > Clase instancia1 = new Clase();
+    > Clase instancia2 = new Clase();
+    > Clase instancia1_2 = instancia1;
+    > ```
+    > 
+    > - Se pueden ejecutar concurrentemente `instancia1.metodo()` e `instancia2.metodo()` puesto que son distintas instancias.
+    > - No así como con `instancia1.metodo()` e `instancia1_2.metodo()` porque son la misma instancia.
+
+    > El modificador `synchronized` es **necesario** para crear un **patrón Singleton** (véase [Ingeniería del Software](../2º/Ingeniería_del_Software.md) para más información sobre patrones de diseño).
+
+    También existen **bloques `synchronized`** de forma que todo **un bloque de código tiene asociado un *lock***.
+
+    > E.g.:
+    >
+    > ```java
+    > /* . . . */
+    > synchronized (<objeto>) {
+    >     /* . . . */
+    > }
+    > /* . . . */
+    > ```
+
+> Estas herramientas deben utilizarse con cuidado pues, por ejemplo, `synchronized` puede llevar a **interbloqueos** (véase Sistemas Operativos para más información sobre *deadlocks*), para más información, véase el ejemplo en las transparencias.
+
+### [`Timer`](https://docs.oracle.com/javase/8/docs/api/java/util/Timer.html) y [`TimerTask`](https://docs.oracle.com/javase/8/docs/api/java/util/TimerTask.html)
+
+Para ejecutar tareeas de forma periódica se puede extender de la clase **`TimerTask`**, que funciona de forma similar a `Thread`.
+\
+`TimerTask` hereda de `Timer` los métodos imprescindibles para su funcionalidad, son, principalmente, sobrecargas de **`schedule(<args>)`**.
