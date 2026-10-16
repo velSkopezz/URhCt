@@ -279,7 +279,10 @@ public class Hilo extends Thread {
     private Object outParameter;
     private Exception throwable;
 
-    public Hilo(Object input) { this.in_Parameter = input; }
+    public Hilo(Object input) {
+        super();
+        this.in_Parameter = input;
+    }
     public void run() {
         try {
             /* . . . */
