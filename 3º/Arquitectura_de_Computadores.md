@@ -486,3 +486,171 @@ Los dispositivos con **mayor tiempo de acceso** (más lentos) priorizarán:
     > Esto se debe al **Principio de la localidad de las referencias**. Para más información sobre Principio de localidad véase en Sistemas Operativos.
 
 > La memoria caché funciona de tal manera que ni el procesador ni el programador deben considerarla.
+
+## Memoria principal semiconductora
+
+Se verán distintas tecnologías de almacenamiento en **circuitos integrados**. Todas utilizarán acceso aleatorio.
+
+- **Memorias de lectura/escritura**
+        \
+        Ambas operaciones pueden realizarse rápidamente.
+
+    - **RAM** (*random access memory*)
+            \
+            Destaca porque sus operaciones de **escritura** también son rápidas.
+            
+        - **DRAM** (*dynamic RAM*)
+            \
+            Almacena los datos en forma de **carga en condensador**. Con el tiempo se descarga, de ahí el *dynamic*.
+
+            > Se usa en memorias principales por su bajo coste.
+
+        - **SRAM** (*static RAM*)
+            \
+            Almacena el estado del **biestable**. Son más rápidos que la DRAM porque no invierten tiempo en refrescarse.
+
+            > Se usa en memorias caché.
+
+- **Memorias de sólo escritura**
+    
+    - **ROM** (*read only memory*)
+        \
+        Los datos vienen **programados por *hardware*** y, por ello, son costosos y requieren una programación con mínimos errores.
+
+    - **PROM** (*programable ROM*)
+        \
+        Se fabrica sin programación y el usuario puede **escribir una única vez** con la ayuda de un dispositivo programador. No se puede reprogramar.
+
+- **Memorias de sobre-todo lectura**
+
+    - **EPROM** (*erasable PROM*)
+        \
+        Antes de alterar el contenido de la memoria se somete a un proceso de **borrado mediante luz ultravioleta**.
+        \
+        Este proceso borra la totalidad de la programación del chip.
+
+    - **EEPROM** (*electrically EPROM*)
+        \
+        Utiliza **borrado eléctrico** y **por bytes**, aunque esto las hace **más densas y costosas**.
+
+        > Se diferencia de la RAM en la velocidad de escritura. EEPROM no es volátil pero su velocidad de escritura no es lo suficientemente veloz para la memoria principal.
+
+    - **FLASH**
+        \
+        Se denomina así por su velocidad para reprogramarse. Sus características son intermedias entre la EPROM y la EEPROM.
+        \
+        Permite el **borrado eléctrico de bloques** en lugar de bytes. También son, dentro de su categoría, poco densas. De un tamaño similar a la EPROM.
+
+## Corrección de errores
+
+En ciertas ocasiones, los contenidos de la memoria pueden verse innecesariamente alterados. Por ello, existen medios de **deteción** y **corrección** en forma de algoritmos.
+
+### Memorias ECC
+
+Las memorias con *Error Correction Code* utilizan múltiples flujos de datos dedicados a la corrección junto con un **dispositivo corrector**. Para ello, existe otro dispositivo anterior que encuentra el error mediante un **comparador XOR**. Este último puede enviar la **palabra de síndrome** para corregirlo o, si no fuera posible, enviar una **señal de error**.
+
+> El código más famoso es el **código Hamming**.
+
+#### Código Hamming SEC
+
+Es un **corrector de grupos simple**, es decir, sólo corrige un bit. A continuación se proporciona un ejemplo con 4 bits de datos y 3 bits de control.
+
+> E.g.: de forma gráfica para una comprensión más simple
+>
+> ![Código Hamming SEC visual con 4 bits de datos](../assets/hamming4bit.png "Código Hamming SEC visual con 4 bits de datos")
+>
+> > La codificación es binaria por lo que para corregir el error basta con cambiar el bit.
+>
+> A continuación se explica de forma **algebraica** intercambiando $(A, B, C)$ por $(e_1, e_2, e_3)$.
+
+De acuerdo con el ejemplo anterior, se divide el espacio en corpantimentos.
+
+$e_1$ | $e_2$ | $e_3$ | compartimento
+--: | --: | --: | :--
+ 0 | 0 | 0 | Sin error
+ 0 | 0 | 1 | Comp. 1
+ 0 | 1 | 0 | Comp. 2
+ 0 | 1 | 1 | Comp. 3
+ 1 | 0 | 0 | Comp. 4
+ 1 | 0 | 1 | Comp. 5
+ 1 | 1 | 0 | Comp. 6
+ 1 | 1 | 1 | Comp. 7
+
+> Nótese como cada compartimento se corresponde a un espacio de intersección entre los *"círculos"*.
+
+Las próximas operaciones estarán basadas en la paridad de los bytes. Por ello, se utilizará la **operación lógica XOR**. En específico se utilizará como:
+
+1. **generador de paridad par**
+2. **detector de paridad impar**
+3. **comparador**
+
+Para usarse en **8 bits de datos** se necesitan **4 bits de comprobación**: un total de **12 bits** cuyos componentes serán $b_{12}$, $b_{11}$, $b_{10}$... hasta $b_1$.
+
+> No se utilizará $b_0$ puesto que corresponde al compartimento **sin errores**.
+
+La **palabra de síndrome** está formada por **los 4 bits de comprobación** $(e_1, e_2, e_3, e_4)$. De los 12 bits, desde $b_1$ hasta $b_{12}$, podrá haber **un error en $b_i$**:
+
+$e_4$ | $e_3$ | $e_2$ | $e_1$ | $b_i$
+--: | --: | --: | --: | :--
+0 | 0 | 0 | 0 | $b_0$
+0 | 0 | 0 | 1 | $b_1$
+0 | 0 | 1 | 0 | $b_2$
+0 | 0 | 1 | 1 | $b_3$
+0 | 1 | 0 | 0 | $b_4$
+0 | 1 | 0 | 1 | $b_5$
+0 | 1 | 1 | 0 | $b_6$
+0 | 1 | 1 | 1 | $b_7$
+1 | 0 | 0 | 0 | $b_8$
+1 | 0 | 0 | 1 | $b_9$
+1 | 0 | 1 | 0 | $b_{10}$
+1 | 0 | 1 | 1 | $b_{11}$
+1 | 1 | 0 | 0 | $b_{12}$
+1 | 1 | 0 | 1 | $b_{13}$
+1 | 1 | 1 | 0 | $b_{14}$
+1 | 1 | 1 | 1 | $b_{15}$
+
+Vista esta tabla, su correspondencia:
+
+- $e_4 = b_8 \oplus b_9 \oplus b_{10} \oplus b_{11} \oplus b_{12}$
+- $e_3 = b_4 \oplus b_5 \oplus b_6 \oplus b_7 \oplus b_{12}$
+- $e_2 = b_2 \oplus b_3 \oplus b_6 \oplus b_7 \oplus b_{10} \oplus b_{11}$
+- $e_1 = b_1 \oplus b_3 \oplus b_5 \oplus b_7 \oplus b_9 \oplus b_{11}$
+
+En cada una de esas situaciones **todos son bits de datos salvo uno**, que es de **comprobación**. El de comprobación es aquel que **no pertenece al resto de componentes de la palabra de síndrome**, es decir, $(b_8, b_4, b_2, b_1)$. Todos potencias de dos.
+
+> ⚠️ Hasta aquí, corresponde a la comprobación de paridad por XOR.
+
+A continuación, calculamos los bits $K_i$ tal que $K_i = e_i - b_{2^{i-1}}$:
+
+- $K_4 = e_4 - b_8$
+- $K_3 = e_3 - b_4$
+- $K_2 = e_2 - b_2$
+- $K_1 = e_1 - b_1$
+
+> ⚠️ Hasta aquí corresponde a la generación de número impar por XOR.
+
+Con estos datos obtenemos el **código de Hamming**:
+
+**$i$** | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 
+:-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: 
+**$b_i$** | $m_8$ | $m_7$ | $m_6$ | $m_5$ | $K_4$ | $m_4$ | $m_3$ | $m_2$ | $K_3$ | $m_1$ | $K_2$ | $K_1$
+
+> Siendo los $m_i$ los bits de datos.
+
+> ⚠️ Hasta aquí corresponde a la comparación por XOR.
+
+> E.g.: $M =$ `0b 1101 0010` con código de Hamming `0b 1101 1011 0011`.
+>
+> $K =$ `0b 1011`, obtenido por los bits `8`, `4`, `2` y `1` del código Hamming.
+> \
+> $K' =$ `0b 1101`, obtenido de la suma de los $b_i$ de su compartimento.
+> \
+> $e = K \oplus K' =$ `0b 0110`.
+>
+> Como el valor de $e$ (`0b 0110`) en decimal es `6`, esto indica que el $m_i$ que corresponde al bit 6 del código Hamming tiene un error (`0b 1101 10[1]1 0011`).
+
+![Esquema de código Hamming](../assets/hammingSchema.png "Esquema de código Hamming")
+
+> Nótese que pasra tratar con $2^nb$ se necesitan, al menos, $n$ bits de comprobación sin contar el **bit de sin error**.
+> \
+> En total, se necesitan $2^K - 1 \ge M + K$.
