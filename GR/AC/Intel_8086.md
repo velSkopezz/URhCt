@@ -37,7 +37,7 @@ Que el procesador sea de 16 bits no solo implica la cantidad de bits que almacen
         
     > A pesar de lo dicho, no se verá próximamente.
 
-Para llegar a registros de 20 bits se van a tener que **utilizar dos registros**, lo que dejará un aholgura de $20b - 2 \cdot 16b = 12b$.
+Para llegar a registros de 20 bits se van a tener que **utilizar dos registros**, lo que dejará una holgura de $20b - 2 \cdot 16b = 12b$.
 
 ## Segmentación de la memoria
 
@@ -114,3 +114,37 @@ Todos los registros generales ocupan 2 bytes y podrán dividirse en 2 partes de 
 
 Por tanto, se pueden almacenar 32 bits, y con ello [números en coma flotante](https://es.wikipedia.org/wiki/IEEE_754), por medio de `DX:AX` ($2 \cdot 8b + 2 \cdot 8b = 32b$).
 
+### Registros de segmento y desplazamiento
+
+Hay ciertas combinaciones que hay que conocer:
+
+- **`DS:SI`** (*Data Segment* : *Source Index*) apunta a a dirección de datos de lectura.
+- **`ES:DI`** (*Extra Segment* : *Destination Index*) apunta a la dirección de datos de escritura.
+
+- **`SS:SP`** (*Stack Segment* : *Stack Pointer*) apunta al tope del *stack*.
+- **`SS:BP`** (*Stack Segment* : *Base Pointer*) apunta al inicio del marco de la pila (*stack frame*) para almacenar el contexto.
+
+- **`CS:IP`** (*Code Segment* : *Instruction Pointer*) apunta a la siguiente instrucción que el procesador debe ejecutar.
+
+### Registros de estado (*flags*)
+
+Almacenan ciertas condiciones que puene suceder al operar en la ALU. Son un total de 9 ***flags*** de los cuales 6 de ellos son de **condición** y 3 de ellos son de **control**.
+
+#### Registros de condición
+
+*flag* | Nombre | Descripción
+:--: | :-- | :--
+**`CF`** | *Carry Flag* | Indica si la operación ha resultado con **acarreo**.
+**`OF`** | *Overflow Flag* | Indica si la operación ha generado ***overflow***.
+`AF` | *Auxiliary Carry Flag* | Indica si las sumas de BCD (4 últimos bits) tienen acarreo.
+**`ZF`** | *Zero Flag* | Indica si el resultado de una operación es 0. También utilizado para operaciones de igualdad.
+**`SF`** | *Sign Flag* | Indica si el resultado tiene signo (negativo). También utilizado para operaciones de igualdad.
+**`PF`** | *Parity Flag* | Indica si la cantidad de dígitos a 1 en binario de ese número es par.
+
+#### Registros de control
+
+*flag* | Nombre | Descripción
+:--: | :-- | :--
+**`IF`** | *Interrupt Flag* | Habilita o deshabilita las interrupciones. Tras resetear el programa, `IF` siempre vuelve a `0`  (interrupciones deshabilitadas). Las interrupciones en el Intel 8086 deshabilitan las otras interrupciones.
+`DF` | *Direction Flag* | Indica si la cadena se lee de forma creciente o decreciente.
+**`TF`** | *Trap Flag* | Detiene el procesador tras cada instrucción para permitir facilitar el ***debug*** del código. Si está en `1`, el procesador genera una intrucción interna especial tras la instrucción actual.
