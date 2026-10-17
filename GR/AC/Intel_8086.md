@@ -45,7 +45,7 @@ La memoria está dividida en **segmentos**. Estos segmentos contarán con un **d
 \
 Se calcula de la siguiente forma con el fin de que sólo se puedan direccionar direcciones disponibles:
 
-$$\text{``direccion física"} = 16 \cdot \text{``segmento"} + \text{``desplazamiento"}$$
+$$\text{"direccion física"} = 16 \cdot \text{"segmento"} + \text{"desplazamiento"}$$
 
 > Las direcciones físicas suelen escribirse en hexadecimal. Es por ello que la fórmula puede reescribirse en `dir_física = 10 * dir_segmento + desplazamiento`, lo que facilitará los cálculos.
 
