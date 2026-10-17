@@ -49,7 +49,7 @@ Funciona de tal forma que el núcleo planea la ida y llegada de información par
 
 #### Arquitectura de doble bus independiente (DIB)
 
-Proporciona dos BUSes para el acceso paralelo.
+Proporciona dos buses para el acceso paralelo.
 
 #### *Hyper-Threading Technology* (HT)
 
@@ -89,9 +89,9 @@ $$R_{\text{total}} = (T_{\text{case}} - T_{\text{inlet}})/P_{\text{max}} - R_{\t
 
     2. **Compararlo porcentualmente con el tamaño del bloque máximo de memoria direccionable en un procesador con bus de direcciones de 64 bits.**
 
-        Con un BUS de 64 bits habría $2^{64} \cdot 1\text{B} = 2^{64}\text{B}$ direccionables.
+        Con un bus de 64 bits habría $2^{64} \cdot 1\text{B} = 2^{64}\text{B}$ direccionables.
 
-        Dicho de otro modo, sería $\frac{2^{64}\text{B}}{2^{32}\text{B}} = 2^{32}$ veces mayor con un BUS de 64 bits.
+        Dicho de otro modo, sería $\frac{2^{64}\text{B}}{2^{32}\text{B}} = 2^{32}$ veces mayor con un bus de 64 bits.
 
 2. **Disponemos de un procesador que necesita 26 ciclos de reloj para realizar una operación de movimiento de un dato entre memorias. Su frecuencia de trabajo es 20MHz.**
     

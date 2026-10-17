@@ -152,7 +152,7 @@ Una estrategia habitual cuando un determinado componente alcanza un punto compli
 
 En el caso de los procesadores, es comúnu incorporar en un sólo circuito integrado **múltiples núcleos** (procesadores) funcionando con una **frecuencia de reloj inferior** y **compartiendo una misma memoria caché**.
 
-# TEMA 3: Necesidades de interconexión: BUSes
+# TEMA 3: Necesidades de interconexión: buses
 
 ## Componentes del computador
 
@@ -279,33 +279,33 @@ Comprende los siguientes pasos:
 
 Puesto que era un malgasto de recursos que la CPU fuera intermediaria entre la memoria principal y los dispositivos de entrada y salida, se legó a la conclusión de que se debía conectar todo entre sí a pesar de los ciclos. Esto da lugar al **DMA** (Direct Memory Access)
 
-### Interconexión con BUSes
+### Interconexión con buses
 
-Un **BUS** es un medio de transmisión compartido. Cualquier dato del BUS está disponible para el resto de partes del dispositivo. Es por ello que se requieren **métodos de arbitraje** con el fin de evitar la alteración de los datos
+Un **bus** es un medio de transmisión compartido. Cualquier dato del bus está disponible para el resto de partes del dispositivo. Es por ello que se requieren **métodos de arbitraje** con el fin de evitar la alteración de los datos
 
-El BUS está constituido por **líneas eléctricas**.
+El bus está constituido por **líneas eléctricas**.
 - **serie**: por una línea se envía una secuencia de bits
 - **paralelo**: se envían bits de forma paralela entre múltiples líneas
 
-![BUS serie/paralelo](../assets/serial-paralelo-bus.webp "BUS serie/paralelo en profesionalreview.com")
+![bus serie/paralelo](../assets/serial-paralelo-bus.webp "bus serie/paralelo en profesionalreview.com")
 
-En un computador hay **múltiples BUSes** siendo el más importante el **BUS del sistema**.
+En un computador hay **múltiples buses** siendo el más importante el **bus del sistema**.
 
-#### BUS del sistema
+#### bus del sistema
 
-El BUS del sistema consta de líneas de **datos**, **direcciones**, **control** y, a veces, de **alimentación** (usado, por ejemplo, para USB).
+El bus del sistema consta de líneas de **datos**, **direcciones**, **control** y, a veces, de **alimentación** (usado, por ejemplo, para USB).
 
 ##### Línea de datos
 
-En total constituye lo que se llama **BUS de datos**. Se transmiten contenidos en forma de **datos e instrucciones**.
+En total constituye lo que se llama **bus de datos**. Se transmiten contenidos en forma de **datos e instrucciones**.
 
-Tiene tantas **líneas como anchura del BUS de datos**.
+Tiene tantas **líneas como anchura del bus de datos**.
 
 > Representa las **prestaciones** del sistema.
 
 ##### Línea de direcciones
 
-Se transmite la **dirección de memoria** o el **número de puerto** de entrada/salida en la que se desea acceder. Conforma el **BUS de direcciones**.
+Se transmite la **dirección de memoria** o el **número de puerto** de entrada/salida en la que se desea acceder. Conforma el **bus de direcciones**.
 
 > Su **anchura** representa la **capacidad de direccionamiento**.
 
@@ -319,19 +319,19 @@ Sirve para controlar el acceso y uso de las líneas de datos y direcciones. Perm
     Indica la validez de los datos y direcciones-
     > e.g.: `INTERRUPT REQUEST`
 
-#### Jerarquía de BUSes
+#### Jerarquía de buses
 
-Según aumenta el número de dispositivos conectados al BUS aumenta el **riesgo de congestión**. Para solventar este problema se utilizan **múltiples BUSes** organizados de forma **jerárquica**. Por ello, existen múltiples arquitecturas:
+Según aumenta el número de dispositivos conectados al bus aumenta el **riesgo de congestión**. Para solventar este problema se utilizan **múltiples buses** organizados de forma **jerárquica**. Por ello, existen múltiples arquitecturas:
 
-1. **BUS local**
+1. **bus local**
     \
     Es una conexión **rápida** para el **microprocesador** y la **memoria caché**.
 
-2. **BUS del sistema**
+2. **bus del sistema**
     \
     Comunica con la **memoria principal**.
 
-3. **BUS de expansión**
+3. **bus de expansión**
     \
     Es más **lento** que los anteriores. Comunica con los **periféricos**.
 
@@ -341,29 +341,29 @@ Esta arquitectura permite liberar a la CPU del uso de intermediario en el trasla
 
 Existe la llamada **arquitectura de interplaca** que utiliza 4 niveles:
 
-1. **BUS local**
+1. **bus local**
 
-2. **BUS del sistema**
+2. **bus del sistema**
 
-3. **BUS de alta velocidad**
+3. **bus de alta velocidad**
     \
     Para **periféricos veloces**.
 
-4. **BUS de expansión**
+4. **bus de expansión**
     \
     Para **periféricos lentos**.
 
-#### Elementos de diseño de un BUS
+#### Elementos de diseño de un bus
 
-Hablamos de dos **tipos de BUSes**: **dedicados** y **multiplexados**:
+Hablamos de dos **tipos de buses**: **dedicados** y **multiplexados**:
 
 - **Dedicados**
 
-    Las líneas de un BUS pueden estar **permanentemente dedicadas** a algo. De ello depende que sean:
+    Las líneas de un bus pueden estar **permanentemente dedicadas** a algo. De ello depende que sean:
     - **Dedicación funcional**: dedicadas a la misma **función**
     - **Dedicación física**: dedicados a un mismo **subconjunto de dispositivos**
 
-    > e.g.: La transmisión de datos y la transmisión de direcciones son dos tipos distintos de funciones, por ello, tener un bus para cada tipo de estas dos transmisiones implica tener BUSes permanentemente dedicados por dedicación funcional.
+    > e.g.: La transmisión de datos y la transmisión de direcciones son dos tipos distintos de funciones, por ello, tener un bus para cada tipo de estas dos transmisiones implica tener buses permanentemente dedicados por dedicación funcional.
 
 - **Multiplexados**
 
@@ -377,11 +377,11 @@ Implica asegurar que, en cada instante, únicamente un solo dispositivo pueda tr
 
 - **Arbitraje centralizado**
 
-    Existe un **árbitro** o **controlador del BUS** encargado de asignar los tiempos de uso en el BUS. El árbitro puede ser el microprocesador u otro dispositivo.
+    Existe un **árbitro** o **controlador del bus** encargado de asignar los tiempos de uso en el bus. El árbitro puede ser el microprocesador u otro dispositivo.
 
 - **Arbitraje distribuido**
 
-    Todos los **componentes disponene de lógica** para **coodinar** su acceso al BUS.
+    Todos los **componentes disponene de lógica** para **coodinar** su acceso al bus.
 
     > Con respecto a la terminología:
     > 
@@ -400,13 +400,13 @@ Depende del uso del reloj.
 
 - **Temporización asíncrona**
     
-    Cada evento den el BUS es consecuencia de que se haya producido un **evento previo**.
+    Cada evento den el bus es consecuencia de que se haya producido un **evento previo**.
 
     > e.g.: **MSYN** (*Master Synchronization*), **SSYN** (*Slave Syncrhonization*)
 
 En comparativa, la temporización **síncrona** es de más **fácil implementación** aunqe es limitante en flexibilidad puesto que no permite parovechar las prestaciones de los dispositivos más rápidos. No así como la temporización **asíncrona** en la que cada dispositov puede funcionar a su **máxima frecuencia**.
 
-> e.g.: Un dispositivo RAM de 6400 MHz no puede aprovechar 400 MHz en una placa base con un BUS de 6000 MHz. Tendrá que funcionar a velocidad limitada de 6000 MHz. En la realidad el ejemplo queda matizado, el ejemplo pretende ilustrar la realidad lógica de las limitaciones síncronas.
+> e.g.: Un dispositivo RAM de 6400 MHz no puede aprovechar 400 MHz en una placa base con un bus de 6000 MHz. Tendrá que funcionar a velocidad limitada de 6000 MHz. En la realidad el ejemplo queda matizado, el ejemplo pretende ilustrar la realidad lógica de las limitaciones síncronas.
 
 # TEMA 4: Memoria interna
 
