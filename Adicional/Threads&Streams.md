@@ -11,11 +11,11 @@ El siguiente contenido cumple con el propósito de proporcionar información que
 \
 La distribución del documento queda reservada al permiso explícito de su autor. Si necesitase información de contacto puede [enviar un correo](mailto:velskopezz@gmail.com).
 
-# Streams
+# **Streams**
 
 Un *stream* es una secuencia de datos disponibles a lo largo del tiempo. Estos datos serán, en todos los casos, ***byte**s* ya sea en mayor o menor nivel.
 
-## Streams en C++
+# Streams en C++
 
 Normalmente, se incluyen por medio de [`<iostream>`](https://es.cppreference.com/cpp/io), que incluyen distintas clases del `namespace` `std` utilizados con frecuencia.
 \
@@ -48,13 +48,15 @@ typedef basic_ifstream<char> ifstream;
 typedef basic_ofstream<char> ofstream;
 ```
 
-### `std::ostream`
+## `std::ostream`
 
 Es la clase por defecto de salida de caracteres. Se trata de una abstracción, en específico `std::basic_ostream<char>` utilizando [*templates*](https://en.cppreference.com/cpp/language/templates).
 
+Las clases de tipo *stream* de salida tienen un método `ostream& flush()` (devuelve el propio objeto) que fuerza el envío de datos.
+
 > El objeto `cout` es de tipo `ostream`.
 
-### `std::istream`
+## `std::istream`
 
 Es la clase por defecto de entrada de caracteres. Se trata de una abstracción, en específico `std::basic_istream<char>` utilizando [*templates*](https://en.cppreference.com/cpp/language/templates).
 
@@ -64,6 +66,58 @@ Es la clase por defecto de entrada de caracteres. Se trata de una abstracción, 
 
 Son las clases por defecto que proporciona [`<fstream>`](https://es.cppreference.com/cpp/header/fstream). Funcionan de forma similar a las de entradas por defecto de datos, incluyendo el hecho de ser abstracciones de `std::basic_ofstream<char>` y de `std::basic_ifstream<char>` respectivamente.
 
+# Streams en Java
 
+Se importarán por medio de distintas clases y paquetes puesto que se utilizan clases que heredan de las más básicas y que proporcionan funcionalidad específica. Muchas de ellas funcionarán por medio de filtros. Además, suma tener en cuenta que Java se especializa por correr dentro de una máquina virtual ([JVM](https://es.wikipedia.org/wiki/M%C3%A1quina_virtual_Java)) por lo que, a diferencia de otros lenguajes como C++, no hace falta valorar distintas formas de utilizar un *stream* en condición del sistema operativo para el que se destine el programa.
 
+### InputStream y OutputStream
 
+Pertenecen al paquete `java.io` que proporciona funcionalidad de entrada y salida. Son clases básicas y muy presentes en otras clases como [`java.net.Socket`](https://docs.oracle.com/javase/8/docs/api/java/net/Socket.html).
+
+Ambas clases deben **cerrarse tras su uso** por el método `close(): void`. Esto lleva a que todas las clases hijas o que funcionen como filtro deban cerrarse también con el mismo método o similar.
+
+## [`java.io.InputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html)
+
+Es la más básica de las clases para la entrada de datos. Soporta flujo de *bytes* en los siguientes tres métodos principales.
+
+- [**`public abstract int read() throws IOException`**](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html#read--)
+  - `returns int`: Devuelve el siguiente *byte* o `-1` si no se lee nada.
+
+- [**`public int read(byte[] b) throws IOException`**](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html#read-byte:A-)
+  \
+  Toma los datos y los introduce en el *array* de *bytes*.
+  - `byte[] b`: Los datos.
+  - `returns int`: Devuelve la cantidad de *bytes* leídos.
+  
+- [**`public int read(byte[] b, int off, int len) throws IOException`**](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html#read-byte:A-int-int-)
+  \
+  Toma los datos y los introduce en el *array* de *bytes*.
+  - `byte[] b`: Los datos.
+  - `int off`: De *offset*, indica el inicio donde se escribe en el *array*.
+  - `int len`: De *length*, indica la cantidad de *bytes* que se leen. Por consiguiente, se lee desde `off` hasta `off + len`.
+  - `returns int`: Devuelve la cantidad de *bytes* leídos. Nótese que podría leer menos que `len` *bytes*.
+
+## [`java.io.OutputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html)
+
+Es la más básica de las clases para la salida de datos. Soporta flujo de *bytes* en los siguientes tres métodos principales.
+
+- [**`public abstract void write(int b) throws IOException`**](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html#write-int-)
+  - `int b`: Escribe el *byte*.
+
+- [**`public void write(byte[] b) throws IOException`**](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html#write-byte:A-)
+  \
+  Envía los datos.
+  - `byte[]`: Los datos.
+ 
+- [**`public void write(byte[] b, int off, int len) throws IOException`**](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html#write-byte:A-int-int-)
+  \
+  Envía los datos.
+  - `byte[] b`: Los datos.
+  - `int off`: De *offset*, indica el inicio donde se escribe en el *array*.
+  - `int len`: De *length*, indica la cantidad de *bytes* que se escriben. Por consiguiente, se escribe desde `off` hasta `off + len`.
+
+- [**`public void flush()`**](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html#flush--)
+  \
+  Los *streams* pueden esperar antes de enviar los datos. Este método fuerza el envío de datos.
+
+##
