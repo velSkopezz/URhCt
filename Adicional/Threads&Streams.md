@@ -26,7 +26,7 @@ Es por ello que, en los textos que los IDEs suelen proporcionar un texto por def
 > ```cpp
 > #include <iostream>
 >
-> using namespace std
+> using namespace std;
 > int main() {
 >     cout << "Hello World!" << endl;
 >     return 0;
