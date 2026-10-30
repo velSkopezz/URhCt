@@ -120,4 +120,141 @@ Es la más básica de las clases para la salida de datos. Soporta flujo de *byte
   \
   Los *streams* pueden esperar antes de enviar los datos. Este método fuerza el envío de datos.
 
-##
+## [`java.io.FileInputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/FileInputStream.html) y [`java.io.FileOutputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/FileOutputStream.html)
+
+Su funcionamiento es análogo a `java.io.InputStream` y `java.io.OutputStream`. Su mayor diferencia es que, en su constructor, se indica el fichero del flujo por medio de clase `java.lang.String` con la ruta del archivo o por clase `java.io.File`, entre opciones.
+
+## [`java.io.DataInputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/DataInputStream.html)
+
+Funciona por medio de filtro y es clase hija de `java.io.InputStream`. Proporciona varios métodos que aportan funcionalidad para enviar datos abstractos por *streams*.
+
+El método `readLine(): String` lee cadenas de texto. No obstante, es un método obsoleto puesto que no trabaja correctamente con codificaciones de texto.
+
+> e.g.: Obtener texto de un `DataInputStream`
+> Sea `is` una variable de tipo `java.io.InputStream`.
+> 
+> ```java
+> String text;
+> try (DataInputStream dis = new DataInputStream(is)) {
+>     while ((text = is.readLine()) != null) {
+>         text += "\r\n";
+>     }
+> } catch (IOException ioe) {
+>     ioe.printStackTrace();
+> }
+> ```
+>
+> > Se ha aprovechado que `InputStream` implementa [`AutoCloseable`](https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html) para utilizar un [*try-with-resources*](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html).
+> 
+> > Nótese que el método **`readLine(): String` excluye el carácter de fin de línea**.
+
+## [`java.io.DataOutputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/DataOutputStream.html)
+
+Funciona por medio de filtro y es clase hija de `java.io.OutputStream`. Proporciona varios métodos que aportan funcionalidad para enviar datos abstractos por *streams*.
+
+El método `writeBytes(String s): void`, lejos de lo que pudiera parecer, envía `String`s, no `byte`s.
+
+> - El método `writeChars(String s): void` envía caracteres línea a línea.
+> - El método `writeUTF(String str): void` utiliza una **modificación de UTF-8** propia de Java.
+
+> e.g.: Enviar un texto con un `DataOutputStream`
+> Sea `os` una variable de tipo `java.io.OutputStream`.
+> 
+> ```java
+> String text = "Hello World!";
+> try (DataOutputStream dos = new DataOutputStream(os)) {
+>     dos.writeBytes(text);
+>     dos.flush();
+> } catch (IOException ioe) {
+>     ioe.printStackTrace();
+> }
+> ```
+>
+> > Se ha aprovechado que `OutputStream` implementa [`AutoCloseable`](https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html) para utilizar un [*try-with-resources*](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html).
+> 
+> > Nótese que se ha utilizado **`flush(): void` para garantizar el envío** de la información. Esto será importante para evitar bloqueos.
+
+## [`java.io.PrintStream`](https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html)
+
+Funciona a modo de filtro de un `java.io.OutputStream` aunque también se le puede proporcionar un `java.io.File` o una `java.lang.String` para abrir un *stream*.
+
+> `System.out` es un objeto de tipo `java.io.PrintStream`
+
+## [`java.util.Scanner`](https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html)
+
+Funciona a modo de filtro de un `java.io.InputStream` aunque también se le puede proporcionar un `java.io.File` o una `java.lang.String` para abrir un *stream*.
+
+> e.g.: Leer texto de la entrada del sistema.
+>
+> ```java
+> Scanner sc = new Scanner(System.in);
+> String text = sc.nextLine();
+> ```
+>
+> > Nótese que no se ha utilizado el método `close(): void` porque el recurso `System.in` se cerrará junto con el proceso.
+> > \
+> > Si fuera otro recurso requeriría de un cierre.
+
+## [`java.io.BufferedReader`](https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html)
+
+Es una clase **especializada en datos de texto** que funciona a modo de filtro de `java.io.Reader`s. A estos últimos, se les puede añadir, en su constructor, un *encoding* como parámetro.
+
+Esta clase toma del *stream* los datos de lectura y un **margen adicional en un *buffer***. Esto la hace **mucho más veloz que `java.io.DataInputStream`** aunque también impide la lectura de datos que no sean texto así como **impide su uso en *sockets***.
+
+> e.g.: Mostrar un archivo desde un `BufferedReader`.
+>
+> ```java
+> try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("archivo.txt"), StandardCharsets.UTF_8))) {
+>     String linea;
+>     while ((linea = br.readLine()) != null) {
+>         System.out.println(linea);
+>     }
+> } catch (Exception e) {
+>     e.printStackTrace();
+> }
+> ```
+
+## [`java.io.BufferedWriter`](https://docs.oracle.com/javase/8/docs/api/java/io/BufferedWriter.html)
+
+Es una clase **especializada en datos de texto** que funciona a modo de filtro de `java.io.Writer`s. A estos últimos, se les puede añadir, en su constructor, un *encoding* como parámetro.
+
+> e.g.: Enviar un texto desde un `BufferedWriter`.
+>
+> ```java
+> try (BufferedWriter writer = new BufferedWriter(new FileWriter("archivo.txt"))) {
+>     writer.write("Hola, mundo!");
+>     writer.newLine();
+>     writer.flush();
+> } catch (IOException e) {
+>     e.printStackTrace();
+> }
+> ```
+> 
+> > Nótese que existe el método `newLine(): void`. Este método se asegura de **añadir una línea compatible con el sistema operativo** (e.g.: Unix utiliza `\n`, Windows utiliza `\r\n`, los Mac clásicos utilizan `\r`...).
+
+# **Threads**
+
+Un *thread* es una secuencia de instrucciones que pueden ser ejecutadas por un computador. A diferencia de los procesos, los *threads* comparten la imagen del proceso.
+
+Si bien los *threads* son una gran ventaja, puesto que permiten la **ejecución paralela**, provocan graves problemas de concurrencia: el programador no puede controlar el orden de ejecución de un *thread* ni si termina su ejecución antes que otro.
+
+### *Daemon*
+
+Un *daemon* es un *thread* que continúa su ejecución, y la del programa con él, a pesar de que el hilo principal ya ha terminado su ejecución. Se excluye de la definición a aquellos *threads* que deban ejecutarse tras el hilo principal por propósitos del programa.
+
+# Threads en C++
+
+Se utiliza la clase [`std::thread`](https://es.cppreference.com/cpp/header/thread) para la que se debe incluir [`<thread>`](https://en.cppreference.com/cpp/thread/thread/join). Se puede utilizar el método [`join(): void`](https://en.cppreference.com/cpp/thread/thread/join) para esperar al *thread*.
+
+> e.g.: *Thread*s en C++.
+>
+> ```cpp
+> #include <thread>
+>
+> void function(int arg) { /* . . . */ }
+>
+> int main() {
+>     std::thread th1(function, 42);
+>     return 0;
+> }
+> ```
