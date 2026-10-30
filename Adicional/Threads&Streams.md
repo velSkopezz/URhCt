@@ -378,3 +378,35 @@ Para lanzar el *thread* es obligatorio utilizar el método [`submit(Callable<T> 
 
 > También se pueden ejecutar múltiples `Callable<V>` a la vez por los métodos [`invokeAll(Collection<? extends Callable<T>> tasks): <T> List<Future<T>>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#invokeAll-java.util.Collection-), entre signaturas, que lanzan [`java.lang.InterruptedException`](https://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html).
 
+Para obtener el resultado del objeto es necesario utilizar una clase `Future<V>`. El método `submit(Callable<T> task): Future<T>` devuelve un objeto de este tipo. De esta forma, se obtiene el envoltorio que nos proporciona el dato gracias al método [`get(): V`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html#get--), entre sobrecargas de distinta signatura.
+
+> Para obtener todos los parámetros de salida al utilizar `invokeAll(Collection<? extends Callable<T>> tasks): <T> List<Future<T>>` se debe proporcionar una `List<Future<T>>` en la salida. Los resultados se asociarán de forma relativa a sus índices.
+
+> e.g.: Uso de `Callable` para mostrar un mensaje por pantalla.
+>
+> ```java
+> ExecutorService pool = Executors.newCachedThreadPool();
+>
+> Callable<String> thread = new Callable<>() {
+>     @Override
+>     public String call() {
+>         return "This was a thread!";
+>     }
+> };
+> try {
+>     Future<String> result = pool.submit(thread);
+>     System.out.println(result.get());
+> } catch (InterruptedException ie) {
+>     ie.printStackTrace();
+> }
+> ```
+>
+> > Nótese que se necesita una estructura *try-catch* puesto que se puede obtener `InterruptedException`.
+>
+> > Nótese que no hace falta esperar al *thread* porque **`get(): V` es un método bloqueante**.
+>
+> > Nótese es necesario un *pool* de *threads*.
+>
+> > Nótese que, tal y como está hecho el código, `result: Future<String>` podría no estar declarado fuera del *try-catch*. El compilador lo haría notar si ocasionase problemas.
+
+--- 
