@@ -141,3 +141,94 @@ Las interfaces tienen detrás toda su ciencia buscando **visibilidad** y **acces
 > La información de este temario, por lo pronto, se omite debido a que su contenido está plenamente contenido en otra asignatura.
 >
 > Para más información, véanse Diagramas de Casos de Uso y Diagramas de Actividad en [Ingeniería del Software](../2º/Ingeniería_del_Software.md)
+
+# TEMA 4: Diagramas de interacción
+
+Es un diagrama que ilustra **elementos que interactuan** para proporcionar una funcionalidad más complejta.
+\
+Está **fuertemente ligado** al diagrama de clases. Es por ello que **todas las operaciones del diagrama de interacción deben figurar en el diagrama de clases**.
+
+En un diagrama de interacción también se incluyen **elementos no humanos**. El objetivo es **modelar la interacción** y **representar la interacción y comunicación**.
+
+Hay múltiples tipos de diagramas de interacción. La elección debería depender del énfasis que proporciona a mejor comprensión.
+
+- **Diagrama de secuencia**
+- **Diagraam de comunicación**
+- Diagrama de visión global de interacción
+- Diagrama de tiempos
+
+> De acuerdo con UML, los diagramas de interacción se pueden traducir entre ellos sin perder información.
+
+> Sobre el documento: No se ilustrará el diagrama de visión global de interacción ni diagrama de tiempos puesto que parece ser contenido secundario de la asignatura.
+
+## Diagrama de secuencia
+
+Se utiliza una ***lifeline*** (línea de vida) que recorre el tiempo para ilustrar una instancia. El nombre de cada una viene indicada por su clase, salvo que se trate de un rol específico de dicha clase.
+
+![Lifelines diagramas de secuencia](../assets/lifelinesInteraccion.png "Lifelines")
+
+> Las *lifelines* suelen disponerse de forma paralela.
+
+Existen, además los **roles multivaluados** utilizan **selecotores** o seleccionadores para obtener una instancia específica (e.g.: nombreRol[selector]: Clase).
+
+Una **especificación de ejecución** es una barra que indica la **actividad de la clase**. Se trata del **control** es opcional.
+
+![Especificación de ejecución](../assets/especificacionEjecucionInteraccion.png "Especificación de ejecución")
+
+Los **objetos activos** tienen su propio flujo de control y operan de forma independiente a otros objetos. Suelen representar otros procesos o hilos.
+
+### Mensajes
+
+> e.g.: Relación entre diagramas de secuencia y clases
+>
+> ![Relación entre diagramas de secuencia y clases](../assets/secuencia-clases.png "Relación entre diagramas de secuencia y clases")
+>
+> > Cita: Es el fallo más común en los exámenes.
+
+Los **mensajes** se representan con flechas. Estas flechas podrán ser huecas o  rellenas dependiendo de condiciones.
+
+- Una **flecha contínua rellena** indica que se proporciona una **información de emisión** e implica **sincronía**.
+
+- Una **flecha contínua hueca** implica **asincronía**. Envía información y no espera respuesta.
+
+- Una **flecha discontínua hueca** proporciona **respuesta a una flecha contínua rellena**. Su funcionamiento suele traducirse en una instrucción `return`.
+
+![Tipos de mensajes en diagramas de secuencia](../assets/tiposMensajesSecuencia.png "Diagrama de Secuencia: Mensajes. Obtenido desde las transparencias de la asignatura (2026)")
+
+- Los mensajes **encontrados** y **perdidos** llaman a otros objetos cuya *lifetime* no interesa para el diagrama.
+
+### Avanzado
+
+Existen una serie de **operadores** para **diagramas de secuencia avanzados**. 
+
+En este documento no se explicarán con detalle los operadores. Tan solo se mencionarçan.
+
+#### Ramificaciones y bucles
+- alt: interacción alternativa
+- opt: interacción opcional
+- loop: interacción iterativa
+- break: interacción de excepción
+
+#### Concurrencia y orden
+- seq: orden débil
+- strict: orden estricto
+- par: interacción concurrente
+- critical: interacción anatómica
+
+#### Filtros y afirmaciones
+- ignore: partes de interacción irrelevante
+- consider: partes de interacción relevante
+- assert: interacción afirmada
+- neg: interación no válida
+
+## Diagramas de comunicación
+
+Enfatizan la interacción entre las clases sobre la temporalidad de la comunicación. También utiliza **flechas vacías y rellenas**  de acuerdo con la **sincronización**.
+
+En los diagramas de comunicación se **ignoran las respuestas** en froma de datos (`return`s) no así como las respuestas que conllevan la ejecución de otra subrutina, que se muestran **sobre la misma flecha**.
+
+Las subrutinas vienen **enumeradas** para indicar el orden de ejecución. Estas enumeraciones pueden incluir subdivisiones (e.g.: 1.1.2.1) para reflejar mensajes encadenados por otros.
+
+![Interacción en diagramas de comunicación](../assets/interaccionComunicacion.png "Interacción en diagramas de comunicación")
+
+---
