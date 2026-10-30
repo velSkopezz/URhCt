@@ -128,7 +128,7 @@ Su funcionamiento es análogo a `java.io.InputStream` y `java.io.OutputStream`. 
 
 Funciona por medio de filtro y es clase hija de `java.io.InputStream`. Proporciona varios métodos que aportan funcionalidad para enviar datos abstractos por *streams*.
 
-El método `readLine(): String` lee cadenas de texto. No obstante, es un método obsoleto puesto que no trabaja correctamente con codificaciones de texto.
+El método [`readLine(): String`](https://docs.oracle.com/javase/8/docs/api/java/io/DataInputStream.html#readLine--) lee cadenas de texto. No obstante, es un método obsoleto puesto que no trabaja correctamente con codificaciones de texto.
 
 > e.g.: Obtener texto de un `DataInputStream`
 > Sea `is` una variable de tipo `java.io.InputStream`.
@@ -152,10 +152,10 @@ El método `readLine(): String` lee cadenas de texto. No obstante, es un método
 
 Funciona por medio de filtro y es clase hija de `java.io.OutputStream`. Proporciona varios métodos que aportan funcionalidad para enviar datos abstractos por *streams*.
 
-El método `writeBytes(String s): void`, lejos de lo que pudiera parecer, envía `String`s, no `byte`s.
+El método [`writeBytes(String s): void`](https://docs.oracle.com/javase/8/docs/api/java/io/DataOutputStream.html#writeBytes-java.lang.String-), lejos de lo que pudiera parecer, envía `String`s, no `byte`s.
 
-> - El método `writeChars(String s): void` envía caracteres línea a línea.
-> - El método `writeUTF(String str): void` utiliza una **modificación de UTF-8** propia de Java.
+> - El método [`writeChars(String s): void`](https://docs.oracle.com/javase/8/docs/api/java/io/DataOutputStream.html#writeChars-java.lang.String-) envía caracteres línea a línea.
+> - El método [`writeUTF(String str): void`](https://docs.oracle.com/javase/8/docs/api/java/io/DataOutputStream.html#writeUTF-java.lang.String-) utiliza una **modificación de UTF-8** propia de Java.
 
 > e.g.: Enviar un texto con un `DataOutputStream`
 > Sea `os` una variable de tipo `java.io.OutputStream`.
@@ -256,5 +256,92 @@ Se utiliza la clase [`std::thread`](https://es.cppreference.com/cpp/header/threa
 > int main() {
 >     std::thread th1(function, 42);
 >     return 0;
+> }
+> ```
+
+# Threads en Java
+
+Se van a proporcionar múltiples clases e interfaces para proporcionar *threads* de forma sencilla, o bien, solventar problemas para aprovechar las funcionalidades de Java.
+
+## [`java.lang.Thread`](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html)
+
+Requiere que se sobreescriba e implemente el método [`run(): void`](https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html#run--) de la interfaz `Runnable`. Se ejecuta con el método [`start(): void`](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.html#start--).
+
+> e.g.: Uso de `Thread`.
+>
+> ```java
+> Thread th = new Thread() {
+>     @Override
+>     public void run() { /* . . . */ }
+> }
+> th.start();
+> ```
+
+### Paso de parámetros con `Thread`
+
+Pasar parámetros de retorno con `Thread` requiere añadir métodos adicionales. Aunque se recomienda utilizar `Callable<V>`y `Future<V>`, es posible lograr la misma funcionalidad con un `Thread`.
+
+> e.g.: Paso de parámetros con un `Thread`
+>
+> ```java
+> public class Hilo extends Thread {
+>    private Object in_Parameter;
+>    private Object outParameter;
+>    private Exception throwable;
+>
+>    public Hilo(Object input) {
+>        super();
+>        this.in_Parameter = input;
+>    }
+>    public void run() {
+>        try {
+>            /* . . . */
+>        } catch (Exception e) {
+>            this.throwable = e;
+>        }
+>    }
+>    public Object getResult() throws Exception {
+>        if (this.throwable != null) { throw this.throwable; }
+>        return this.outParameter;
+>    }
+> }
+>
+> public class Main {
+>    public static void main(String[] args) {
+>        Object in = new Object();
+>        Object result = null;
+>        Hilo th = new Hilo(in);
+>        th.start();
+>        try {
+>            th.join();
+>            result = th.getResult();
+>        } catch (Exception e) {
+>            e.printStackTrace();
+>        }
+>        /* . . . */
+>    }
+> }
+> ```
+>
+> > Nótese que una excepción es un objeto [`java.lang.Exception`](https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html) que funciona como cualquier otra clase.
+
+## [`java.lang.Runnable`](https://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html)
+
+El objetivo es poder crear clases de *threads* que permitan heredar de otras clases. El funcionamiento requiere instanciar un `java.lang.Thread`.
+
+> e.g.: Uso de `Runnable`.
+>
+> ```java
+> public class Hilo implements Runnable {
+>     @Override
+>     public void run() { /* . . . */ }
+> }
+>
+> public class Main {
+>     public static void main(String[] args) {
+>         Hilo hilo = new Hilo();
+>         Thread th = new Thread(Hilo);
+>         th.start();
+>     }
 > }
 > ```
