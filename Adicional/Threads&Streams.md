@@ -368,7 +368,7 @@ En Java, un *pool* viene dado por la clase `java.util.concurrent.ExecutorService
 
 ## [`java.util.concurrent.Callable<V>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Callable.html) y [`java.util.concurrent.Future<V>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html).
 
-Se trata de interfaces modernas y la **opción recomendada para utilizar *threads***. Su funcionalidad principal requiere el uso de `ExecutorService` y permite parámetros de salidas para los *threads*. Hace uso de [*generics*](https://docs.oracle.com/javase/8/docs/technotes/guides/language/generics.html)
+Se trata de interfaces modernas y la **opción recomendada para utilizar *threads***. Su funcionalidad principal requiere el uso de `ExecutorService` y permite parámetros de salidas para los *threads*. Hace uso de [*generics*](https://docs.oracle.com/javase/8/docs/technotes/guides/language/generics.html).
 
 El funcionamiento de `Callable<V>` requiere implementar el método [`call(): V`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Callable.html#call--). Este método también está definido de tal forma que puede lanzar una excepción.
 
