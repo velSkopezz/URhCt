@@ -307,3 +307,127 @@ Estas dificultades llevan a muchos a elegir **alternativas Cloud**.
 Funciona de forma que un dispositivo servidor proporciona servicios a múltiples clientes. Para enviar información por la red se usan sistemas y tecnologías como las capas de Internet, Ethernet, segmentación, multiplexación...
 
 > Buena parte de la información de este tema consiste en un resumen de lo visto en [Redes de Computadores](../2º/Redes_de_Computadores.md). Toda esa información queda omitida en este documento.
+
+## Protocolo RIP
+
+Utiliza el **conteo de saltos** como **métrica**, que debe ser **inderior a 16**. Consiste en enviar un ***broadcast*** cada 30 segundos de la actualización de la topología. Además, hay 3 temporizadores adicionales al **temporizador de actualización**.
+- temporizador de **invalidez**: cuando un nodo no envía su actualización por 180 segundos
+- temporizador de **purga**: tras 240 segundos, elimina el nodo de la tabla de enrutamiento
+- temporizador de **espera
+
+### *Updates* disparados
+
+Pretenden acelerar la convergencia. Se utilizan *updates* disparados para **evitar la espera de temporizadores**.
+
+> Se suele utilizar ante alteraciones manuales de la topología.
+
+Los problemas de los *updates* disparados suelen ser de concurrencia.
+
+### RIPv2
+
+Es una mejora respecto a RIPv1, permite utilizar **máscaras de red**, ***multicast*** y **autenticación**.
+
+## Protocolo IGRP
+
+El *Interior Gateway Routing Protocol* es un protocolo desarrollado por Cisco que considera el **ancho de banda**, **retardo**, **carga** y **confiabilidad**. Por defecto, se envía un *broadcast* de las actualizaciones cada 90 segundos. Está obsoleto y es predecesor de EIGRP.
+
+## Protocolo EIGRP
+
+> Este no está del todo obsoleto.
+
+Es un protocolo de enrutamiento por **vector de distancias** patentado por Cisco.
+
+Utiliza un algoritmo de **actualización por difusión** (DUAL). En este algoritmo no existen actualizaciones periódicas. En su lugar, se envían únicamente tras un **cambio en la topología**.
+- actualizaciones **no periódicas**: irregulares
+- actualizaciones **parciales**: tras un cambio
+- actualizaciones **limitadas**: sólo **actualizan quienes lo necesitan** de forma que **minimiza el ancho de banda**
+
+### Protocolo de saludo
+
+El protocolo EIGRP necesita conocer a sus vecinos. Para **descubrir**, envían a los *routers* adyacentes un **saludo cada 5 segundos**. Esto provoca que, mientras se reciban estos paquetes, las **rutas permanecen viables**.
+
+Antes de declarar un **vecino inalcanzable**, debe pasar un **tiempo de espera**: 3 paquetes de saludo. Tras ello, se **desactiva la ruta** y se **busca una alternativa**.
+
+El algoritmo utilizado es el **algoritmo de actualización por difusión** (DUAL) en lugar de otros algoritmos Bellman-Ford como usa RIP. El objetivo es la **sincronización** y **evitar bucles**.
+
+> DUAL toma más tiempo que Bellman-Ford.
+
+Utiliza una **métrica de enrutamiento compleja** que genera tres tablas:
+- vecinos
+- topología
+- enrutamiento
+
+## Algoritmo de Bellman-Ford
+
+Hace una estimación del coste mínimo:
+
+$$D_{x}(y) = min_y({c({x,v})+d_{v}(y)})$$
+
+> $D_x(y) \equiv \text{''estimación del coste"}$
+> \
+> $c(x,v) \equiv \text{''coste de x hasta el nodo v"}$
+> \
+> $d_v(y) \equiv \text{''coste (según v) que le toma llegar al nodo"}$
+
+> Véase el vídeo del proceso en el aula virtual.
+
+Este algoritmo busca una **convergencia** en la que, tras múltiples iteraciones, las tablas de encaminamiento permanecen inalteradas.
+
+## Protocolo OSPF
+
+El *Open Shortest Path First* es posterior y con mejoras respecto a RIP. Entre ellas, permite el **direccionamiento sin clase**. Tiene diferentes tipos de paquetes y utiliza el **ancho de banda** como condicionante de métrica.
+- **Saludo**: permite descubrir vecinos
+- **DBD**: relacionado con la base de datos de la topología
+- **LSR**: pide información respecto al estado de un nodo
+- **LSU**: responde a los LSR
+- **LSAck**: un mensaje de reconocimiento entre LSRs y LSUs.
+
+### Saludo OSPF
+
+Su función principal es **descubrir vecinos OSPF aunque también se incluyen las **condiciones de la conexión**. En este último, se habla de **direcciones de respaldo** y otra información de conexión.
+
+### Información OSPF
+
+Todo se hace mediante paquetes **LSR** y **LSU**. Este último, viene dividido en 10 tipos.
+\
+La información de paquetes LSU se almacena en una **base de datos** de topología.
+
+El objetivo es hacer una **reconstrucción previa de la topología** de tal forma que todos los nodos la conozcan y, cumpliéndose las condiciones previas, **cada nodo ejecute el algoritmo de Dijkstra** y obtenga la ruta de menor coste.
+
+> Permite cifrado y autenticación.
+
+### Áreas OSPF
+
+Al disponer la información en OSPF se utilizan **máscaras *wildcard***, es decir, que muestran la última dirección disponible (*broadcast*). El objetivo es reducir el tiempo del *router* al calcular.
+
+> e.g.: En lugar de `255.255.255.0` se utiliza `0.0.0.255`.
+
+También existen **áreas** correctamente identificadas. El identificador del área es un campo necesario y de, estrictamente, **8 caracteres** de tamaño.
+
+### Enrutamiento OSPF
+
+Cada **router tiene una ID**, esta corresponderá con una serie de 4 bytes que pueden confundirse fácilmente con una dirección IP puesto que se visualizan de la misma forma.
+
+Las redes hechas por OSPF proporcionan un ***broadcast* automatizado** (la red más alta) si no se proporciona ninguno de forma manual.
+
+> Se puede utilizar `show ip ospfneighbor` en *routers* para ver información OSPF.
+
+> Un *router* puede **pertenecer a tantas áreas como interfaces tenga**.
+
+### Configuraciones e información
+
+Entre otras, se puede disponer un *delay* para ejecutar Dijkstra ante un cambio en la topología (usado para cambios temporales). Se incuye **configuración específica para una interfaz** de red (adaptador físico).
+
+> También se puede ver la métrica.
+> \
+> En OSPF la métrica es más pequeña: tiene menor precisión pero se compara mejor.
+
+### Métrica OSPF
+
+Se hace el **inverso del ancho de banda** para obtner una métrica en la que, al igual que en la forma tradicional, una menor métrica sea más eficiente.
+
+La métrica corresponde tal que un $\text{coste} = \frac{\text{referencia}}{\it{bandwith}}$ se asocia con una tabla de **tramos de métrica** para obtener la métrica. No obstante, hoy en día es irrelevante el paso anterior puesto que las velocidades de la actualidad siempre llevan a métrica 1 (la más baja).
+
+> La referencia por defecto es $10^8bps$.
+
+> Se puede configurar el *bandwith* a mano para alterar el valor real y producir el efecto deseado. También se puede usar `ip ospf cost <coste>` para forzar el coste.
