@@ -9,6 +9,8 @@ El siguiente contenido corresponde a un **apoyo** educativo para cualquier inter
 \
 La distribución del documento queda reservada al permiso explícito de su autor. Si necesitase información de contacto puede [enviar un correo](mailto:velskopezz@gmail.com).
 
+De acuerdo con los temas 1 y 3, es posible enocntrar información mejor organizada en el documento [*Threads&Streams*](../adicional/Threads&Streams.md), en los documentos adicionales.
+
 # TEMA 1: Entrada/Salida en Java
 
 ## Streams
@@ -382,3 +384,190 @@ El objetivo es evitar problemas de concurrencia como la actualización perdida.
 Para ejecutar tareeas de forma periódica se puede extender de la clase **`TimerTask`**, que funciona de forma similar a `Thread`.
 \
 `TimerTask` hereda de `Timer` los métodos imprescindibles para su funcionalidad, son, principalmente, sobrecargas de **`schedule(<args>)`**.
+
+### Colecciones concurrentes
+
+Su objetivo es ser *thread safe*.
+- `ArrayList` tiene su forma *thread safe* en `Vector`
+- `HashMap` tiene su forma *thread safe*  en `Hashtable`
+
+Hacer una clase *thread safe* tiene su coste en eficiencia.
+
+La librería `java.util.concurrent` proporciona ciertos métodos con colecciones comunes con métodos estándar (e.g.: `List<T> synchronized List<T>(List<T>)`).
+
+Por ejemplo, existen:
+- `java.util.HashMap`
+- `java.util.concurent.SynchronizedMap`: impide el acceso concurrente
+- `java.util.concurrent.ConcurrentHashMap`: permite alternar distintos accesos a la vez
+
+> Cita: La diferencia entre aquellos 3 **es** pregunta de examen.
+
+## *Pool* de *threads*
+
+Crear y destruir hilos es una tarea costosa. Para reducir tiempo, vale la pena abrir unos hilos y dejarles corriendo hasta asignarle una tarea adecuada. para ello, se utiliza un ***pool* de *threads***.
+
+El medio en Java es **`ExecutorService`** y la factoría **`Executors`**.
+- **`newFixedThreadPool(int): ExecutorService <<static>>`**
+- **`newCachedThreadPool(): ExecutorService <<static>>`**
+
+> Los otros 3 métodos tienen una funcionalidad que se ve mejor proporcionada por las clases `Timer`.
+
+> 1. Crear el *pool* (`ExecutorService`).
+> 2. *Try-with-resources* con el `ServerSocket`.
+> 3. `while (true)`
+> 4. `try`
+> 5. `ServerSocket.accept()`
+> 6. `ExecutorService.submit( . . . )`
+
+## [`java.util.concurrent.Callable<V>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Callable.html) y [`java.util.concurrent.Future<V>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html)
+
+Existen para solucionar el **paso de parámetros de `Thread`**. La interfaz utiliza **genéricos** para devolver un tipo de dato. En su lugar, se reescribe el **método `call(): <T>`.
+
+Por otro lado, `Future<V>` proporciona el método **`get(): <T>`** que proporciona el resutlado. Este es un **método bloqueante** pues utiliza **`join(): void`** de Thread de forma interna.
+
+> `ExecutorService` tiene un método para ejecutar múltiples hilos a la vez y de forma bloqueante. Es el método **`invokeAll(Collection<Callable<V>>): List<Future<V>>`.
+
+> Los métodos que llaman a *threads* pueden producir **`InterruptedException`**.
+
+## Sincronizadores
+
+Son herramientas para sincronizar la ejecución de hilos. Se aprovechan de compartir el espacio de memoria.
+
+> Normalmente, son clases conceptuales que funcionan internamente con contador.
+
+### [`Semaphore`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Semaphore.html)
+
+Guarda una cantidad de *locks* que permiten ejecutar un hilo. Un hilo debe adquirir mediante `acquire(): void` y, al final de su ejecución, debe liberarlo mediante `release(): void`.
+
+Si la cantidad de *locks* se ve agotada se obliga a esperar al *thread* hasta que algún otro ejecute `release(): void`, dejando libre un *lock.*
+
+### [`CountDownLatch`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CountDownLatch.html)
+
+Su constructor toma como parámetro la cantidad de inicial de la cuenta atrás.
+
+Un *thread* debe ejecutar `countDown(): void` y se esperará por el método bloqueante `await(): void` en otro *thread* hasta que la cuenta atrás sea 0.
+
+### [`CyclicBarrier`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CyclicBarrier.html)
+
+Permite que múltiples los *threads* esperen al resto por meido del método `await(): void`.
+
+En su constructor se indica la cantidad de *threads* a los que se debe esperar. Una vez alcanzada dicha cantidad de hilos bloqueados en `await(): void`, se liberan.
+
+### Colas bloqueantes
+
+Funcionan de tal forma que se **envía un objeto a una cola**. Si la cola se llena, cualquier *thread* que intente enviar información por la cola se bloquea.
+
+# TEMA 4: Programación avanzada en red
+
+El objetivo es comprender el uso de **clases de alto nivel** para realizar funciones que en temas anteriores se han enseñado con herramientas más rudimentarias.
+
+Para ello, se presentan clases como [**`java.net.URL`**](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html). Esta clase permite el **tratamiento de `Strings`** y proporciona funcionalidad para **conexiones por ULR** por medio de **HTTP** y FTP entre otros.
+
+> Cita: En el examen se puede pedir explícitamente que no se use.
+
+A veces **`java.net.URL`** no permite obtener información que el usuario pudiera necesitar. En cuyo caso, hay clases disponibles como [**`java.net.URLConnection`**](https://docs.oracle.com/javase/8/docs/api/java/net/URLConnection.html).
+
+> Nótese que:
+>
+> - `java.net.URL` tiene el método `openStream(): InputStream` que proporciona únicamente el *payload* de aplicación.
+> - `java.net.URLConnection` tiene el método `openConnection(): URLConnection` que proporciona **todo el contenido** de la capa de aplicación.
+
+## `java.net.URLConnection`
+
+debe tenerse en cuenta el protocolo que se utiliza. Por ejemplo, en HTTP, hay que obtener el **`InputStream`** después del mensaje PUT.
+
+Algunos métodos interesantes pueden ser **`getContentLength(): int`**, **`getContentType(): String`**, **`addRequestProperty(String key, String value): void`** y **`setRequestProperty(String key, String value): void`**.
+
+### CGI
+
+Cierta información tiene cabecera propia (*véase trasparencias*). En `PUT`s se puede requerir, por ejemplo, `Content Length`.
+
+## [`java.net.URLEncoder`](https://docs.oracle.com/javase/8/docs/api/java/net/URLEncoder.html)
+
+Permiten cambiar caracteres indisponibles para URLs (e.g.: espacios, tildes...) por su forma codificada en URLs (e.g.: `%20`).
+
+> Se incluye *proxies*, StringQueries, etc que se pueden usar en el trabajo.
+
+### Cerrar un [`java.net.HttpURLConnection`](https://docs.oracle.com/javase/8/docs/api/java/net/HttpURLConnection.html)
+
+Utilizan el método **`disconnect(): void`** para cerrarlo todo. El método `close: void` no cierra todo aunque, con certeza, el sistema operativo acabará liberando dicho recurso tras pasado el *timeout*.
+
+## Protocolo UDP
+
+Utiliza dos clases principales [**`java.net.DatagramPacket`**](https://docs.oracle.com/javase/8/docs/api/java/net/DatagramPacket.html) y [**`java.netDatagramSocket`**](https://docs.oracle.com/javase/8/docs/api/java/net/DatagramSocket.html). La primera se utiliza para **enviar la información** mientras que la segunda puede **enviar y recibir** por igual.
+
+> El protocolo UDP se proporciona principalmente para el trabajo de la asignatura.
+
+> El protocolo UDP no está orientado a conexión e ignora el orden y y la llegada de los paquetes.
+
+### `java.net.DatagramPacket`
+
+Se construye con un ***buffer* de *bytes*** junto a un **puerto**. Requiere la **dirección** (`InetAddress`) y un **puerto** para enviar la información. Los datos se obtienen con **`getData(): byte[]`**.
+
+### `java.net.DatagramSocket`
+
+Se construye con un **puerto**. Sus métodos son del tipo **`recieve(DatagramPacket): void`** para obtener datos y **`send(DatagramPacket): void`** para enviar.
+
+# TEMA 5: *Extensible Markup Language*
+
+El estándar **XML** es uno entre el subconjunto SBML junto con HTML, entre otros. Permite proporcionar un **contexto a la información**.
+
+Sigue una **estructura jerarquizada** en la que existe una **raíz única** y cada etiqueta tiene una **etiqueta de cierre**.
+
+> Se habla de **documentos estructurados**.
+
+Los documentos XML pueden tener **fijado un estilo**. Para eso se pueden utilizar **DTD**s o **XML Schema**s.
+
+## Documentos XML
+
+La primera línea suele indicar la versión
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    . . .
+</root>
+```
+
+### Elementos
+
+Son las etiquetas más comunes de XML. No es obligatorio que tengan **contenido** ni tampoco **elementos hijos**.
+
+### Atributos
+
+Se disponen tras un espacio en la etiqueta de la forma `nombre="valor"`. El valor **debe estar rodeado por comillas simples o dobles**.
+
+También puede haber atributos en la etiqueta de cierre.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <element key="value">sample</element>
+</root>
+```
+
+### Referencias a entidades
+
+Es una forma de escribir caracteres reservados (e.g.: `<`, `>`, `&`). Para ello, se escribe un **'&'** y se sigue con un nombre único (e.g.: `&gt`, `&lt`, `&amp` respecto al ejemplo anterior).
+
+### Secciones CDATA
+
+Obliga al *parser* a tomar la sección com texto, ignorando caracteres reservados.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <title>sample</title>
+    <content>
+        <![CDATA[
+            SELECT *
+            FROM sample
+            WHERE condition=true
+        ]]>
+    </content>
+</root>
+```
+
+### Documento bien formado
+
+Un documento XML está **bien formado** cuando cumple con las **reglas sintácticas de XML**.
