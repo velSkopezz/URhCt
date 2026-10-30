@@ -345,3 +345,36 @@ El objetivo es poder crear clases de *threads* que permitan heredar de otras cla
 >     }
 > }
 > ```
+
+## *Pool* de *threads* y [`java.util.concurrent.ExecutorService`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html)
+
+Lo cierto es que crear un *thread* es una operación costosa para el sistema operativo que crea cierto *delay* en los programas. Por ello, lo común es utilizar *pool* de *threads*, es decir un grupo de *threads* siempre activos que se van utilizando según sean necesarios y se mantienen en espera en tanto que no se utilizan.
+
+En Java, un *pool* viene dado por la clase `java.util.concurrent.ExecutorService`, que debe instanciarse por medio de un método de [patrón Factory](https://es.wikipedia.org/wiki/Factory_Method_(patr%C3%B3n_de_dise%C3%B1o)) de la clase [`Executors`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html).
+
+- [**`public static ExecutorService newFixedThreadPool(int nThreads)`**](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html#newFixedThreadPool-int-)
+  \
+  Crea una cantidad fija de *threads* en la *pool*.
+
+ - [**`public static ExecutorService newCachedThreadPool()`**](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html#newCachedThreadPool--)
+  \
+  Crea una cantidad variable de *threads* en la *pool* que se incrementa según hagan falta y decrementa si deja de hacerlo.
+
+> e.g.: Obtener *pool*
+>
+> ```java
+> ExecutorService pool = Executors.newCachedThreadPool();
+> ```
+
+## [`java.util.concurrent.Callable<V>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Callable.html) y [`java.util.concurrent.Future<V>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html)
+
+Se trata de interfaces modernas y la **opción recomendada para utilizar *threads***. Su funcionalidad principal requiere el uso de `ExecutorService` y permite parámetros de salidas para los *threads*.
+
+El funcionamiento de `Callable<V>` requiere implementar el método [`call(): V`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Callable.html#call--). Este método también está definido de tal forma que puede lanzar una excepción.
+
+Para lanzar el *thread* es obligatorio utilizar el método [`submit(Callable<T> task): <T> Future<T>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#submit-java.util.concurrent.Callable-) del objeto `ExecutorService`.
+
+> También existen unos métodos análogos para clases `Runnable`.
+
+> También se pueden ejecutar múltiples `Callable<V>` a la vez por los métodos [`invokeAll(Collection<? extends Callable<T>> tasks): <T> List<Future<T>>`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#invokeAll-java.util.Collection-), entre signaturas, que lanzan [`java.lang.InterruptedException`](https://docs.oracle.com/javase/8/docs/api/java/lang/InterruptedException.html).
+
