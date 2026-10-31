@@ -551,106 +551,338 @@ Las memorias con *Error Correction Code* utilizan múltiples flujos de datos ded
 
 > El código más famoso es el **código Hamming**.
 
-#### Código Hamming SEC
+- **Código Hamming SEC**
 
-Es un **corrector de grupos simple**, es decir, sólo corrige un bit. A continuación se proporciona un ejemplo con 4 bits de datos y 3 bits de control.
+    Es un **corrector de grupos simple**, es decir, sólo corrige un bit. A continuación se proporciona un ejemplo con 4 bits de datos y 3 bits de control.
 
-> E.g.: de forma gráfica para una comprensión más simple
->
-> ![Código Hamming SEC visual con 4 bits de datos](../assets/hamming4bit.png "Código Hamming SEC visual con 4 bits de datos")
->
-> > La codificación es binaria por lo que para corregir el error basta con cambiar el bit.
->
-> A continuación se explica de forma **algebraica** intercambiando $(A, B, C)$ por $(e_1, e_2, e_3)$.
+    > E.g.: de forma gráfica para una comprensión más simple
+    >
+    > ![Código Hamming SEC visual con 4 bits de datos](../assets/hamming4bit.png "Código Hamming SEC visual con 4 bits de datos")
+    >
+    > > La codificación es binaria por lo que para corregir el error basta con cambiar el bit.
+    >
+    > A continuación se explica de forma **algebraica** intercambiando $(A, B, C)$ por $(e_1, e_2, e_3)$.
 
-De acuerdo con el ejemplo anterior, se divide el espacio en corpantimentos.
+    De acuerdo con el ejemplo anterior, se divide el espacio en corpantimentos.
 
-$e_1$ | $e_2$ | $e_3$ | compartimento
---: | --: | --: | :--
- 0 | 0 | 0 | Sin error
- 0 | 0 | 1 | Comp. 1
- 0 | 1 | 0 | Comp. 2
- 0 | 1 | 1 | Comp. 3
- 1 | 0 | 0 | Comp. 4
- 1 | 0 | 1 | Comp. 5
- 1 | 1 | 0 | Comp. 6
- 1 | 1 | 1 | Comp. 7
+    $e_1$ | $e_2$ | $e_3$ | compartimento
+    --: | --: | --: | :--
+    0 | 0 | 0 | Sin error
+    0 | 0 | 1 | Comp. 1
+    0 | 1 | 0 | Comp. 2
+    0 | 1 | 1 | Comp. 3
+    1 | 0 | 0 | Comp. 4
+    1 | 0 | 1 | Comp. 5
+    1 | 1 | 0 | Comp. 6
+    1 | 1 | 1 | Comp. 7
 
-> Nótese como cada compartimento se corresponde a un espacio de intersección entre los *"círculos"*.
+    > Nótese como cada compartimento se corresponde a un espacio de intersección entre los *"círculos"*.
 
-Las próximas operaciones estarán basadas en la paridad de los bytes. Por ello, se utilizará la **operación lógica XOR**. En específico se utilizará como:
+    Las próximas operaciones estarán basadas en la paridad de los bytes. Por ello, se utilizará la **operación lógica XOR**. En específico se utilizará como:
 
-1. **generador de paridad par**
-2. **detector de paridad impar**
-3. **comparador**
+    1. **generador de paridad par**
+    2. **detector de paridad impar**
+    3. **comparador**
 
-Para usarse en **8 bits de datos** se necesitan **4 bits de comprobación**: un total de **12 bits** cuyos componentes serán $b_{12}$, $b_{11}$, $b_{10}$... hasta $b_1$.
+    Para usarse en **8 bits de datos** se necesitan **4 bits de comprobación**: un total de **12 bits** cuyos componentes serán $b_{12}$, $b_{11}$, $b_{10}$... hasta $b_1$.
 
-> No se utilizará $b_0$ puesto que corresponde al compartimento **sin errores**.
+    > No se utilizará $b_0$ puesto que corresponde al compartimento **sin errores**.
 
-La **palabra de síndrome** está formada por **los 4 bits de comprobación** $(e_1, e_2, e_3, e_4)$. De los 12 bits, desde $b_1$ hasta $b_{12}$, podrá haber **un error en $b_i$**:
+    La **palabra de síndrome** está formada por **los 4 bits de comprobación** $(e_1, e_2, e_3, e_4)$. De los 12 bits, desde $b_1$ hasta $b_{12}$, podrá haber **un error en $b_i$**:
 
-$e_4$ | $e_3$ | $e_2$ | $e_1$ | $b_i$
---: | --: | --: | --: | :--
-0 | 0 | 0 | 0 | $b_0$
-0 | 0 | 0 | 1 | $b_1$
-0 | 0 | 1 | 0 | $b_2$
-0 | 0 | 1 | 1 | $b_3$
-0 | 1 | 0 | 0 | $b_4$
-0 | 1 | 0 | 1 | $b_5$
-0 | 1 | 1 | 0 | $b_6$
-0 | 1 | 1 | 1 | $b_7$
-1 | 0 | 0 | 0 | $b_8$
-1 | 0 | 0 | 1 | $b_9$
-1 | 0 | 1 | 0 | $b_{10}$
-1 | 0 | 1 | 1 | $b_{11}$
-1 | 1 | 0 | 0 | $b_{12}$
-1 | 1 | 0 | 1 | $b_{13}$
-1 | 1 | 1 | 0 | $b_{14}$
-1 | 1 | 1 | 1 | $b_{15}$
+    $e_4$ | $e_3$ | $e_2$ | $e_1$ | $b_i$
+    --: | --: | --: | --: | :--
+    0 | 0 | 0 | 0 | $b_0$
+    0 | 0 | 0 | 1 | $b_1$
+    0 | 0 | 1 | 0 | $b_2$
+    0 | 0 | 1 | 1 | $b_3$
+    0 | 1 | 0 | 0 | $b_4$
+    0 | 1 | 0 | 1 | $b_5$
+    0 | 1 | 1 | 0 | $b_6$
+    0 | 1 | 1 | 1 | $b_7$
+    1 | 0 | 0 | 0 | $b_8$
+    1 | 0 | 0 | 1 | $b_9$
+    1 | 0 | 1 | 0 | $b_{10}$
+    1 | 0 | 1 | 1 | $b_{11}$
+    1 | 1 | 0 | 0 | $b_{12}$
+    1 | 1 | 0 | 1 | $b_{13}$
+    1 | 1 | 1 | 0 | $b_{14}$
+    1 | 1 | 1 | 1 | $b_{15}$
 
-Vista esta tabla, su correspondencia:
+    Vista esta tabla, su correspondencia:
 
-- $e_4 = b_8 \oplus b_9 \oplus b_{10} \oplus b_{11} \oplus b_{12}$
-- $e_3 = b_4 \oplus b_5 \oplus b_6 \oplus b_7 \oplus b_{12}$
-- $e_2 = b_2 \oplus b_3 \oplus b_6 \oplus b_7 \oplus b_{10} \oplus b_{11}$
-- $e_1 = b_1 \oplus b_3 \oplus b_5 \oplus b_7 \oplus b_9 \oplus b_{11}$
+    - $e_4 = b_8 \oplus b_9 \oplus b_{10} \oplus b_{11} \oplus b_{12}$
+    - $e_3 = b_4 \oplus b_5 \oplus b_6 \oplus b_7 \oplus b_{12}$
+    - $e_2 = b_2 \oplus b_3 \oplus b_6 \oplus b_7 \oplus b_{10} \oplus b_{11}$
+    - $e_1 = b_1 \oplus b_3 \oplus b_5 \oplus b_7 \oplus b_9 \oplus b_{11}$
 
-En cada una de esas situaciones **todos son bits de datos salvo uno**, que es de **comprobación**. El de comprobación es aquel que **no pertenece al resto de componentes de la palabra de síndrome**, es decir, $(b_8, b_4, b_2, b_1)$. Todos potencias de dos.
+    En cada una de esas situaciones **todos son bits de datos salvo uno**, que es de **comprobación**. El de comprobación es aquel que **no pertenece al resto de componentes de la palabra de síndrome**, es decir, $(b_8, b_4, b_2, b_1)$. Todos potencias de dos.
 
-> ⚠️ Hasta aquí, corresponde a la comprobación de paridad por XOR.
+    > ⚠️ Hasta aquí, corresponde a la comprobación de paridad por XOR.
 
-A continuación, calculamos los bits $K_i$ tal que $K_i = e_i - b_{2^{i-1}}$:
+    A continuación, calculamos los bits $K_i$ tal que $K_i = e_i - b_{2^{i-1}}$:
 
-- $K_4 = e_4 - b_8$
-- $K_3 = e_3 - b_4$
-- $K_2 = e_2 - b_2$
-- $K_1 = e_1 - b_1$
+    - $K_4 = e_4 - b_8$
+    - $K_3 = e_3 - b_4$
+    - $K_2 = e_2 - b_2$
+    - $K_1 = e_1 - b_1$
 
-> ⚠️ Hasta aquí corresponde a la generación de número impar por XOR.
+    > ⚠️ Hasta aquí corresponde a la generación de número impar por XOR.
 
-Con estos datos obtenemos el **código de Hamming**:
+    Con estos datos obtenemos el **código de Hamming**:
 
-**$i$** | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 
-:-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: 
-**$b_i$** | $m_8$ | $m_7$ | $m_6$ | $m_5$ | $K_4$ | $m_4$ | $m_3$ | $m_2$ | $K_3$ | $m_1$ | $K_2$ | $K_1$
+    **$i$** | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 
+    :-- | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: 
+    **$b_i$** | $m_8$ | $m_7$ | $m_6$ | $m_5$ | $K_4$ | $m_4$ | $m_3$ | $m_2$ | $K_3$ | $m_1$ | $K_2$ | $K_1$
 
-> Siendo los $m_i$ los bits de datos.
+    > Siendo los $m_i$ los bits de datos.
 
-> ⚠️ Hasta aquí corresponde a la comparación por XOR.
+    > ⚠️ Hasta aquí corresponde a la comparación por XOR.
 
-> E.g.: $M =$ `0b 1101 0010` con código de Hamming `0b 1101 1011 0011`.
->
-> $K =$ `0b 1011`, obtenido por los bits `8`, `4`, `2` y `1` del código Hamming.
-> \
-> $K' =$ `0b 1101`, obtenido de la suma de los $b_i$ de su compartimento.
-> \
-> $e = K \oplus K' =$ `0b 0110`.
->
-> Como el valor de $e$ (`0b 0110`) en decimal es `6`, esto indica que el $m_i$ que corresponde al bit 6 del código Hamming tiene un error (`0b 1101 10[1]1 0011`).
+    > E.g.: $M =$ `0b 1101 0010` con código de Hamming `0b 1101 1011 0011`.
+    >
+    > $K =$ `0b 1011`, obtenido por los bits `8`, `4`, `2` y `1` del código Hamming.
+    > \
+    > $K' =$ `0b 1101`, obtenido de la suma de los $b_i$ de su compartimento.
+    > \
+    > $e = K \oplus K' =$ `0b 0110`.
+    >
+    > Como el valor de $e$ (`0b 0110`) en decimal es `6`, esto indica que el $m_i$ que corresponde al bit 6 del código Hamming tiene un error (`0b 1101 10[1]1 0011`).
 
-![Esquema de código Hamming](../assets/hammingSchema.png "Esquema de código Hamming")
+    ![Esquema de código Hamming](../assets/hammingSchema.png "Esquema de código Hamming")
 
-> Nótese que pasra tratar con $2^nb$ se necesitan, al menos, $n$ bits de comprobación sin contar el **bit de sin error**.
-> \
-> En total, se necesitan $2^K - 1 \ge M + K$.
+    > Nótese que pasra tratar con $2^nb$ se necesitan, al menos, $n$ bits de comprobación sin contar el **bit de sin error**.
+    > \
+    > En total, se necesitan $2^K - 1 \ge M + K$.
+
+- **SEC/DED**
+
+    El *Single Error Correction, Double Error Detection* es una **extensión del código Hamming** que permite **corregir 1 error y detectar hasta 2 errores**.
+    \
+    Para ello, utiliza un **bit de comprobación adicional** sumando un total de $k+1$ bits en total.
+
+    El **bit de comprobación adicional** ($k+1$) se calcula como el `XOR` de todos los bits de la palabra (datos y Hamming anteriores). Esto fuerza que el **total de bits en `1` de toda la palabra sea par**.
+
+    Se realiza una operación **`XOR` de todos los bits, incluido el bit adicional**. Esto genera el **bit de paridad final**
+    
+    Síndrome Hamming | Bit de paridad final | Tipo de error
+    --: | :-- | :--
+    $S = 0$ | `0` | Sin error
+    $S \ne 0$ | `1` | Error simple (1 error)
+    $S \ne 0$ | `0` | Error doble (2 errores)        
+
+## Memoria caché
+
+Pretende transferir ***words*** a la CPU. Estas palabras se obtienen por medio de **bloques** transferidos desde la memoria principal.
+
+> Se basa en el **principio de localidad de las referencias**.
+
+A diferencia de la memoria principal, que tiene $n$ bits para direccionar un rango de $[0,2^{n-1})$ palabras agrupadas en **bloques de $k$ words** ($\therefore |\text{''bloques"}|=\frac{2n}{k}$), la **memoria caché** **almacena líneas**.
+
+> En los procesadores modernos la **relación entre línea y bloque es 1:1**.
+
+Nótese que $C << \frac{2n}{k}$. En memoria caché **no hay espacio** para todos los bloques de la memoria principañ. Cada línea de caché tendrá una **etiqueta que identifica los bloques en la memoria principal**.
+
+### Operaciones de lectura
+
+Hay que distinguir la terminología:
+- ***Read Address*** (RA) proporciona la **palabra solicitada por la CPU**.
+- **Acierto de caché** cuando el **contenido solicitado se encuentra en la caché**.
+- **Fallo de caché** cuando el **contenido no está en la caché**.
+
+En el caso de acierto de caché, la comunicación se hace **completa entre caché y CPU** de forma que los buses de datos y direcciones quedan libres.
+
+### Elementos del diseño de la caché
+
+El tamaño de la caché apenas alcanza unos *megabytes*. Esto se debe al **alto costo** de la SRAM.
+
+> Nótese que una línea mapea múltiples bloques de memoria pero únicamente referencia a uno a la vez.
+
+Se utiliza una **función de corresponencia** que hace **corresponder bloques a líneas** así como **identificar el bloque que ocupa una línea**.
+
+- **Correspondencia directa**
+
+    ```txt
+    línea: [ ETIQUETA#(8b) | #INDICE#(14b)# | DW ] (total: 24 bits)
+    ```
+
+    Compara la **etiqueta con el índice** de la línea.
+
+    - **Acierto de caché**: Se envía a la CPU el **campo de palabra** asociado.
+    - **Fallo de caché**: Se usa la dirección completa para **extraer de la RAM**, se envía y almacena a la caché y, después, se envía a la CPU.
+
+    Entre sus ventajas, esta función de correspondencia requiere una **etiqueta corta** de forma que **requiere menos espacio**. En cambio, es **poco flexible** y susceptible al ***thrashing***, que provoca **contínuos errores de caché que sobrescriben mismas *words***.
+
+    > El *thrashing* (vapuleo) es un suceso en el que dos *words* de distintos bloques que son **mapeados por la misma línea** son referenciados de forma alternativa.
+
+- **Correspondencia asociativa**
+
+    En correspondencia asociativa **no hay líneas preasignadas**.
+
+    ```txt
+    línea: [ ####ETIQUETA#(22b)#### | DW ] (total: 24 bits)
+    ```
+    
+    Nuevamente, se comparan las **etiquetas** de todas las líneas de memoria caché con el campo de etiqueta.
+
+    - **Acierto de caché**: Se envía a la CPU el **campo de palabra** asociado.
+    - **Fallo de caché**: Se usa la dirección completa para **extraer de la RAM**, se envía y almacena a la caché y, después, se envía a la CPU.
+
+    Esta función de correspondencia es **totalmente flexible** de forma que **evita totalmente el *thrashing***. Sin embargo, requiere **etiquetas muy largas** que aumentan la latencia.
+
+- **Correspondencia asociativa por conjuntos**
+
+    Utiliza **conjuntos de correspondencia directa** entre los que los **datos se distribuyen por medio de correspondencia asociativa** (dentro del conjunto).
+
+    ![Correspondencia asociativa por conjuntos](../assets/asociativaConjuntos.png "Correspondencia asociativa por conjuntos")
+
+    ```txt
+    línea: [ ETIQ#(9b) | CONJUNTO(13b) | DW ] (24 bits)
+    ```
+
+    - **Acierto de caché**: Se deben corresponden el **conjunto** y, después, la **etiqueta**. 
+    - **Fallo de la caché**: Se pasa el **bloque completo** de memoria principal a la caché y, después, la palabra solicitada de la caché a la CPU.
+
+    Sigue siendo posible el *thrashing* pero se ve minimizado con respecto a la correspondencia directa. En general, son características intermedias.
+
+    > Las otras dos funciones de correspondencia son casos particulares de esta misma.
+    >
+    > > $n \equiv \text{''número de conjuntos"}$
+    > > \
+    > > $k \equiv \text{''número de líneas"}$
+    > > \
+    > > $v \equiv \text{''número de vías"}$
+    >
+    > - Correspondencia directa: $m=v$; $k=1$
+    > - Correspondencia asociativa: $m=k$; $v=1$
+    > - Correspondencia asociativa por conjuntos: $k=n$; $v=\frac{m}{n}$
+    >   - Con $n=2$ hay una mejora notable
+    >   - Con $n=4$ hay una mejora moderada
+    >   - Con $n>4$ no hay diferencia perceptible
+
+### Algoritmos de sustitución
+
+Con una función de correspondencia directa no hace falta ningún algoritmo de sustitución especial.
+
+En cambio, con asociatividad, **cada bloque puede ocupar distintas líneas**.
+
+- **LRU** (*Least Recently Used*)
+    
+    Sustituye por aquel que más tiempo lleva en la memoria **sin ser solicitado**.
+
+    > Se basa en el **principio de localidad de las referencias**.
+
+    En su implementación, **cada línea tiene un bit de uso** inicializado en `1` al leerse y que **cambia a `0` al referenciar otra vía adyacente**. De esta forma, siempre se conoce **cuál bit es el menos referenciado**.
+
+    ![Bit de uso](../assets/lruBitUso.png "LRU")
+
+- **FIFO** (*First-in Last-out*)
+
+    Sustituye los contenidos de forma **cíclica**, es decir, en cada momento se sustituye el bloque que haya permanecido por más tiempo.
+
+- **LFU** (*Least Frequently Used*)
+
+    Sustituye el bloque que haya sido **menos referenciado**. Su implementación requiere añadir un **contador** a cada línea.
+
+- **Aleatoriamente**
+
+### Política de escritura
+
+Pretende encontrar la dirección de escritura en cuanto se modifica un dato puesto que este también está presente en **memoria principal**.
+
+- **Escritura inmediata**
+    
+    Al actualizar un dato de la caché también se actualiza en memoria principal. Esto genera **tráfico** a una memoria cuyo tiempo de acceso es más lento.
+
+- **Post-escritura**
+    
+    El **bloque completo** de la palabra actualizada queda marcada como **pendiente de actualización**. Si este bit está activo, se traslada la actualización al sobrescribir el bloque de caché.
+
+    Al actualizar todas las palabras del bloque a la vez (**alterados y no alterados**), se produce una **pérdida de concordancia con mecanismos DMA** (véase DMA anteriormente)
+    
+    > Los DMA acceden a memoria principal sin pasar lor el procesador.
+
+Los ordenadores ***multi-core*** obligarían a utilizar un único nivel de caché para evitar el **problema de coherencia de caché**, es decir, los cores comparten una parte de la caché y la memoria principal: al actualizar un contenido podría darse **actualización perdida**.
+
+#### Posibles soluciones contra la coherencia de caché
+
+Pretende solucionar el problema por los siguientes medios:
+
+- **Vigilancia del bus con escritura inmediata**
+
+    Las memorias caché de otros procesadores **vigilan el bus** desde una caché a memoria principal. Al detectar un espacio de memoria, si ya estuviera en sucaché, se **marca como inválido** de forma que intentar leerlo provoca un **fallo en la caché**.
+
+    > **Requiere escritura inmediata**.
+
+- **Transparencia *hardware***
+
+    Existe un ***hardware* adicional** con la función específica de **mantener las memorias caché y principal actualizadas**.
+
+- **Memoria excluida de caché** (*non-cacheable*)
+
+    Sólo una porción de memoria principal se puede compartir por todos los *cores*. Esta **porción compartida** se diseña como **no transferible a caché**.
+
+    ![Exclusión de caché](../assets/exclusionCacheMem.png "Memoria excluida de caché")
+
+### Tamaño de una línea
+
+El objetivo es determinar la relación óptima de ***words* por bloque**.
+
+En principio, el principio de localidad de las referencias parece indicar que **un mayor número de palabras** debe llevar un mayor número de aciertos de caché. Sin embargo, a medida que aumentan, se sufren dos efectos:
+- Un mayor tamaño en las líneas implica **menor cantidad de líneas**, es decir, se **obliga a sobrescribir más datos** para dejar espacio en los bloques.
+- Cada **nueva palabra está más lejos**que la anteriormente referenciada de forma que se **reduce el efecto del principio de localidad**.
+
+Estas condiciones implican que el rango óptimo oscila entre una cantidad de *words* que permita almacenar mucha información y que, al mismo tiempo, permita añadir nueva.
+
+> Esta línea oscila entre 8 y 64 *words* aunque es sensible al avance de la tecnología.
+
+### Números de cachés
+
+Para ello hay que tener en cuenta niveles de caché.
+
+#### Niveles de caché
+
+Según dónde esté ubicada se puede hablar de memoria *on-chip* o memoria *off-chip*.
+
+- **Memoria caché *on-chip***
+    \
+    Se encuentra en el **circuito integrado de la CPU**. Proporciona **mayor velocidad**.
+- **Memoria caché *off-chip***
+    \
+    Se ubica en un circuito integrado externo entre la CPU y la memoria. Utiliza un **bus local** y es, sencillamente, peor que el caché *on-chip*.
+
+A pesar de la clara ventaja, históricamente **no siempre se ha podido tener memoria *on-chip*** por lo que se aplicaban niveles:
+
+- Dos niveles
+    - *on-chip*: L1
+    - *off-chip*: L2
+
+- Tres niveles
+    - *on-chip*: L1, L2
+    - *off-chip*: L3
+
+- Tres niveles (posterior)
+    - *on-chip*: L1, L2, L3
+
+#### Caché unificada o partida/separada
+
+En el **nivel L1** hay dos posibilidades, estas son la caché unificada y partida.
+
+- **Caché unificada**
+
+    Una sola memoria en la que **coexisten datos e instrucciones**. Proporciona mayor simplicidad y **nivela los contenidos en función del momento**.
+
+- **Caché partida**
+
+    Divida la caché en dos secciones: **datos** e **instrucciones**. esto permite utilizar la **técnica de segmentación de cauce** (***pipeline***, véase próximamente) de forma que proporciona **dos vías de acceso** evitando la competición entre los datos de la instrucción actual y la próxima instrucción. La tecnología *pipeline* puede **duplicar el rendimiento** del computador.
+
+    > La tecnología *pipeline* pide los **datos** de la instrucción actual y, al mismo tiempo, pide la próxima **instrucción**. Paralelizar la obtención de la información es similar a ejecutar dos instrucciones a la vez.
+
+# TEMA 6: Entrada/Salida
+
+Un **módulo** se conecta al bus del sistema por la **interfaz interna** y se conecta a los **periféricos** por la **interfaz externa**.
+
+El **módulo de entrada/salida** permite la comunicación entre los periféricos y los **recursos internos del computaador** a través del **bus del sistema**.
+\
+El módulo intermediario debe existir por múltiples motivos: **diversidad** de periféricos, **seguridad** del circuito, **control** de acceso, **formato**...
+
