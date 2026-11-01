@@ -144,3 +144,46 @@ public int var {
 >    def __str__(self):
 >       return f"var: {self._var}"
 > ```
+
+# Aspectos adicionales
+
+El siguiente apartado considera los contenidos de la asignatura que no se ha visto previamente en asignaturas anteriores.
+
+## Constantes
+
+Para utilizar constantes en C# se pueden utilizar dos *keywords*:
+- **`readonly`**: equivalente a `const` de C++
+- **`const`**: equivalente a `static constexpr` de C++
+
+> La diferencia entre `const` y `constexpr` en C++ es que el valor de `const` es dado durante ejecución (permite una primera inicialización) mientras que `constexpr` proporciona valor desde la compilación (requiere definición con valor).
+
+## Pasos de parámetros
+
+Son *keywords* que se utilizan como pasos en las funciones:
+- **`ref`**: paso por referencia
+- **`in`**: parámetro de sólo lectura
+- **`out`**: parámetro de sólo salida
+
+## `ValueType`
+
+Es una clase que hereda de `object`. Esta clase indica los tipos de datos por valor (del que heredan `int`, `enum`, `bool`...). Para que funcionen correctamente, el se utilizan `structs` en vez de clases.
+
+## *Keyword* `new`
+
+Si bien `new` suele referirse a la creación de una instancia de clase, un atributo o método puede llevar el **modificador `new`** para **romper la herencia**.
+
+> e.g.: Método con modificador `new`
+> 
+> ```csharp
+> internal new void method() { /* . . . */ }
+> ```
+
+Funciona de tal manera que **se oculta el método del padre** (no `virtual` por defecto) y se superpone el método de la clase hija.
+
+> Esto es una chapuza a nivel de diseño porque rompe con la herencia.
+
+Esto implica también que, al castear, no se tratará este método `new` como un método `override` sino que se tratará como un método completamente distinto.
+
+Sólo debe usarse en situaciones muy específicas.
+- **Resolver conflictos de nombre** (e.g.: Un organismo actualiza una clase de un API añadiendo un método (no `virtual`) con el mismo nombre que otro método que ya implementas en una clase hija de la anterior y que utilizas para todo tu *software*)
+- **Alterar algo pequeño de una clase casi idéntica a lo que se busca**
