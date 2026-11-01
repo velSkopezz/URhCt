@@ -886,3 +886,51 @@ El **módulo de entrada/salida** permite la comunicación entre los periféricos
 \
 El módulo intermediario debe existir por múltiples motivos: **diversidad** de periféricos, **seguridad** del circuito, **control** de acceso, **formato**...
 
+Un módulo de entrada/salida tiene **dos funciones** principales:
+- **interfaz interna**: bus del sistema
+- **interfaz externa**: **enlaces** a periféricos
+
+![Interfaces de módulo E/S](../assets/ModuloESinterfaces.png "Interfaces de módulo E/S")
+
+## Dispositivos externos
+
+Un módulo se conecta a **uno o varios** dispositivos externos (periféricos) a través de **enlaces**.
+
+- **Datos**
+- **Control**: indica la tarea a realizar
+- **Estado**: indica el estado en el que se encuentra
+
+## Módulos de entrada/salida
+
+Las **funciones** de un **módulo entrada/salida** se incluyen en el siguiente listado.
+
+- **Control y temporización**
+    \
+    Coordina el tráfico entre el dispositivo periférico y los **recursos internos** del computador que sean **compartidos**.
+
+- **Comunicación con el procesador**
+    \
+    Con respecto a la **interfaz interna**, incluye e implica el **intercambio de datos** (línea de datos), el **reconocimiento de direcciones** (línea de direcciones) en forma de puertos o periféricos controlados, y la **decodificación de órdenes y distribución de información de estado** (línea de control).
+
+- **Comunicación con el dispositivo periférico**
+    \
+    Con respecto a la **interfaz externa**, incluye datos, control u órdenes y estado (véase introducción del temario).
+
+- **Mantenimiento temporal de los datos**
+    \
+    El módulo dispone de un ***buffer*** para evitar el rpoblema de las **velocidades de transferencia** entre el periférico y el computador.
+
+- **Detección de errores**
+    \
+    Desde fallos en la transmisión de datos hasta situaciones de mayor nivel.
+    - **Defectos eléctricos o mecánicos** (e.g.: atasco de papel (impresora), sector defectuoso (disco)...)
+    - **Cambios accidentales de bits**: Se pueden detectar, comúnmente con bits de paridad.
+
+### Estructura
+
+Las **órdenes** y la información de **estado** pueden transmitirse por dos vías:
+
+-  **Líneas de control** (del **bus del sistema**).
+- **Líneas de datos** (del **bus del sistema**) cuando el módulo E/S disponga de un **registro de estado/control** que pueda ser direccionado de igual forma que el **registro de datos** con dicha finalidad específica.
+
+> El registro de datos es el que se utiliza para **operaciones de lectura o escritura** en x86.
