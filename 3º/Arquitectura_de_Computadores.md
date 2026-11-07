@@ -934,3 +934,180 @@ Las **órdenes** y la información de **estado** pueden transmitirse por dos ví
 - **Líneas de datos** (del **bus del sistema**) cuando el módulo E/S disponga de un **registro de estado/control** que pueda ser direccionado de igual forma que el **registro de datos** con dicha finalidad específica.
 
 > El registro de datos es el que se utiliza para **operaciones de lectura o escritura** en x86.
+
+«Módulo de entada/salida» es un término generalizado para referirse a cualquier tipo de módulo de entrada/salida.
+
+Un **módulo de E/S sofisticado** se encarga de **todos los detalles de procesamiento** de las operaciones E/S, presentando alprocesador una **interfaz de alto nivel**.
+
+> Se presenta en grandes servidores.
+
+Por contraparte, un **controlador de dispositivo** es un módulo simple que **requiere intervención de detallada del procesador**.
+
+> Se presenta en ordenadores personales.
+
+- **Entrada/salida programada**
+    \
+    La **CPU se encarga de leer** cada palabra del bloque desde el módulo E/S y escribir, después, en memoria.
+    \
+    Durante el proceso de lectura, la CPU debe permanecer **leyendo el estado** del módulo E/S hasta que éste disponga de un dato que enviar.
+
+- **Entrada/salida mediante interrupciones**
+    \
+    La **CPU se encarga de leer y escribir** cada palabra del módulo E/S. La peculiaridad radica en que, tras enviar la roden de lectura, la **CPU se dedica a otra cosa hasta la próxima petición de lectura**, evitando perder tiempo en espera de lectura.
+
+- **Acceso directo a memoria (DMA)**
+    \
+    La CPU **delega la lectura y escritura al módulo DMA** el movimiento de todo el bloque de datos entre el módulo de entrada/salida y memoria. De este modo, la CPU sólo interviene en el **envío de la orden** (al inicio) y en la **petición de interrupción** (al final) desde el DMA para comprobar el estado de operación correcta o error.
+
+#### Órdenes de entrada/salida
+
+Cuando una CPU ejecuta una instrucción, ésta envía una **orden** y una **dirección**.
+
+La orden indica al periférico la información dependiendo de su tipo.
+- **Control**: indica la información de acción. (e.g.: expulsar una hoja (impresora))
+- **Test**: indica al módulo E/S que informe de su estado (e.g.: preparado, error...)
+- **Lectura**
+- **Escritura**
+
+#### Direccionamiento
+
+Las posiciones de memoria principal tienen direcciones así como los módulos de entrada/salida (**números de puerto**). Para direccionar, se utilizan dos posibles técnicas.
+
+- **Direcciones de E/S mapeadas en memoria**
+    \
+    La memoria principal **comparte el rango de direcciones** con los puertos de entrada/salida. Esto implica que **sólo necesita dos líneas** (READ, WRITE) para acceder al puerto o  a la memoria.
+    \
+    De cara al programador, los **CODOPs corresponden a las mismas instrucciones** de lectura de memoria y de lectura de puertos.
+
+- **Direcciones aisladas**
+    \
+    Utiliza **dos rangos de direcciones** y, cada uno, corresponde con puertos o con memoria principal. Utiliza **cuatro líneas** (READ, WRITE, IN, OUT) puesto que cada espacio es separado.
+    \
+    El tamaño implica que la **máxima cantidad de puertos viene fijada** por componentes más *fijos* que la memoria principal.
+
+## Entrada/salida mediante interrupciones
+
+### Procesamiento de la instrucción
+
+Hay una **secuencia de estados** (véase Fig. 6.7 en transparencias) que tienen lugar durante el procesamiento de una interrupción.
+
+- **Eventos *hardware***: no es necesario programarlos, vienen por *hardware*.
+- **Eventos *software***: corresponden a las instrucciones presentes en la ruina de gestión de corrupción.
+
+> Es importante guardar el contexto en la pila porque una petición de interrupción puede llegar en cualquier momento.
+
+#### Cuestiones de diseño
+
+Se pretenden resolver dos cuestiones: **identificación del origen de la interrupción** y **acceso directo a memoria**
+
+> Nunca se dijo cuál era la segunda cuestión.
+
+- **Identificación del origen de la interrupción**
+
+    - Técnica de **múltiples líneas de interrupción**
+        
+        Si la CPU dispone de **varios terminales** receptores de peticiones de interrupción, pudiendo conocer el origen en función del terminal de petición. Sin embargo, **nunca se tendrán tantas líneas** para cubrir todos los dispositivos.
+
+        > Por prioridad de línea.
+
+    - Técnica de **consulta *software***
+        
+        La CPU realiza un **consulta al estado** de todos los dispositivos de forma que encuentr al solicitante. Se puede lograr de distinta forma:
+
+        - Activar una línea de **TEST E/S** (línea de control del bus) y poniendo en las líneas de direcciones, una por una, la **dirección de cada dispositivo** hasta que se responda de forma afirmativa.
+        - Añadir a los módulos de entrada/salida un **registro de estado/control** que sea direccionable y que la CPU pueda **acceder uno a uno** hasta encontrar el del dispositivo solicitante.
+
+        > Prioridad por orden de consulta.
+
+    - Técnica de **conexión en cadena** (consulta *hardware* vectorizada)
+        
+        La **señal INTA (*interrupt acknowledge*)** se propaga por los módulos de E/S hasta encontras al solicitante. El módulo solictante, que activó previamente ua **señal INTR (*interrupt request*)** procede a **situar un vector en el bus de datos**. Este vector es un **identificador** (e.g.: `INT 21`) que hace a la CPU asociar una **tabla de vectores de interrupción** y encuentra la **dirección de memoria** de inicio de una **rutina de gestión** para ese tipo de interrupción.
+        \
+        Seguidamente, la CPU salta a la dirección y ejecuta la rutina correspondiente. Esto la hace más veloz al evitar iterar sobre todos los módulos de entrada/salida.
+        
+        ![Consulta hardware vectorizada](../assets/consultaHardwareVectorizada.png "Consulta hardware vectorizada")
+
+        > Prioridad por orden de conexión.
+
+    - Técnica de **arbitraje de bus** (vectorizada)
+
+        Para que un módulo de entrada/salida pueda solicitar una interrupción debe tener previamente concedido el **uso del bus**. De este modo, se garatniza que sólo un **único módulo puede solicitar una interrupción** en un momento dado.
+        \
+        Como el módulo tiene concedido el uso del bus, aprovecha para **situar en las líneas de datos el vector** (similar al anterior).
+
+        > Prioridad por acceso al control del bus.
+
+## Acceso directo a memoria (DMA)
+
+Es necesario un nuevo componente conectado en el bus del sistema: el **módulo DMA**.
+\
+Al principio, la CPU envía una **orden** al módulo DMA especificando:
+
+- Cuál operación es de entre **lectura o escritura**.
+- Dirección del periférico (**número de puerto**).
+- Dirección inicial de **memoria**.
+- **Cantidad de palabras** a transferir.
+
+A continuación, el **módulo DMA se encarga de transferir** el bloque de datos mientras que la **CPU se encarga de ejecutar instrucciones**.
+
+Cuando haya terminado el módulo DMA, **interrumpe a la CPU** para que ésta **compruebe el estado de la operacion** (e.g.: Puede dar un error.) de forma que al CPU **sólo se interrumpe al inicio y al final**.
+
+### Uso simultáneo del bus
+
+No obstante, que el DMA y la CPU necesiten el bus llevará a que el DMA ocupe el bus haciendo perder a la CPU tiempo para ciclos. Aun así, es más ventajoso que el resto de opciones.
+\
+Esto puede suceder en los llamados **puntos de ruptura** (véase Fig. 6.13):
+
+- captar instrucción
+- captar operando
+- captar resultado
+
+### Configuraciones alternativas para el DMA
+
+La configuración más sencilla corresponde al bus único con DMA independiente.
+
+- **Bus único, DMA independiente**
+
+    ![Bus único, DMA independiente](../assets/busUnicoDMAindependiente.png "Bus único, DMA independientes")
+
+- **Bus único, DMA - E/S integrados**
+
+    ![Bus único, DMA - E/S integrados](../assets/busUnicoDMA&ESintegrados.png "Bus único, DMA - E/S integrados")
+
+    Los **módulos de E/S se conectan al DMA** en lugar del bus. De esta forma, el DMA **únicamente puede superponerse a la CPU en escritura** desde el sistema.
+    
+- **Bus de E/S**
+
+    ![Bus de E/S](../assets/busES_control.png "Bus de E/S")
+
+    Existe un **bus de expansión** adicional que **conecta módulos de E/S**. Al igual que con la técnica anterior, para cada palabra, 1 ciclo de bus.
+
+### Canales y procesadores de entrada/salida
+
+Se desarrolla, a continuación, la evolución cronológica de la gestión.
+
+1. La **CPU controla directamente el periférico**.
+
+    > Se ve en dispositivos sencillos controlados por microprocesador (e.g.: lavadoras).
+
+2. Inclusión de un **módulo E/S** de forma que la CPU utiliza la técnica de **E/S programada** y queda liberada de los detalles de cada periférico.
+
+3. Técnica de **entrada/salida mediante interrupciones**, liberandoa la CPU de esperas.
+
+4. Técnica de **DMA**; los datos ya no pasan por CPU.
+
+5. Uso de **canal de E/S**: un módulo capaz de **ejecutar instrucciones de entrada/salida ejecutables desde memroia principal**.
+
+6. Uso de un **procesador de E/S**: un módulo capaz de **ejecutar instrucciones de entrada/salida** ubicadas en una **memoria local del dispositivo**, es decir, funciona a modo de un computador que **libera a la CPU de toda la gestión**.
+
+## Interfaz externa
+
+La **interfaz externa** es la interfaz entre el módulo de entrada/salida y el periférico, que le corresponden uno cada par:
+
+- Diseño en **serie**/**paralelo**
+    \
+    ![Interfaz externa en serie y en paralelo](../assets/interfazExternaSerie&Paralelo.png "Interfaz externa en serie y en paralelo")
+    
+- Diseño **punto a punto**/**multipunto**
+    \
+    Si hay un enlace propio del módulo E/S por periférico, en su lugar, si hay una interfaz externa del módulo E/S en un bus para todos sus periféricos.
