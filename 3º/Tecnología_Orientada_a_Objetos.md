@@ -186,4 +186,4 @@ Esto implica también que, al castear, no se tratará este método `new` como un
 
 Sólo debe usarse en situaciones muy específicas.
 - **Resolver conflictos de nombre** (e.g.: Un organismo actualiza una clase de un API añadiendo un método (no `virtual`) con el mismo nombre que otro método que ya implementas en una clase hija de la anterior y que utilizas para todo tu *software*)
-- **Alterar algo pequeño de una clase casi idéntica a lo que se busca**
+- **Alterar algo pequeño de una clase casi idéntica a lo que se busca** 

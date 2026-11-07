@@ -431,3 +431,181 @@ La métrica corresponde tal que un $\text{coste} = \frac{\text{referencia}}{\it{
 > La referencia por defecto es $10^8bps$.
 
 > Se puede configurar el *bandwith* a mano para alterar el valor real y producir el efecto deseado. También se puede usar `ip ospf cost <coste>` para forzar el coste.
+
+## Protocolo STP
+
+El *Spanning Tree Protocol* pretende solucionar el problema de los **bucles en mensajes**.
+
+> e.g.: Dos *switches* están conectados de forma directa.
+>
+> ```
+> S1 --- S2
+> ```
+>
+> Si el primer *switch* (S1) envía un mensaje por *broadcast*, el segundo *switch* (S2) lo recibe. Como el *switch* S2 recibe un mensaje de *broadcast* este lo envía por todas sus interfaces, llevándo el mensaje de *broadcast* a S1. En este momento, se genera un bucle puesto que S1 enviará por todas sus interfaces el mensje de *broadcast*.
+
+> Se considera un **puerto bloqueado** cuando el tráfico de red **no puede ingresar ni salir** del puerto, excluyendo las tramas de unidad de datos de protocolo de puentes (BPDU) que utiliza STP.
+
+STP utiliza el **algoritmo *spanning tree* (STA)** para determinar los **puertos de switch que deben configurarse para el bloqueo**.
+
+Funciona de modo que el STA designa un **único *switch* como puente raíz** que se utiliza como **referencia** para los cálculos.
+\
+Para determinar el puente raíz se utilizan **tramas BPDU** con las que se determina el *switch* que posea el **menor ID de puente (BID)**. Este *switch* con menor BID será el puente raíz.
+
+> Las tramas BPDU contienen un BID que identifica al *switch* que lo envía.
+>
+> > Un BID contiene:
+> > - Valor de prioridad
+> > - Dirección MAC del *switch* emisor
+> > - ID del sistema extendido (opcional)
+
+Una vez determinado el puente raíz, el STA calcula la **ruta más corta hacia el puente raíz** de tal forma que **todos los *switches* utilizan el STA para determinar los puertos que deben bloquearse**. También se calculan las mejores rutas.
+
+Al conocer las mejores rutas hacia el puente raíz, incluido el dominio de *broadcast*, se **evita que todo el tráfico sea reenviado por todas las interfaces del *switch***.
+
+- **Puertos raíz**: puertos de *switch* más cercanos al puente raíz.
+- **Puertos designados**: puertos que no son raíz pero pueden enviar tráfico a la red.
+- **Puertos no designados**: bloqueados.
+- **Puertos deshabilitados**: administrativamente desactivados.
+
+## Protocolo ARP
+
+El *Address Resolution Protocol* tiene dos funciones básicas:
+- **Resolución de direcciones** IPv4 a MAC.
+- Mantenimiento de una **caché de asignaciones**.
+
+Para que un dispositivo a nivel de enlace envíe una trama este requeire revisar la tabla ARP o **caché ARP**.
+
+### Tabla ARP
+
+Cada entrada de ARP tiene un par de valores: una **dirección IP** asociada a una **dirección MAC**. Se trata de un mapeado.
+
+Las entradas dinámicas de ARP tienen una **marca horaria** puesto que **caducan con el tiempo**.
+
+### Solicitud ARP
+
+Para actualizar la información sobre ARP se requiere enviar un *broadcast* de capa 2 a los dispositivos de la LAN *Ethernet* preguntando por una **IP de destino**. El dispositivo a cuya dirección lógica le corresponda debe responder por *unicast* al emisor.
+
+## Protocolo ICMP
+
+El *Internet Control Message Protocol* es un protocolo cuya finalidad es **proporcionar información**, lejos de hacer red segura.
+
+> Los mensajes ICMP son, a menudo, rechazados dentro de una red por motivos de seguridad.
+
+Entre sus mensajes más importantes para tanto IPv4 como IPv6 se incluyen:
+
+- **Confirmación de *host***
+- **Destino o servicio inaccesible**
+- **Tiempo superado**
+- **Redireccionamiento de ruta**
+
+### `Ping`
+
+Es una utilidad de prueba que utiliza **mensajes de solicitud y repuesta de *echo* ICMP** para **comprobar la conectividad**.
+
+### `Traceroute`
+
+Genera una **lista de saltos** que se alcanzaron correctamente a lo largo de la ruta.
+
+## Protocolo NAT
+
+El *Network Address Translation* es un protocolo que pretende **conservar las direcciones IPv4 públicas** de forma que se utilizan redes privadas internamente. Nació como un parche temporal para solucionar el problema de la falta de direcciones.
+
+> Existe un dilema en la informática puesto que NAT proporciona seguridad al cubrir las direcciones privadas pero, al mismo tiempo, proporciona una complejidad que se contrapone a la filosofía original de Internet (*End-to-End*) y es sensible a actualizaciones en la capa de aplicación. Además, recalcular los *checksums* de TCP y UDP requiere tiempo de procesamiento.
+>
+> En IPv6 se optó por prescindir de NAT.
+
+- **NAT estática**
+    \
+    Una dirección privada se traduce a una única dirección pública.
+
+- **NAT dinámica**
+    \
+    Una dirección privada se mapea a una pública basándose aen una tabla de direcciones públicas registradas.
+    
+    > Normalmente, el *router* NAT eligirá una dirección que no esté siendo utilizada por otra dirección privda con el fin de enmascarar la configuración interna y protegere los dispositivos.
+
+- **Sobrecarga NAT**
+    \
+    También conocido com PAT (*Port Address Translation*), se utilia para **enmascarar puertos** de tal forma que se permita multiplexar **múltiples solicitudes IP privadas**.
+
+## Aplicaciones multimedia en red
+
+Refiere a cualquier aplicación que emplee **video** o **audio**.
+
+Para poder tratar correctamente con vídeo y audios se debe tener en cuenta ciertos conceptos:
+
+- **retardo** (retardo fijo): es un tipo **fijo** de propagación.
+- ***jitter*** (retardo variable): es un retardo de encolamiento que depende de las *queues* por las que pasas el paquete.
+- **caudal**
+
+> Cuando una *queue* se completa porque el tráfico supera a la capacidad de red, los paquetes que no se pueden almacenar quedan descartados. Por ello, estas aplicaciones requieren **adaptar la tasa de transmisión** al caudal disponible.
+
+### Flujos de vídeo almacenado
+
+En los vídeos se manejan dos magnitudes:
+
+- **Resolución**: refiere a la calidad de imagen del vídeo.
+- **Ratio de *frames***: refiere a la cantidad de imágenes por unidad de tiempo del vídeo.
+
+> Estas magnitudes dan lugar al ***bitrate***.
+
+Los vídeos pregrabados se almacenan en servidores que responden a solicitudes de usuario para ver dichos vídeos.
+
+El objetivo es aprovechar **posibles interrupciones** para cargar el vídeo en el cliente de forma contínuay mitigar, con ello, el *jitter*. Para eso, se requiere de un ***buffer* de aplicación** en el lado del cliente. Estos *buffers* de aplicación almacenan una serie de paquetes cuya reproducción se espera con proximidad.
+\
+En estos *buffers* de aplicación también existe un **tiempo de *playout***, es decir, el tiempo que se debe esperar, de acuerdo con las **condiciones de la red**, para almacenar en el *buffer* de aplicación suficiente contenido como para que el usuario no perciba interrupciones suponiendo que se mantienen las condiciones en la red. Si bien esto puede sonar poco lógico, se responde al conocer los **mecanismos de congestión TCP** (véase [Redes de Computadores](../2º/Redes_de_Computadores.md)), que generan picos en el uso de la red.
+
+Además, para **distribuir cantidades masivas de datos** a usuarios de todo el mundo, se hace uso de **CDN**s (*Content Distribution Networks*) que **gestionan servidores en múltiples ubicaciones geográficas** con copias del contenido. Estas CDNs interceptan las solicitudes y proporcionan a un servidor de forma arbitraria la responsabilidad de responder la petición de un usuario.
+
+- **CDN privada**: propiedad del proveedor de contenido.
+- **CDN comercial**: distriñbuye para múltiples proveedores de contenido.
+
+> *Véase en transparencias ejercicios*.
+
+#### RTSP
+
+El *Real Time Straming Protocol* es un protocolo que proporciona funcionalidad para **controlar la reproducción** de un contenido.
+
+### Voz sobre IP
+
+En los audios se manejan dos magnitudes:
+
+- ***Sampling*** (muestreo): instantes del tiempo discretos a los que se asocia un valor.
+- **Cuantización**: valores mínimos y máximos entre los que se puede manejar un valor de muestreo.
+
+Se proporcionan herramientas para combatir las **fluctuaciones**:
+- Añadir un **número de secuencia**
+- Añadir una **marca de tiempo**
+- Añadir un **retardo en la reproducción**
+    - retardo **fijo**
+    - retardo **adaptativo**: aprovecha silencios
+- **Compresión/alargamiento en periodos de silencio**
+
+$$d_i = (1-u) \cdot d_{i-1} + u \cdot (r_i - t_i)$$
+
+> $d_i \equiv \text{''retardo medio"}$
+> \
+> $u \equiv cte$
+> \
+> $r_i - t_i \equiv \text{''retardo observado"}$
+
+$$v_i = (1-u) \cdot v_{i-1} + u \cdot |r_i - t_i - d_i|$$
+
+> $v_i = \text{''desviación del retardo respecto a la media"}$
+
+$$q_i = d_i + k \ v_i$$
+
+> $q_i \equiv \it{''talkspurt"} = \text{rafaga de conversación"}$
+
+La pérdida de paquetes se mitiga con **corrección de errores**.
+
+#### FEC
+
+Los algoritmos ***Forward Error Correction*** permiten la reconstrucción al **añadir información redundante**.
+
+Mediante un algoritmo similar a CRC, se crea un paquete FEC por medio de vcarios paquetes que permite, parcialmente, recrear el paquete perdido.
+
+> Similar a RAID 5.
+
+![FEC](../assets/arys_FEC.png "FEC en Administración de Redes y Servidores, Universidad de La Rioja")
