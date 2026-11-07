@@ -571,3 +571,62 @@ Obliga al *parser* a tomar la sección com texto, ignorando caracteres reservado
 ### Documento bien formado
 
 Un documento XML está **bien formado** cuando cumple con las **reglas sintácticas de XML**.
+
+## Declaraciones de tipo de documentos (DTD)
+
+Las distintas formas de leer el documento pueden **reducir la complejidad**.
+
+> Cita: Interesa tener una buena estructura porque en el examen se obliga a utilizar el XML creado.
+
+Un documento XML es **válido** cuando cumple con las **reglas de un esquema**.
+
+> Un documento mal formado nunca es válido.
+
+### Declaraciones *Element Type* y *Attribute Type*
+
+Indica los elementos hijos que debe tener un elemento.
+
+> e.g.: Declaración *Element Type* de DTDs
+>
+> ```dtd
+> <!ELEMENT elemento1 (hijo1?, hijo2+, hijo3*)>
+> <!ELEMENT elemento2 EMPTY>
+> ```
+
+Debe tenerse en cuenta que **el orden de los elementos hijos es estricto**.
+
+- `?` - 1 o 0
+- `+` - 1 o más
+- ` ` - 1
+- `*` - 0 o más
+
+Además, hay ciertas *keywords*:
+
+- `EMPTY`: indica que no hay elementos hijos.
+- `#PCDATA`: indica que el lector XML revisará el texto en busca de entidades de marcado especial (e.g.: `&lt` por `<`).
+
+> e.g.:
+>
+> ```dtd
+> <!ELEMENT persona (nombre)>
+> <!ELEMENT nombre (#PCDATA)>
+> ```
+
+La información para **atributos** puede tener distintos tipos. Cabe destacar que, a diferencia de los elementos, el orden de los atributos no es estricto.
+
+- `CDATA`: a modo de datos.
+- `ID`: a modo de clave principal.
+- `IDREF`/`IDREFS`: referencian al `ID` de otro elemento, pueden enumerar posibles valores.
+- `#REQUIRED` o `#IMPLIED`: Requerido o implícito (se puede omitir) respectivamente, pueden enumerar posibles valores.
+
+> e.g.: ATTLIST
+>
+> ```dtd
+> <!ATTLIST alumno
+>       matricula       ID          #REQUIRED
+>       curso           (1|2|3|4)   #IMPLIED
+>       planEstudios    CDATA       '2026'
+> >
+> ```
+
+> Cita: Con esto ya estaría. Es poco probable que pida declaraciones de tipo entidad.
